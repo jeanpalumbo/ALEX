@@ -6,12 +6,34 @@ this project reads, with empty/placeholder values.
 from __future__ import annotations
 
 import os
+import secrets
 from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(ROOT_DIR / ".env")
+ENV_PATH = ROOT_DIR / ".env"
+load_dotenv(ENV_PATH)
+
+# === Profile — offline (default) / sandbox / live ===
+# Master-plan requirement: the system starts offline/mock by default. In
+# "offline", ShopifyAgent refuses real HTTP calls even if credentials happen
+# to be present — this is a distinct, harder gate than "not configured".
+PROFILE = os.getenv("PROFILE", "offline").lower()
+if PROFILE not in ("offline", "sandbox", "live"):
+    PROFILE = "offline"
+
+# === Local console auth (session + CSRF mitigation for the loopback UI) ===
+# A random token is generated on first run and persisted to .env so it
+# survives restarts. It is embedded server-side into the rendered page (never
+# sent to any third party) and required as a header on every /api/* call —
+# a cross-origin page cannot read it or attach a custom header without
+# triggering a CORS preflight that this server does not answer.
+CONSOLE_TOKEN = os.getenv("CONSOLE_TOKEN", "")
+if not CONSOLE_TOKEN:
+    CONSOLE_TOKEN = secrets.token_urlsafe(32)
+    if ENV_PATH.exists():
+        set_key(str(ENV_PATH), "CONSOLE_TOKEN", CONSOLE_TOKEN)
 
 # === AI CEO model ===
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
@@ -41,3 +63,10 @@ BRAIN_DB_PATH = DATA_DIR / "brain.db"
 DAILY_BUDGET_LIMIT = float(os.getenv("DAILY_BUDGET_LIMIT", "20.0"))
 SHOPIFY_BUDGET_LIMIT = float(os.getenv("SHOPIFY_BUDGET_LIMIT", "10.0"))
 CEO_LLM_BUDGET_LIMIT = float(os.getenv("CEO_LLM_BUDGET_LIMIT", "5.0"))
+
+# === Approvals ===
+# Every approval request gets a deadline (now + this many seconds) unless the
+# caller sets one explicitly. An expired pending request can no longer be
+# approved — it must be re-proposed, so a stale approval can't be executed
+# against a payload/context that has since moved on.
+APPROVAL_TTL_SECONDS = int(os.getenv("APPROVAL_TTL_SECONDS", "1800"))

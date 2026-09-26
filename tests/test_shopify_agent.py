@@ -1,6 +1,17 @@
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from aicommerce.agents.shopify_agent import ShopifyAgent
+
+
+@pytest.fixture(autouse=True)
+def sandbox_profile(monkeypatch):
+    """These tests exercise the HTTP client itself, not the profile gate —
+    that gate has its own tests in test_kill_switch_and_profile.py."""
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "PROFILE", "sandbox")
 
 
 def test_unconfigured_agent_reports_clear_error():

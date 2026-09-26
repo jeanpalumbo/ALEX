@@ -3,17 +3,29 @@
 Every endpoint reads/writes the real, live `System` (see `aicommerce.bootstrap`).
 There is no mock data path: if Shopify or the LLM isn't configured, the
 endpoints say so explicitly (BLOCKED/DEGRADED), they don't fabricate output.
+
+Local auth / CSRF note: this app is meant to bind to 127.0.0.1 only. Every
+`/api/*` call must carry the `X-Console-Token` header matching
+`config.CONSOLE_TOKEN` (a random value generated on first run and persisted
+to `.env`). The token is embedded server-side into the rendered `index.html`
+and read from there by the page's own JS — a third-party page cannot read it
+(different origin) and cannot attach a custom header cross-origin without a
+CORS preflight, which this server never answers (no CORS middleware is
+installed). This is a lightweight session/CSRF mitigation appropriate for a
+single-user loopback tool, not a substitute for real auth if this is ever
+exposed beyond localhost — don't do that.
 """
 from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+from aicommerce import config
 from aicommerce.bootstrap import get_system
 from aicommerce.brain.models import MemoryKind
 
@@ -23,21 +35,34 @@ STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
+def require_console_token(x_console_token: Optional[str] = Header(None)) -> None:
+    if not x_console_token or x_console_token != config.CONSOLE_TOKEN:
+        raise HTTPException(status_code=401, detail="missing or invalid X-Console-Token header")
+
+
+api = APIRouter(prefix="/api", dependencies=[Depends(require_console_token)])
+
+
 @app.get("/")
-def index() -> FileResponse:
-    return FileResponse(STATIC_DIR / "index.html")
+def index() -> HTMLResponse:
+    html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+    html = html.replace("__CONSOLE_TOKEN__", config.CONSOLE_TOKEN)
+    return HTMLResponse(html)
 
 
 # ----------------------------------------------------------------------
 # State / preflight
 # ----------------------------------------------------------------------
-@app.get("/api/state")
+@api.get("/state")
 def get_state() -> dict:
     system = get_system()
     report = system.preflight.run()
     return {
         "ceo_state": system.ceo.state.to_dict(),
         "llm_configured": system.ceo.llm_configured,
+        "profile": config.PROFILE,
+        "kill_switch_engaged": system.orchestrator.kill_switch_engaged,
+        "kill_switch_reason": system.orchestrator.kill_switch_reason,
         "preflight": {
             "result": report.result.value,
             "failed_checks": report.failed_checks,
@@ -49,13 +74,35 @@ def get_state() -> dict:
 
 
 # ----------------------------------------------------------------------
+# Kill switch
+# ----------------------------------------------------------------------
+class KillSwitchRequest(BaseModel):
+    engaged: bool
+    reason: str = ""
+    by: str = "jean"
+
+
+@api.post("/killswitch")
+def set_kill_switch(body: KillSwitchRequest) -> dict:
+    system = get_system()
+    if body.engaged:
+        system.orchestrator.engage_kill_switch(body.reason or "no reason given", by=body.by)
+    else:
+        system.orchestrator.disengage_kill_switch(by=body.by)
+    return {
+        "kill_switch_engaged": system.orchestrator.kill_switch_engaged,
+        "kill_switch_reason": system.orchestrator.kill_switch_reason,
+    }
+
+
+# ----------------------------------------------------------------------
 # Chat
 # ----------------------------------------------------------------------
 class ChatRequest(BaseModel):
     message: str
 
 
-@app.post("/api/chat")
+@api.post("/chat")
 def post_chat(body: ChatRequest) -> dict:
     system = get_system()
     turn = system.ceo.chat(body.message)
@@ -67,7 +114,7 @@ def post_chat(body: ChatRequest) -> dict:
     }
 
 
-@app.get("/api/chat/history")
+@api.get("/chat/history")
 def get_chat_history() -> dict:
     system = get_system()
     return {
@@ -87,7 +134,7 @@ class ObjectiveRequest(BaseModel):
     objective: str
 
 
-@app.post("/api/objective")
+@api.post("/objective")
 def post_objective(body: ObjectiveRequest) -> dict:
     system = get_system()
     return system.ceo.tools.dispatch("set_objective", {"objective": body.objective})
@@ -96,7 +143,7 @@ def post_objective(body: ObjectiveRequest) -> dict:
 # ----------------------------------------------------------------------
 # Agents / budget
 # ----------------------------------------------------------------------
-@app.get("/api/agents")
+@api.get("/agents")
 def get_agents() -> dict:
     system = get_system()
     return {
@@ -114,7 +161,7 @@ def get_agents() -> dict:
     }
 
 
-@app.get("/api/budget")
+@api.get("/budget")
 def get_budget() -> dict:
     system = get_system()
     return {"budgets": system.budget.all_status()}
@@ -123,7 +170,7 @@ def get_budget() -> dict:
 # ----------------------------------------------------------------------
 # Approvals
 # ----------------------------------------------------------------------
-@app.get("/api/approvals")
+@api.get("/approvals")
 def get_approvals() -> dict:
     system = get_system()
     return {
@@ -140,6 +187,7 @@ def get_approvals() -> dict:
                 "reversible": r.reversible,
                 "proposal": r.proposal,
                 "created_at": r.created_at.isoformat(),
+                "deadline": r.deadline.isoformat() if r.deadline else None,
             }
             for r in system.approvals.pending()
         ]
@@ -152,7 +200,7 @@ class ApprovalDecision(BaseModel):
     note: str = ""
 
 
-@app.post("/api/approvals/{request_id}/decide")
+@api.post("/approvals/{request_id}/decide")
 def decide_approval(request_id: str, body: ApprovalDecision) -> dict:
     system = get_system()
     try:
@@ -174,7 +222,7 @@ def decide_approval(request_id: str, body: ApprovalDecision) -> dict:
 # ----------------------------------------------------------------------
 # Company Brain
 # ----------------------------------------------------------------------
-@app.get("/api/brain")
+@api.get("/brain")
 def get_brain(kind: Optional[str] = None, tag: Optional[str] = None, limit: int = 50) -> dict:
     system = get_system()
     records = system.brain.query(
@@ -201,7 +249,7 @@ def get_brain(kind: Optional[str] = None, tag: Optional[str] = None, limit: int 
 # ----------------------------------------------------------------------
 # Events / scheduler
 # ----------------------------------------------------------------------
-@app.get("/api/events")
+@api.get("/events")
 def get_events(type: Optional[str] = None, limit: int = 50) -> dict:
     system = get_system()
     events = system.events.history(type)[-limit:]
@@ -210,7 +258,7 @@ def get_events(type: Optional[str] = None, limit: int = 50) -> dict:
     }
 
 
-@app.get("/api/scheduler")
+@api.get("/scheduler")
 def get_scheduler() -> dict:
     system = get_system()
     return {
@@ -225,8 +273,11 @@ def get_scheduler() -> dict:
     }
 
 
-@app.post("/api/scheduler/run")
+@api.post("/scheduler/run")
 def run_scheduler() -> dict:
     system = get_system()
     ran = system.scheduler.run_due()
     return {"ran": ran}
+
+
+app.include_router(api)

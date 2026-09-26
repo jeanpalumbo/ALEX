@@ -4,9 +4,18 @@ An AI Commerce Operating System: an ecommerce company whose daily work is execut
 by a coordinated organization of AI agents, governed by explicit policies, budgets,
 permissions, evidence and human approvals.
 
-See [`AI_COMMERCE_MASTER_CONTEXT.md`](./AI_COMMERCE_MASTER_CONTEXT.md) for the full
-vision, principles and roadmap. This README tracks **actual, verified implementation
-status** — read `aicommerce/` and run `pytest` to check it yourself.
+See [`AI_COMMERCE_MASTER_CONTEXT.md`](./AI_COMMERCE_MASTER_CONTEXT.md) and
+[`AI_COMMERCE_OS_MASTER_PLAN.md`](./AI_COMMERCE_OS_MASTER_PLAN.md) for the full
+vision, principles and milestone plan. This README tracks **actual, verified
+implementation status** — read `aicommerce/` and run `pytest` to check it yourself.
+
+**Note on the master plan doc's Section 1:** it states "solo existe este
+documento — no hay repo, carpeta ni implementación". That was true when it was
+written, in a session that had lost this one. Jean confirmed on recovering this
+conversation that this repo (with a working CEO Console, real model, 79 tests)
+is the current, correct state — this README supersedes that doc's baseline
+claim. The rest of that doc (constitution, architecture, milestone checklist,
+definition of done) still applies and is the checklist used below.
 
 ## What you can do right now
 
@@ -46,9 +55,14 @@ You can:
 | Autonomous scheduler-driven CEO ticks | **DISEÑADO, apagado por defecto** | Wired in `aicommerce/bootstrap.py` behind `AUTONOMOUS_LLM_TICKS=false`. Turning it on makes the CEO call the paid model on a timer, reserving/spending from the `ceo_llm` budget each time — deliberately not the default, since master context principle 13/28 says never silently route to a paid model. |
 | Other specialized agents (Research, Ads, SEO, CRM, Finance, ...) | **NO EMPEZADO** | only `shopify` and the `qa`/`echo` stub agents exist. |
 | Evaluation suites, Evolution Engine, production autonomy | **NO EMPEZADO** | as before. |
+| PROFILE (offline/sandbox/live) | **OPERATIVO** | `config.PROFILE`, default `offline`. In `offline`, `ShopifyAgent` refuses every real HTTP call — even with valid credentials — before it refuses for missing credentials. Verified: `PROFILE=offline` + real-looking creds still returns "PROFILE=offline: no real external calls are permitted". `sandbox`/`live` lift the gate (credentials still separately required). 2 tests. |
+| Kill switch | **OPERATIVO** | `Orchestrator.engage_kill_switch()`/`disengage_kill_switch()`, checked first in `run_cycle` before permissions/budget/agent — while engaged, every proposed action (read or write) is denied and logged. Console has a **STOP**/**REANUDAR** button calling `POST /api/killswitch`. Verified live: engaged it, asked the CEO to read Shopify orders, it correctly reported the denial and did not attempt the call; disengaged and normal operation resumed. Chat/memory queries still work while engaged (they don't go through `run_cycle`). 4 tests. |
+| Approval expiration (payload binding) | **PARCIAL** | Every approval now gets `deadline = now + APPROVAL_TTL_SECONDS` (default 1800s) and an expired pending request is excluded from `pending()`/cannot be decided. Approval is implicitly bound to the exact `params`/`budget_scope` snapshot taken at proposal time (stored in `ApprovalRequest.metadata`, not re-derived at decide time) — there is no API path to alter params before approving. Not yet implemented: an explicit content hash of the payload for tamper-evidence (defense in depth beyond what's needed today, since the decide endpoint takes no params). 1 test. |
+| CEO Console auth / CSRF | **PARCIAL** | Every `/api/*` call requires an `X-Console-Token` header matching a random token generated on first run and persisted to `.env`; the token is embedded server-side into the rendered page (never sent elsewhere) and the index page itself needs no token. This is a lightweight session/CSRF mitigation appropriate for a **loopback-only** tool (binds to 127.0.0.1 by default) — it is *not* real multi-user auth and must not be exposed beyond localhost as-is. 4 tests (`test_server_auth.py`). |
 
-**68 tests, all passing** (`python -m pytest`), no external network calls in the test
-suite (Shopify HTTP calls are mocked; the LLM is a fake/scripted model in CEO tests).
+**79 tests, all passing** (`python -m pytest`), no external network calls in the test
+suite (Shopify HTTP calls are mocked; the LLM is a fake/scripted model in CEO tests;
+the console auth tests use FastAPI's in-process `TestClient`).
 
 ## What I need from you to unblock Shopify
 
@@ -64,13 +78,27 @@ instead of the clean "not configured" error they return today.
 ## Running
 
 ```bash
-python -m pytest              # 68 tests
+python -m pytest              # 79 tests
 python run_ceo_console.py     # starts the CEO Console on http://127.0.0.1:8420
 ```
 
 Copy `.env.example` to `.env` first if you haven't (an `ANTHROPIC_API_KEY` is
 already present, copied from your existing `~/.env` on 2026-09-26 — never
-committed to git).
+committed to git). `CONSOLE_TOKEN` is generated automatically on first run and
+written back to `.env` — you don't need to set it yourself. `PROFILE` defaults
+to `offline`, so no agent makes real external calls until you set it to
+`sandbox` or `live`.
+
+## Stopping / kill switch
+
+- **Stop the process**: close the terminal running `run_ceo_console.py`, or
+  find the PID listening on the configured port and kill it — there's no
+  separate "stop everything" script yet.
+- **Stop new actions without stopping the process**: click **STOP** in the
+  console header (or `POST /api/killswitch {"engaged": true, "reason": "..."}`).
+  This blocks every new proposed action immediately; chat and memory browsing
+  keep working so you can see what's going on. Click **REANUDAR** (or
+  `engaged: false`) to resume.
 
 ## Talking to the CEO
 
@@ -99,6 +127,6 @@ aicommerce/
   agents/            Agent base class, stub agents, real ShopifyAgent
   ceo/               state, llm (Anthropic wrapper), tools (LLM<->system bridge), service (chat loop), orchestrator
   webapp/            FastAPI server + static/index.html (CEO Console)
-tests/               68 tests covering every module above, including the CEO chat loop and Shopify agent (mocked HTTP)
+tests/               79 tests covering every module above, including the CEO chat loop and Shopify agent (mocked HTTP)
 run_ceo_console.py   Entry point: starts the web server
 ```

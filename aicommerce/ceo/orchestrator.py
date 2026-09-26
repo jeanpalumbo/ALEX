@@ -53,6 +53,7 @@ class Orchestrator:
         approvals: ApprovalQueue,
         brain: CompanyBrain,
         qa_agent: Optional[QAAgent] = None,
+        approval_ttl_seconds: int = 1800,
     ) -> None:
         self.registry = registry
         self.permissions = permissions
@@ -60,6 +61,12 @@ class Orchestrator:
         self.approvals = approvals
         self.brain = brain
         self.qa_agent = qa_agent or QAAgent()
+        self.approval_ttl_seconds = approval_ttl_seconds
+        # Kill switch: while engaged, run_cycle refuses every new action
+        # (read or write) before touching permissions/budget/agents. Chat and
+        # memory queries still work since they don't go through run_cycle.
+        self.kill_switch_engaged = False
+        self.kill_switch_reason = ""
 
     # ------------------------------------------------------------------
     # Core loop
@@ -82,6 +89,11 @@ class Orchestrator:
         Records a `decision` memory either way, so every important call is
         traceable to evidence, per section 27.
         """
+        if self.kill_switch_engaged:
+            return self._deny(
+                objective, agent_name, action, f"kill switch engaged: {self.kill_switch_reason or 'no reason given'}"
+            )
+
         # UNDERSTAND: is this agent even known to the control plane?
         if self.registry.get_instance(agent_name) is None:
             return self._deny(objective, agent_name, action, "agent not registered")
@@ -96,6 +108,8 @@ class Orchestrator:
 
         # DECIDE: does this need a human? (section 12 — high-risk/irreversible)
         if risk in REQUIRES_APPROVAL_RISKS or not reversible:
+            from datetime import datetime, timedelta, timezone
+
             request = self.approvals.submit(
                 ApprovalRequest(
                     action=action,
@@ -107,6 +121,7 @@ class Orchestrator:
                     risk=risk,
                     reversible=reversible,
                     proposal=f"run '{action}' via agent '{agent_name}'",
+                    deadline=datetime.now(timezone.utc) + timedelta(seconds=self.approval_ttl_seconds),
                 )
             )
             request.metadata = {"params": params or {}, "budget_scope": budget_scope}
@@ -158,6 +173,34 @@ class Orchestrator:
 
     def reject(self, request_id: str, *, decided_by: str, note: str = "") -> ApprovalRequest:
         return self.approvals.decide(request_id, approve=False, decided_by=decided_by, note=note)
+
+    # ------------------------------------------------------------------
+    # Kill switch
+    # ------------------------------------------------------------------
+    def engage_kill_switch(self, reason: str, by: str = "human") -> None:
+        self.kill_switch_engaged = True
+        self.kill_switch_reason = reason
+        self.brain.record(
+            MemoryRecord(
+                kind=MemoryKind.DECISION,
+                content=f"Kill switch ENGAGED by {by}: {reason}. No new actions will be accepted.",
+                source=by,
+                confidence=Confidence.FACT,
+                tags=("kill_switch",),
+            )
+        )
+
+    def disengage_kill_switch(self, by: str = "human") -> None:
+        self.kill_switch_engaged = False
+        self.brain.record(
+            MemoryRecord(
+                kind=MemoryKind.DECISION,
+                content=f"Kill switch DISENGAGED by {by}. New actions may be accepted again.",
+                source=by,
+                confidence=Confidence.FACT,
+                tags=("kill_switch",),
+            )
+        )
 
     # ------------------------------------------------------------------
     # Internals

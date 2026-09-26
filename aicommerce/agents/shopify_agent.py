@@ -56,6 +56,12 @@ class ShopifyAgent(Agent):
     def configured(self) -> bool:
         return bool(self.store) and bool(self.token)
 
+    @property
+    def operational(self) -> bool:
+        """True only if real calls are actually possible: credentials present
+        AND the profile permits external calls (not `offline`)."""
+        return self.configured and config.PROFILE != "offline"
+
     def _base_url(self) -> str:
         return f"https://{self.store}/admin/api/{self.api_version}"
 
@@ -63,6 +69,12 @@ class ShopifyAgent(Agent):
         return {"X-Shopify-Access-Token": self.token, "Content-Type": "application/json"}
 
     def _require_configured(self) -> None:
+        if config.PROFILE == "offline":
+            raise ShopifyNotConfigured(
+                "PROFILE=offline: no real external calls are permitted in this profile, "
+                "even though credentials may be present. Set PROFILE=sandbox or PROFILE=live "
+                "in ai-commerce-os/.env to allow the Shopify agent to call the real API."
+            )
         if not self.configured:
             raise ShopifyNotConfigured(
                 "SHOPIFY_STORE / SHOPIFY_TOKEN are not set. Add them to ai-commerce-os/.env "

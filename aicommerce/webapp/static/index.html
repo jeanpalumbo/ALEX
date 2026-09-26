@@ -51,7 +51,10 @@
 <body>
 <header>
   <h1>🏢 AI Commerce OS — CEO Console</h1>
-  <div id="status-badges"></div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <div id="status-badges"></div>
+    <button id="kill-switch-btn" class="btn-reject" onclick="toggleKillSwitch()">STOP</button>
+  </div>
 </header>
 <div class="layout">
   <div class="col">
@@ -97,9 +100,12 @@
 </div>
 
 <script>
+const CONSOLE_TOKEN = "__CONSOLE_TOKEN__";
 const $ = (id) => document.getElementById(id);
 
 async function api(path, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({}, opts.headers, {'X-Console-Token': CONSOLE_TOKEN});
   const res = await fetch(path, opts);
   if (!res.ok) throw new Error(await res.text());
   return res.json();
@@ -113,9 +119,15 @@ async function refreshState() {
   const s = await api('/api/state');
   const pf = s.preflight.result;
   $('status-badges').innerHTML =
-    badge(pf.toUpperCase(), pf) +
+    badge('PROFILE:' + s.profile.toUpperCase(), s.profile === 'live' ? 'requires_approval' : 'degraded') +
+    ' ' + badge(pf.toUpperCase(), pf) +
     ' ' + badge(s.llm_configured ? 'LLM OK' : 'LLM NOT CONFIGURED', s.llm_configured ? 'ready' : 'blocked') +
-    ' ' + badge(s.pending_approvals + ' pending', s.pending_approvals > 0 ? 'requires_approval' : 'ready');
+    ' ' + badge(s.pending_approvals + ' pending', s.pending_approvals > 0 ? 'requires_approval' : 'ready') +
+    (s.kill_switch_engaged ? ' ' + badge('KILL SWITCH ON', 'blocked') : '');
+
+  const btn = $('kill-switch-btn');
+  btn.textContent = s.kill_switch_engaged ? 'REANUDAR' : 'STOP';
+  btn.className = s.kill_switch_engaged ? 'btn-approve' : 'btn-reject';
 
   $('ceo-status-kv').innerHTML = `
     <div class="k">Stage</div><div>${s.ceo_state.stage}</div>
@@ -227,6 +239,20 @@ async function setObjective() {
     body: JSON.stringify({objective})
   });
   refreshState();
+}
+
+async function toggleKillSwitch() {
+  const s = await api('/api/state');
+  const engaging = !s.kill_switch_engaged;
+  let reason = '';
+  if (engaging) {
+    reason = prompt('Motivo para detener nuevas acciones (kill switch):', 'parada manual desde la consola') || 'parada manual';
+  }
+  await api('/api/killswitch', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({engaged: engaging, reason, by: 'jean'})
+  });
+  refreshAll();
 }
 
 async function refreshAll() {

@@ -43,7 +43,13 @@ class System:
         self._wire_events()
 
         self.orchestrator = Orchestrator(
-            self.registry, self.permissions, self.budget, self.approvals, self.brain, QAAgent()
+            self.registry,
+            self.permissions,
+            self.budget,
+            self.approvals,
+            self.brain,
+            QAAgent(),
+            approval_ttl_seconds=config.APPROVAL_TTL_SECONDS,
         )
         self.ceo = CEOService(self.orchestrator, CEOModel())
         self.preflight = self._build_preflight()
@@ -104,6 +110,19 @@ class System:
             lambda: self.shopify_agent.configured,
             on_fail=PreflightResult.DEGRADED,
             reason="SHOPIFY_STORE/SHOPIFY_TOKEN not set — Shopify agent will fail on any call",
+        )
+        pf.add_check(
+            "profile_allows_external_calls",
+            lambda: config.PROFILE != "offline",
+            on_fail=PreflightResult.DEGRADED,
+            reason=f"PROFILE={config.PROFILE} — no agent may make real external calls until "
+            "PROFILE is set to sandbox or live",
+        )
+        pf.add_check(
+            "kill_switch_not_engaged",
+            lambda: not self.orchestrator.kill_switch_engaged,
+            on_fail=PreflightResult.BLOCKED,
+            reason="kill switch is engaged — see /api/killswitch for the reason",
         )
         return pf
 
