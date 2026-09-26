@@ -92,9 +92,13 @@
       <h2>Agents</h2>
       <div id="agents-list"><div class="empty">cargando...</div></div>
     </div>
-    <div class="panel" style="max-height: 260px;">
+    <div class="panel" style="max-height: 200px;">
       <h2>Company Brain (recent)</h2>
       <div id="brain-list"><div class="empty">cargando...</div></div>
+    </div>
+    <div class="panel" style="max-height: 220px;">
+      <h2>Activity / events</h2>
+      <div id="events-list"><div class="empty">cargando...</div></div>
     </div>
   </div>
 </div>
@@ -255,8 +259,30 @@ async function toggleKillSwitch() {
   refreshAll();
 }
 
+const EVENT_BADGE = {
+  'action.executed': 'ready', 'action.denied': 'blocked', 'action.failed': 'blocked',
+  'action.qa_rejected': 'blocked', 'action.pending_approval': 'requires_approval',
+  'kill_switch.engaged': 'blocked', 'kill_switch.disengaged': 'ready',
+  'model.call': 'degraded', 'model.call_failed': 'blocked',
+};
+
+async function refreshEvents() {
+  const r = await api('/api/events?limit=20');
+  const events = r.events.slice().reverse();
+  $('events-list').innerHTML = events.map(e => {
+    const cls = EVENT_BADGE[e.type] || 'degraded';
+    const detail = Object.entries(e.payload || {})
+      .filter(([k]) => k !== 'correlation_id')
+      .map(([k, v]) => `${k}=${v}`).join(' ');
+    return `<div class="mem-item">
+      ${badge(e.type, cls)} <span class="tag">${new Date(e.timestamp).toLocaleTimeString()}</span><br>
+      <span class="tag">${escapeHtml(detail)}</span>
+    </div>`;
+  }).join('') || '<div class="empty">sin eventos todavía</div>';
+}
+
 async function refreshAll() {
-  await Promise.all([refreshState(), refreshApprovals(), refreshBudget(), refreshAgents(), refreshBrain()]);
+  await Promise.all([refreshState(), refreshApprovals(), refreshBudget(), refreshAgents(), refreshBrain(), refreshEvents()]);
 }
 
 refreshAll();

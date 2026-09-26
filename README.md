@@ -54,13 +54,18 @@ You can:
 | Shopify Agent — writes (create/update/delete product, set price, set inventory) | **DESIGNED, gated correctly, blocked on credentials** | Code exists and is wired so writes can *only* be reached via `Orchestrator.run_cycle`, which enforces permission + budget + QA + (always, since writes are risk=high/irreversible) human approval. Verified live: proposing `create_product` produced a real pending approval; approving it correctly attempted the real Shopify call and failed cleanly with "SHOPIFY_STORE/SHOPIFY_TOKEN not set" — no crash, no bypass. |
 | Autonomous scheduler-driven CEO ticks | **DISEÑADO, apagado por defecto** | Wired in `aicommerce/bootstrap.py` behind `AUTONOMOUS_LLM_TICKS=false`. Turning it on makes the CEO call the paid model on a timer, reserving/spending from the `ceo_llm` budget each time — deliberately not the default, since master context principle 13/28 says never silently route to a paid model. |
 | Other specialized agents (Research, Ads, SEO, CRM, Finance, ...) | **NO EMPEZADO** | only `shopify` and the `qa`/`echo` stub agents exist. |
-| Evaluation suites, Evolution Engine, production autonomy | **NO EMPEZADO** | as before. |
+| Evolution Engine, production autonomy (Milestones 9-10) | **NO EMPEZADO** | as before — no shadow-mode grading, no self-proposed agent changes. |
 | PROFILE (offline/sandbox/live) | **OPERATIVO** | `config.PROFILE`, default `offline`. In `offline`, `ShopifyAgent` refuses every real HTTP call — even with valid credentials — before it refuses for missing credentials. Verified: `PROFILE=offline` + real-looking creds still returns "PROFILE=offline: no real external calls are permitted". `sandbox`/`live` lift the gate (credentials still separately required). 2 tests. |
 | Kill switch | **OPERATIVO** | `Orchestrator.engage_kill_switch()`/`disengage_kill_switch()`, checked first in `run_cycle` before permissions/budget/agent — while engaged, every proposed action (read or write) is denied and logged. Console has a **STOP**/**REANUDAR** button calling `POST /api/killswitch`. Verified live: engaged it, asked the CEO to read Shopify orders, it correctly reported the denial and did not attempt the call; disengaged and normal operation resumed. Chat/memory queries still work while engaged (they don't go through `run_cycle`). 4 tests. |
-| Approval expiration (payload binding) | **PARCIAL** | Every approval now gets `deadline = now + APPROVAL_TTL_SECONDS` (default 1800s) and an expired pending request is excluded from `pending()`/cannot be decided. Approval is implicitly bound to the exact `params`/`budget_scope` snapshot taken at proposal time (stored in `ApprovalRequest.metadata`, not re-derived at decide time) — there is no API path to alter params before approving. Not yet implemented: an explicit content hash of the payload for tamper-evidence (defense in depth beyond what's needed today, since the decide endpoint takes no params). 1 test. |
-| CEO Console auth / CSRF | **PARCIAL** | Every `/api/*` call requires an `X-Console-Token` header matching a random token generated on first run and persisted to `.env`; the token is embedded server-side into the rendered page (never sent elsewhere) and the index page itself needs no token. This is a lightweight session/CSRF mitigation appropriate for a **loopback-only** tool (binds to 127.0.0.1 by default) — it is *not* real multi-user auth and must not be exposed beyond localhost as-is. 4 tests (`test_server_auth.py`). |
+| Approval expiration (payload binding) | **PARCIAL** | Every approval now gets `deadline = now + APPROVAL_TTL_SECONDS` (default 1800s) and an expired pending request is excluded from `pending()`/cannot be decided. Approval is implicitly bound to the exact `params`/`budget_scope` snapshot taken at proposal time (stored in `ApprovalRequest.metadata`, not re-derived at decide time) — there is no API path to alter params before approving (proven by `test_eval_scenarios.py`, which asserts the decide endpoint's schema has no params/cost/action field). Not yet implemented: an explicit content hash for defense-in-depth beyond what's needed today. |
+| CEO Console auth / CSRF | **PARCIAL** | Every `/api/*` call requires an `X-Console-Token` header matching a random token generated on first run and persisted to `.env`; the token is embedded server-side into the rendered page (never sent elsewhere) and the index page itself needs no token. This is a lightweight session/CSRF mitigation appropriate for a **loopback-only** tool (binds to 127.0.0.1 by default) — it is *not* real multi-user auth and must not be exposed beyond localhost as-is. |
+| Scheduler + EventBus persistence, auto-run loop (Milestone 7) | **OPERATIVO** | `Scheduler`/`EventBus` optionally persist to SQLite (`data/scheduler.db`, `data/events.db`); a job's `last_run` survives a restart so it isn't re-fired immediately (verified with a test that simulates exactly that). A daemon thread started from the FastAPI `lifespan` calls `run_due()` every 30s automatically — verified live: watched `heartbeat`'s `last_run` go from `null` to a real timestamp with no manual trigger. One job's exception no longer blocks the rest of that tick, and a failed job is retried next tick rather than skipped. |
+| Backup / restore (Milestone 7) | **OPERATIVO** | `aicommerce/backup.py`, exposed as `POST /api/backup` (create), `GET /api/backup` (list), `POST /api/backup/restore` (destructive, requires `confirm: true`). Plain file copies under `data/backups/<timestamp>/`. Verified live via curl: created a real backup of the running instance's data dir. |
+| Audit/event stream (Milestone 2/7) | **OPERATIVO** | `Orchestrator` now publishes to the `EventBus` at every terminal outcome (`action.executed/denied/failed/qa_rejected/pending_approval`) and on kill-switch transitions — durable, queryable (`GET /api/events`, paginated `EventBus.query_persisted`), and shown live in the Console's **Activity/events** panel. Previously the bus existed but nothing published real events to it. |
+| ModelRouter (Milestone 4) | **PARCIAL (un solo proveedor)** | `aicommerce/ceo/model_router.py` separates "which model / at what cost" from the CEO's chat loop, per the master plan's explicit ask. Every real model call now records provider/model/task/latency/input+output tokens/estimated cost/correlation id as a `model.call` event, and `CEOService` spends that estimate from the `ceo_llm` budget for real (verified live: two real calls landed as `model.call` events with real token counts, and `ceo_llm`'s `spent` moved from $0 to match). There is exactly one configured provider (Anthropic) — this does **not** fabricate a second provider or a fallback chain; that remains DISEÑADO until a second approved credential exists. |
+| Evaluation suite (Milestone 9) | **PARCIAL** | `tests/test_eval_scenarios.py` runs 7 adversarial/edge scenarios against the real orchestrator/tools/API (not descriptions): prompt injection in agent content and in a CEO-written memory record stays inert data; double-approval can't double-spend; an empty objective is recorded not dropped; contradictory memory facts both survive (supersede is opt-in); a reserved budget is released, not leaked, on agent failure. Not yet built: shadow-mode grading against real historical decisions, drift thresholds, adversarial fuzzing beyond these fixed scenarios. |
 
-**79 tests, all passing** (`python -m pytest`), no external network calls in the test
+**106 tests, all passing** (`python -m pytest`), no external network calls in the test
 suite (Shopify HTTP calls are mocked; the LLM is a fake/scripted model in CEO tests;
 the console auth tests use FastAPI's in-process `TestClient`).
 
@@ -78,7 +83,7 @@ instead of the clean "not configured" error they return today.
 ## Running
 
 ```bash
-python -m pytest              # 79 tests
+python -m pytest              # 106 tests
 python run_ceo_console.py     # starts the CEO Console on http://127.0.0.1:8420
 ```
 
@@ -120,13 +125,14 @@ when escalating.
 
 ```
 aicommerce/
-  config.py         Reads .env — no hardcoded secrets
+  config.py         Reads .env — no hardcoded secrets; PROFILE, CONSOLE_TOKEN, APPROVAL_TTL_SECONDS
+  backup.py          backup_data_dir / restore_data_dir / list_backups
   bootstrap.py       Wires the one live System instance (brain, control plane, agents, CEO)
   brain/             Company Brain: persistent, provider-agnostic memory (SQLite, thread-safe)
-  control_plane/     Agent registry, permissions, budget guard, approvals, events, scheduler, preflight
-  agents/            Agent base class, stub agents, real ShopifyAgent
-  ceo/               state, llm (Anthropic wrapper), tools (LLM<->system bridge), service (chat loop), orchestrator
-  webapp/            FastAPI server + static/index.html (CEO Console)
-tests/               79 tests covering every module above, including the CEO chat loop and Shopify agent (mocked HTTP)
+  control_plane/     Agent registry, permissions, budget guard, approvals, events (persisted), scheduler (persisted), preflight
+  agents/            Agent base class, stub agents, real ShopifyAgent (profile-gated)
+  ceo/               state, llm (Anthropic wrapper), model_router (telemetry/cost), tools (LLM<->system bridge), service (chat loop), orchestrator (kill switch, event publishing)
+  webapp/            FastAPI server (console-token auth, scheduler auto-run thread) + static/index.html (CEO Console)
+tests/               106 tests covering every module above, including the CEO chat loop, Shopify agent (mocked HTTP), kill switch, backup/restore, and an adversarial evaluation suite
 run_ceo_console.py   Entry point: starts the web server
 ```
