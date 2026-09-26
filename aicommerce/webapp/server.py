@@ -17,6 +17,8 @@ exposed beyond localhost — don't do that.
 """
 from __future__ import annotations
 
+import threading
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Optional
 
@@ -25,11 +27,49 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from aicommerce import config
+from aicommerce import backup, config
 from aicommerce.bootstrap import get_system
 from aicommerce.brain.models import MemoryKind
 
-app = FastAPI(title="AI Commerce OS — CEO Console")
+_scheduler_stop = threading.Event()
+
+
+def _record_job_error(system, job_name: str, exc: Exception) -> None:
+    from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
+
+    system.brain.record(
+        MemoryRecord(
+            kind=MemoryKind.EPISODIC,
+            content=f"Scheduler job '{job_name}' raised {type(exc).__name__}: {exc}. "
+            "last_run was not advanced; it will be retried next tick.",
+            source="scheduler",
+            confidence=Confidence.FACT,
+            tags=("scheduler_error", job_name),
+        )
+    )
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Milestone 7: the Scheduler needs something calling `run_due()`
+    periodically. Previously nothing did — it only ran when a test or a
+    manual `POST /api/scheduler/run` called it. Now the server itself drives
+    it every 30s in a daemon thread for as long as the process is up."""
+    system = get_system()
+
+    def loop() -> None:
+        while not _scheduler_stop.wait(30):
+            system.scheduler.run_due(on_error=lambda name, exc: _record_job_error(system, name, exc))
+
+    thread = threading.Thread(target=loop, name="scheduler-loop", daemon=True)
+    thread.start()
+    try:
+        yield
+    finally:
+        _scheduler_stop.set()
+
+
+app = FastAPI(title="AI Commerce OS — CEO Console", lifespan=lifespan)
 
 STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
@@ -278,6 +318,40 @@ def run_scheduler() -> dict:
     system = get_system()
     ran = system.scheduler.run_due()
     return {"ran": ran}
+
+
+# ----------------------------------------------------------------------
+# Backup / restore
+# ----------------------------------------------------------------------
+@api.post("/backup")
+def create_backup() -> dict:
+    dest = backup.backup_data_dir(config.DATA_DIR)
+    return {"backup": dest.name, "path": str(dest)}
+
+
+@api.get("/backup")
+def list_backups() -> dict:
+    return {"backups": [p.name for p in backup.list_backups(config.DATA_DIR)]}
+
+
+class RestoreRequest(BaseModel):
+    backup: str
+    confirm: bool = False
+
+
+@api.post("/backup/restore")
+def restore_backup(body: RestoreRequest) -> dict:
+    if not body.confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="restore overwrites the live database files — resend with confirm: true",
+        )
+    backup_dir = config.DATA_DIR / "backups" / body.backup
+    try:
+        restored = backup.restore_data_dir(backup_dir, config.DATA_DIR)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    return {"restored": restored, "note": "restart the server for the restored data to take effect"}
 
 
 app.include_router(api)

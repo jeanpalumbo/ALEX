@@ -34,8 +34,8 @@ class System:
         self.permissions = PermissionManager()
         self.budget = BudgetGuard()
         self.approvals = ApprovalQueue()
-        self.events = EventBus()
-        self.scheduler = Scheduler()
+        self.events = EventBus(db_path=config.DATA_DIR / "events.db")
+        self.scheduler = Scheduler(db_path=config.DATA_DIR / "scheduler.db")
 
         self._register_agents()
         self._configure_permissions()
@@ -50,6 +50,7 @@ class System:
             self.brain,
             QAAgent(),
             approval_ttl_seconds=config.APPROVAL_TTL_SECONDS,
+            events=self.events,
         )
         self.ceo = CEOService(self.orchestrator, CEOModel())
         self.preflight = self._build_preflight()

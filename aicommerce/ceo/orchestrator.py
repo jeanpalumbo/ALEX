@@ -21,6 +21,7 @@ from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
 from aicommerce.brain.store import CompanyBrain
 from aicommerce.control_plane.approvals import ApprovalQueue, ApprovalRequest, ApprovalStatus
 from aicommerce.control_plane.budget import BudgetExceededError, BudgetGuard
+from aicommerce.control_plane.events import EventBus
 from aicommerce.control_plane.permissions import PermissionDeniedError, PermissionManager
 from aicommerce.control_plane.registry import AgentRegistry
 
@@ -54,6 +55,7 @@ class Orchestrator:
         brain: CompanyBrain,
         qa_agent: Optional[QAAgent] = None,
         approval_ttl_seconds: int = 1800,
+        events: Optional[EventBus] = None,
     ) -> None:
         self.registry = registry
         self.permissions = permissions
@@ -62,11 +64,16 @@ class Orchestrator:
         self.brain = brain
         self.qa_agent = qa_agent or QAAgent()
         self.approval_ttl_seconds = approval_ttl_seconds
+        self.events = events
         # Kill switch: while engaged, run_cycle refuses every new action
         # (read or write) before touching permissions/budget/agents. Chat and
         # memory queries still work since they don't go through run_cycle.
         self.kill_switch_engaged = False
         self.kill_switch_reason = ""
+
+    def _publish(self, event_type: str, payload: dict) -> None:
+        if self.events is not None:
+            self.events.publish(event_type, payload)
 
     # ------------------------------------------------------------------
     # Core loop
@@ -125,6 +132,10 @@ class Orchestrator:
                 )
             )
             request.metadata = {"params": params or {}, "budget_scope": budget_scope}
+            self._publish(
+                "action.pending_approval",
+                {"agent": agent_name, "action": action, "risk": risk, "approval_request_id": request.id},
+            )
             self.brain.record(
                 MemoryRecord(
                     kind=MemoryKind.DECISION,
@@ -180,6 +191,7 @@ class Orchestrator:
     def engage_kill_switch(self, reason: str, by: str = "human") -> None:
         self.kill_switch_engaged = True
         self.kill_switch_reason = reason
+        self._publish("kill_switch.engaged", {"reason": reason, "by": by})
         self.brain.record(
             MemoryRecord(
                 kind=MemoryKind.DECISION,
@@ -192,6 +204,7 @@ class Orchestrator:
 
     def disengage_kill_switch(self, by: str = "human") -> None:
         self.kill_switch_engaged = False
+        self._publish("kill_switch.disengaged", {"by": by})
         self.brain.record(
             MemoryRecord(
                 kind=MemoryKind.DECISION,
@@ -220,6 +233,7 @@ class Orchestrator:
             if cost > 0:
                 self.budget.reserve(budget_scope, cost)
         except BudgetExceededError as exc:
+            self._publish("action.failed", {"agent": agent_name, "action": action, "reason": "budget_exceeded"})
             self.brain.record(
                 MemoryRecord(
                     kind=MemoryKind.DECISION,
@@ -246,6 +260,7 @@ class Orchestrator:
                     tags=("agent_failed", agent_name),
                 )
             )
+            self._publish("action.failed", {"agent": agent_name, "action": action, "reason": result.error})
             return TaskOutcome(status=TaskStatus.FAILED, agent_result=result, detail=result.error)
 
         # QA gate — nothing downstream trusts raw agent output, even on success
@@ -262,6 +277,7 @@ class Orchestrator:
                     tags=("qa_rejected", agent_name),
                 )
             )
+            self._publish("action.qa_rejected", {"agent": agent_name, "action": action, "reason": qa_result.error})
             return TaskOutcome(status=TaskStatus.QA_REJECTED, agent_result=result, detail=qa_result.error)
 
         # MEASURE + LEARN
@@ -278,9 +294,11 @@ class Orchestrator:
                 metadata={"cost": cost},
             )
         )
+        self._publish("action.executed", {"agent": agent_name, "action": action, "cost": cost})
         return TaskOutcome(status=TaskStatus.EXECUTED, agent_result=result)
 
     def _deny(self, objective: str, agent_name: str, action: str, reason: str) -> TaskOutcome:
+        self._publish("action.denied", {"agent": agent_name, "action": action, "reason": reason})
         self.brain.record(
             MemoryRecord(
                 kind=MemoryKind.DECISION,
