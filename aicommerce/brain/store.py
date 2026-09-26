@@ -7,6 +7,7 @@ without losing institutional memory, per the master context.
 from __future__ import annotations
 
 import sqlite3
+import threading
 from pathlib import Path
 from typing import Iterable, Optional
 
@@ -36,9 +37,15 @@ class CompanyBrain:
         self.db_path = str(db_path)
         if self.db_path != ":memory:":
             Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(self.db_path)
-        self._conn.executescript(_SCHEMA)
-        self._conn.commit()
+        # A web server (FastAPI's threadpool) may call this from a different
+        # OS thread per request. sqlite3 connections aren't safe to share
+        # across threads concurrently, so allow cross-thread use and
+        # serialize access ourselves with a lock instead.
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        self._lock = threading.Lock()
+        with self._lock:
+            self._conn.executescript(_SCHEMA)
+            self._conn.commit()
 
     def close(self) -> None:
         self._conn.close()
@@ -53,11 +60,12 @@ class CompanyBrain:
     # Write
     # ------------------------------------------------------------------
     def record(self, memory: MemoryRecord) -> MemoryRecord:
-        self._conn.execute(
-            "INSERT INTO memory VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            memory.to_row(),
-        )
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute(
+                "INSERT INTO memory VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                memory.to_row(),
+            )
+            self._conn.commit()
         return memory
 
     def supersede(self, old_id: str, new: MemoryRecord) -> MemoryRecord:
@@ -67,21 +75,23 @@ class CompanyBrain:
         for auditability but flagged, rather than silently overwritten.
         """
         self.record(new)
-        self._conn.execute(
-            "UPDATE memory SET superseded_by = ? WHERE id = ?", (new.id, old_id)
-        )
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute(
+                "UPDATE memory SET superseded_by = ? WHERE id = ?", (new.id, old_id)
+            )
+            self._conn.commit()
         return new
 
     # ------------------------------------------------------------------
     # Read
     # ------------------------------------------------------------------
     def get(self, memory_id: str) -> Optional[MemoryRecord]:
-        row = self._conn.execute(
-            "SELECT id, kind, content, source, confidence, tags, metadata, timestamp, superseded_by "
-            "FROM memory WHERE id = ?",
-            (memory_id,),
-        ).fetchone()
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT id, kind, content, source, confidence, tags, metadata, timestamp, superseded_by "
+                "FROM memory WHERE id = ?",
+                (memory_id,),
+            ).fetchone()
         return MemoryRecord.from_row(row) if row else None
 
     def query(
@@ -104,7 +114,8 @@ class CompanyBrain:
         sql += " ORDER BY timestamp DESC LIMIT ?"
         params.append(limit)
 
-        rows = self._conn.execute(sql, params).fetchall()
+        with self._lock:
+            rows = self._conn.execute(sql, params).fetchall()
         records = [MemoryRecord.from_row(r) for r in rows]
 
         if tags:

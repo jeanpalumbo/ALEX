@@ -75,6 +75,7 @@ class Orchestrator:
         risk: str = "low",
         reversible: bool = True,
         tool: Optional[str] = None,
+        params: Optional[dict] = None,
     ) -> TaskOutcome:
         """DECIDE + ACT (+ escalate) for a single delegated task.
 
@@ -108,6 +109,7 @@ class Orchestrator:
                     proposal=f"run '{action}' via agent '{agent_name}'",
                 )
             )
+            request.metadata = {"params": params or {}, "budget_scope": budget_scope}
             self.brain.record(
                 MemoryRecord(
                     kind=MemoryKind.DECISION,
@@ -123,7 +125,7 @@ class Orchestrator:
                 detail="requires human approval before execution",
             )
 
-        return self._execute(objective, agent_name, action, budget_scope, cost)
+        return self._execute(objective, agent_name, action, budget_scope, cost, params)
 
     def approve_and_execute(
         self,
@@ -131,12 +133,26 @@ class Orchestrator:
         *,
         decided_by: str,
         objective: str,
-        budget_scope: str,
+        budget_scope: Optional[str] = None,
         note: str = "",
     ) -> TaskOutcome:
-        """Human approves a pending request; only then does the agent run."""
+        """Human approves a pending request; only then does the agent run.
+
+        `budget_scope` and the original call's `params` are read back from the
+        request itself (recorded at submission time) when not passed here
+        explicitly, so the caller does not need to remember them across the
+        approval round-trip.
+        """
         request = self.approvals.decide(request_id, approve=True, decided_by=decided_by, note=note)
-        outcome = self._execute(objective, request.agent, request.action, budget_scope, request.cost)
+        stored = request.metadata or {}
+        outcome = self._execute(
+            objective,
+            request.agent,
+            request.action,
+            budget_scope or stored.get("budget_scope", "default"),
+            request.cost,
+            stored.get("params"),
+        )
         self.approvals.mark_executed(request_id, success=outcome.status == TaskStatus.EXECUTED)
         return outcome
 
@@ -146,7 +162,15 @@ class Orchestrator:
     # ------------------------------------------------------------------
     # Internals
     # ------------------------------------------------------------------
-    def _execute(self, objective: str, agent_name: str, action: str, budget_scope: str, cost: float) -> TaskOutcome:
+    def _execute(
+        self,
+        objective: str,
+        agent_name: str,
+        action: str,
+        budget_scope: str,
+        cost: float,
+        params: Optional[dict] = None,
+    ) -> TaskOutcome:
         agent: Agent = self.registry.get_instance(agent_name)
 
         try:
@@ -165,9 +189,23 @@ class Orchestrator:
             return TaskOutcome(status=TaskStatus.FAILED, detail=str(exc))
 
         # ACT
-        result = agent.execute({"objective": objective, "action": action})
+        result = agent.execute({"objective": objective, "action": action, "params": params or {}})
 
-        # QA gate — nothing downstream trusts raw agent output
+        if not result.success:
+            if cost > 0:
+                self.budget.release_reservation(budget_scope, cost)
+            self.brain.record(
+                MemoryRecord(
+                    kind=MemoryKind.EPISODIC,
+                    content=f"Agent '{agent_name}' failed action '{action}': {result.error}",
+                    source=agent_name,
+                    confidence=Confidence.FACT,
+                    tags=("agent_failed", agent_name),
+                )
+            )
+            return TaskOutcome(status=TaskStatus.FAILED, agent_result=result, detail=result.error)
+
+        # QA gate — nothing downstream trusts raw agent output, even on success
         qa_result = self.qa_agent.review(result)
         if not qa_result.success:
             if cost > 0:

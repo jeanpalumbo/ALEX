@@ -36,6 +36,7 @@ class ApprovalRequest:
     decided_at: Optional[datetime] = None
     decided_by: Optional[str] = None
     decision_note: Optional[str] = None
+    metadata: dict = field(default_factory=dict)
 
 
 class ApprovalQueue:

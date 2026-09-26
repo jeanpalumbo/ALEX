@@ -5,49 +5,100 @@ by a coordinated organization of AI agents, governed by explicit policies, budge
 permissions, evidence and human approvals.
 
 See [`AI_COMMERCE_MASTER_CONTEXT.md`](./AI_COMMERCE_MASTER_CONTEXT.md) for the full
-vision, principles and roadmap. This README tracks **actual implementation status**,
-verifiable by reading `aicommerce/` and running `pytest`.
+vision, principles and roadmap. This README tracks **actual, verified implementation
+status** — read `aicommerce/` and run `pytest` to check it yourself.
 
-## Status (Reality-First)
+## What you can do right now
 
-This project was bootstrapped on 2026-09-26. Nothing existed before this. Status below
-uses the classification from the master context: IMPLEMENTED / PARTIAL / DESIGNED /
-BLOCKED / DEPRECATED / UNKNOWN.
+Open the **CEO Console** in a browser and have a real conversation with the AI CEO —
+it uses a real Anthropic model, with real tool-calling into the real Company
+Brain / Control Plane / Orchestrator. Nothing here is a mock chatbot.
 
-| Phase | Component | Status | Notes |
-|---|---|---|---|
-| 0 | Repo / tests / structure | IMPLEMENTED | this repo |
-| 1 | Company Brain (persistent memory) | IMPLEMENTED | SQLite-backed, `aicommerce/brain/` |
-| 2 | Agent Registry | IMPLEMENTED | in-memory, `aicommerce/control_plane/registry.py` |
-| 2 | Permissions (RBAC/scopes) | IMPLEMENTED | `aicommerce/control_plane/permissions.py` |
-| 2 | Budget Guard | IMPLEMENTED | enforces, not advisory; `aicommerce/control_plane/budget.py` |
-| 2 | Approval Queue | IMPLEMENTED | `aicommerce/control_plane/approvals.py` |
-| 2 | Readiness Preflight | IMPLEMENTED | `aicommerce/control_plane/preflight.py` |
-| 3 | Event Bus | IMPLEMENTED | in-process pub/sub, `aicommerce/control_plane/events.py` |
-| 3 | Scheduler | PARTIAL | polling-based, in-process only, no persistence across restarts |
-| 4 | Shopify integration | DESIGNED | not implemented — no store/credentials configured yet |
-| 5 | AI CEO orchestrator | PARTIAL | `aicommerce/ceo/orchestrator.py` runs the OBSERVE→...→IMPROVE loop against the registry/budget/approval/brain, but only stub agents exist |
-| 6 | Specialized agents (Research, Product, Brand, ...) | PARTIAL | only `EchoAgent`-style stub agents exist for wiring/testing; no real research/ads/SEO capability yet |
-| 7 | Evaluation | UNKNOWN | not started |
-| 8 | Evolution Engine | UNKNOWN | not started |
-| 9 | Production autonomous operation | UNKNOWN | not started |
+```bash
+python run_ceo_console.py
+# open http://127.0.0.1:8420/
+```
 
-Nothing here is connected to a real Shopify store, real ad accounts, or real money.
-Everything is local, in-process, and safe to run repeatedly.
+You can:
+- Chat with the CEO. It answers using `get_company_state`, `query_memory`,
+  `list_agents`, `get_pending_approvals`, `propose_action`, `record_memory`,
+  `set_objective` — real tool calls against the live system, visible in the
+  "🔧" line under each of its replies.
+- Set the current objective (also settable by asking the CEO directly).
+- See pending approvals and **APPROVE / REJECT** them from the console — the
+  decision is executed (or discarded) for real through the Orchestrator and
+  logged to Company Brain.
+- Watch budgets (daily / shopify / ceo_llm), registered agents, and the last
+  ~50 Company Brain entries (decisions, episodes, etc.), refreshed every 5s.
+
+## Status (Reality-First) — verified by running the code, not by reading old status text
+
+| Component | Status | Evidence |
+|---|---|---|
+| Company Brain (SQLite, 6 memory kinds, supersede) | **OPERATIVO** | `aicommerce/brain/`, thread-safe (fixed 2026-09-26 — sqlite connections were crashing under FastAPI's threadpool), 5 tests |
+| AgentRegistry / PermissionManager (RBAC, deny-by-default) / BudgetGuard (enforced) / ApprovalQueue / EventBus / ReadinessPreflight | **OPERATIVO** | `aicommerce/control_plane/`, 28 tests |
+| Scheduler | **PARCIAL** | polling-based (`run_due()` must be called; nothing calls it automatically yet — see Next step). In-process only, no persistence across restarts. |
+| AI CEO Orchestrator (OBSERVE→UNDERSTAND→DECIDE→ACT→MEASURE→LEARN) | **OPERATIVO** | `aicommerce/ceo/orchestrator.py` — every action goes through permissions → budget → agent → QA, and high-risk/irreversible actions stop at `PENDING_APPROVAL` until a human decides. 8 tests. |
+| CEO chat (real Anthropic model, real tool-use loop) | **OPERATIVO** | `aicommerce/ceo/service.py` + `llm.py` + `tools.py`. Verified live: asked "analiza el estado actual y dime las 3 prioridades" → it called 10 real tools, correctly reported Shopify as unconfigured (it tried `read_shop`/`read_products`/`read_orders` and got real failures), tagged claims FACT/HYPOTHESIS, and proposed a real `create_product` action that correctly stopped at human approval. |
+| CEO Console (web UI) | **OPERATIVO** | `aicommerce/webapp/` — FastAPI + vanilla JS, single page, no mocked panels. Chat, objective, approvals (with working Approve/Reject), budget, agents, memory all read/write the live backend. |
+| Shopify Agent — reads | **PARCIAL / BLOQUEADO (falta credencial)** | Real Admin REST client implemented (`aicommerce/agents/shopify_agent.py`), covered by 5 tests with a mocked HTTP layer. **Blocked in this environment**: no `SHOPIFY_STORE`/`SHOPIFY_TOKEN` exist anywhere on this machine (checked `.env` files across the whole user profile) and the Shopify MCP connector available in *this Claude Code session* reported "connection invalidated" when queried — it is not usable by the standalone web server anyway (that MCP is scoped to interactive Claude sessions, not to an independent Python process). **Needs from you**: a Shopify Admin API access token (Admin → Apps → Develop apps) in `.env`. |
+| Shopify Agent — writes (create/update/delete product, set price, set inventory) | **DESIGNED, gated correctly, blocked on credentials** | Code exists and is wired so writes can *only* be reached via `Orchestrator.run_cycle`, which enforces permission + budget + QA + (always, since writes are risk=high/irreversible) human approval. Verified live: proposing `create_product` produced a real pending approval; approving it correctly attempted the real Shopify call and failed cleanly with "SHOPIFY_STORE/SHOPIFY_TOKEN not set" — no crash, no bypass. |
+| Autonomous scheduler-driven CEO ticks | **DISEÑADO, apagado por defecto** | Wired in `aicommerce/bootstrap.py` behind `AUTONOMOUS_LLM_TICKS=false`. Turning it on makes the CEO call the paid model on a timer, reserving/spending from the `ceo_llm` budget each time — deliberately not the default, since master context principle 13/28 says never silently route to a paid model. |
+| Other specialized agents (Research, Ads, SEO, CRM, Finance, ...) | **NO EMPEZADO** | only `shopify` and the `qa`/`echo` stub agents exist. |
+| Evaluation suites, Evolution Engine, production autonomy | **NO EMPEZADO** | as before. |
+
+**68 tests, all passing** (`python -m pytest`), no external network calls in the test
+suite (Shopify HTTP calls are mocked; the LLM is a fake/scripted model in CEO tests).
+
+## What I need from you to unblock Shopify
+
+Add to `ai-commerce-os/.env` (copy from `.env.example`):
+```
+SHOPIFY_STORE=tu-tienda.myshopify.com
+SHOPIFY_TOKEN=shpat_...   # Admin API access token: Shopify Admin -> Settings -> Apps -> Develop apps -> Create app -> Admin API access token, scopes read/write_products, read/write_orders, read/write_inventory, read_customers
+```
+Restart the server (`python run_ceo_console.py`) and the preflight badge will go
+from DEGRADED to READY, and the CEO's `read_*` tool calls will return real data
+instead of the clean "not configured" error they return today.
 
 ## Running
 
 ```bash
-python -m pytest
+python -m pytest              # 68 tests
+python run_ceo_console.py     # starts the CEO Console on http://127.0.0.1:8420
 ```
+
+Copy `.env.example` to `.env` first if you haven't (an `ANTHROPIC_API_KEY` is
+already present, copied from your existing `~/.env` on 2026-09-26 — never
+committed to git).
+
+## Talking to the CEO
+
+Type into the chat box at the top-left. Good first messages:
+- "Analiza el estado actual de la empresa y dime cuáles son las tres prioridades operativas siguientes."
+- "Ejecuta la primera prioridad." (it will tell you what it can do automatically vs. what needs your approval or a missing credential)
+- "¿Qué has aprendido hasta ahora?" (it will call `query_memory`)
+
+## Approving / rejecting actions
+
+Any action the CEO proposes with `risk in {high, critical}` or `reversible=False`
+stops at **Pending Approvals** in the right panel, showing what it wants to do, why,
+the requesting agent, estimated cost, risk and reversibility. Click **APPROVE** to
+actually run it (through the same permission/budget/QA path) or **REJECT** to
+discard it. Both are logged to Company Brain via the decision it already recorded
+when escalating.
 
 ## Layout
 
 ```
 aicommerce/
-  brain/            Company Brain: persistent, provider-agnostic memory (SQLite)
-  control_plane/    Agent registry, permissions, budget guard, approvals, events, scheduler, preflight
-  agents/           Agent base class + stub agents
-  ceo/              AI CEO orchestrator (OBSERVE -> UNDERSTAND -> DECIDE -> ACT -> MEASURE -> LEARN -> IMPROVE)
-tests/              pytest suite covering every module above
+  config.py         Reads .env — no hardcoded secrets
+  bootstrap.py       Wires the one live System instance (brain, control plane, agents, CEO)
+  brain/             Company Brain: persistent, provider-agnostic memory (SQLite, thread-safe)
+  control_plane/     Agent registry, permissions, budget guard, approvals, events, scheduler, preflight
+  agents/            Agent base class, stub agents, real ShopifyAgent
+  ceo/               state, llm (Anthropic wrapper), tools (LLM<->system bridge), service (chat loop), orchestrator
+  webapp/            FastAPI server + static/index.html (CEO Console)
+tests/               68 tests covering every module above, including the CEO chat loop and Shopify agent (mocked HTTP)
+run_ceo_console.py   Entry point: starts the web server
 ```

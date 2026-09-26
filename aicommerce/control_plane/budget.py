@@ -87,3 +87,9 @@ class BudgetGuard:
         if scope is None:
             return list(self._history)
         return [h for h in self._history if h["scope"] == scope]
+
+    def scopes(self) -> list[str]:
+        return list(self._budgets.keys())
+
+    def all_status(self) -> list[dict]:
+        return [self.status(s) for s in self._budgets]

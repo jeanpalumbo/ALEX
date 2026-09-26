@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>AI Commerce OS — CEO Console</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #2a2e38; --text: #e6e8ee;
+    --muted: #8b90a0; --accent: #5b8cff; --good: #38c172; --warn: #e0a800;
+    --bad: #e04848;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, Segoe UI, Roboto, sans-serif; }
+  header { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  .badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .badge.ready { background: rgba(56,193,113,.15); color: var(--good); }
+  .badge.blocked { background: rgba(224,72,72,.15); color: var(--bad); }
+  .badge.degraded { background: rgba(224,168,0,.15); color: var(--warn); }
+  .badge.requires_approval { background: rgba(91,140,255,.15); color: var(--accent); }
+  .layout { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; padding: 14px; height: calc(100vh - 53px); }
+  .col { display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; overflow: auto; }
+  .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 8px; }
+  #chat-panel { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  #chat-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
+  .msg { padding: 8px 10px; border-radius: 8px; max-width: 90%; white-space: pre-wrap; font-size: 13px; line-height: 1.4; }
+  .msg.user { align-self: flex-end; background: var(--accent); color: white; }
+  .msg.assistant { align-self: flex-start; background: #232733; }
+  .tool-activity { margin-top: 6px; font-size: 11px; color: var(--muted); }
+  .tool-activity code { background: #10121a; padding: 1px 4px; border-radius: 4px; }
+  #chat-form { display: flex; gap: 8px; margin-top: 10px; }
+  #chat-input { flex: 1; background: #10121a; border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 8px; font-size: 13px; }
+  button { cursor: pointer; border: none; border-radius: 6px; padding: 8px 14px; font-size: 12px; font-weight: 600; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-approve { background: var(--good); color: white; }
+  .btn-reject { background: var(--bad); color: white; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 12px; }
+  .kv .k { color: var(--muted); }
+  .approval-card { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; font-size: 12px; }
+  .approval-card .row { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; }
+  .budget-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .mem-item { font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .mem-item .tag { color: var(--muted); font-size: 10px; }
+  .empty { color: var(--muted); font-size: 12px; font-style: italic; }
+  select, input[type=text].small { background: #10121a; border: 1px solid var(--border); color: var(--text); padding: 4px 6px; border-radius: 6px; font-size: 11px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏢 AI Commerce OS — CEO Console</h1>
+  <div id="status-badges"></div>
+</header>
+<div class="layout">
+  <div class="col">
+    <div class="panel" style="flex: 0 0 auto;">
+      <h2>Current objective</h2>
+      <div style="display:flex; gap:8px;">
+        <input id="objective-input" type="text" class="small" style="flex:1;" placeholder="Dile al CEO cuál es el objetivo actual..." />
+        <button class="btn-primary" onclick="setObjective()">Set</button>
+      </div>
+      <div id="objective-display" class="empty" style="margin-top:6px;">sin objetivo</div>
+    </div>
+    <div class="panel" id="chat-panel">
+      <h2>Chat con el AI CEO</h2>
+      <div id="chat-log"></div>
+      <form id="chat-form" onsubmit="return sendChat(event)">
+        <input id="chat-input" type="text" placeholder="Escríbele al CEO..." autocomplete="off" />
+        <button class="btn-primary" type="submit">Enviar</button>
+      </form>
+    </div>
+  </div>
+  <div class="col">
+    <div class="panel">
+      <h2>CEO status</h2>
+      <div class="kv" id="ceo-status-kv"></div>
+    </div>
+    <div class="panel">
+      <h2>Pending approvals</h2>
+      <div id="approvals-list"><div class="empty">cargando...</div></div>
+    </div>
+    <div class="panel">
+      <h2>Budget</h2>
+      <div id="budget-list"><div class="empty">cargando...</div></div>
+    </div>
+    <div class="panel">
+      <h2>Agents</h2>
+      <div id="agents-list"><div class="empty">cargando...</div></div>
+    </div>
+    <div class="panel" style="max-height: 260px;">
+      <h2>Company Brain (recent)</h2>
+      <div id="brain-list"><div class="empty">cargando...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+function badge(text, cls) {
+  return `<span class="badge ${cls}">${text}</span>`;
+}
+
+async function refreshState() {
+  const s = await api('/api/state');
+  const pf = s.preflight.result;
+  $('status-badges').innerHTML =
+    badge(pf.toUpperCase(), pf) +
+    ' ' + badge(s.llm_configured ? 'LLM OK' : 'LLM NOT CONFIGURED', s.llm_configured ? 'ready' : 'blocked') +
+    ' ' + badge(s.pending_approvals + ' pending', s.pending_approvals > 0 ? 'requires_approval' : 'ready');
+
+  $('ceo-status-kv').innerHTML = `
+    <div class="k">Stage</div><div>${s.ceo_state.stage}</div>
+    <div class="k">Current task</div><div>${s.ceo_state.current_task || '—'}</div>
+    <div class="k">Last updated</div><div>${new Date(s.ceo_state.last_updated).toLocaleTimeString()}</div>
+    <div class="k">Last error</div><div>${s.ceo_state.last_error || '—'}</div>
+    <div class="k">Preflight reasons</div><div>${(s.preflight.reasons||[]).join('; ') || '—'}</div>
+  `;
+  $('objective-display').textContent = s.ceo_state.objective || 'sin objetivo';
+  $('objective-display').className = s.ceo_state.objective ? '' : 'empty';
+}
+
+async function refreshApprovals() {
+  const r = await api('/api/approvals');
+  if (r.pending.length === 0) {
+    $('approvals-list').innerHTML = '<div class="empty">sin aprobaciones pendientes</div>';
+    return;
+  }
+  $('approvals-list').innerHTML = r.pending.map(a => `
+    <div class="approval-card">
+      <div><b>${a.action}</b> vía <code>${a.agent}</code></div>
+      <div>${a.reason}</div>
+      <div style="color:var(--muted)">riesgo=${a.risk} reversible=${a.reversible} coste=${a.cost}</div>
+      <div class="row">
+        <button class="btn-approve" onclick="decide('${a.id}', true)">APPROVE</button>
+        <button class="btn-reject" onclick="decide('${a.id}', false)">REJECT</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function decide(id, approve) {
+  await api(`/api/approvals/${id}/decide`, {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({approve, decided_by: 'jean'})
+  });
+  refreshAll();
+}
+
+async function refreshBudget() {
+  const r = await api('/api/budget');
+  $('budget-list').innerHTML = r.budgets.map(b => `
+    <div class="budget-row"><span>${b.scope}</span><span>${b.spent.toFixed(2)} / ${b.limit.toFixed(2)} (disp: ${b.available.toFixed(2)})</span></div>
+  `).join('') || '<div class="empty">sin presupuestos definidos</div>';
+}
+
+async function refreshAgents() {
+  const r = await api('/api/agents');
+  $('agents-list').innerHTML = r.agents.map(a => `
+    <div class="mem-item"><b>${a.name}</b><br><span class="tag">${a.mission}</span></div>
+  `).join('') || '<div class="empty">sin agentes registrados</div>';
+}
+
+async function refreshBrain() {
+  const r = await api('/api/brain?limit=15');
+  $('brain-list').innerHTML = r.records.map(m => `
+    <div class="mem-item">
+      <span class="tag">[${m.kind}/${m.confidence}] ${new Date(m.timestamp).toLocaleTimeString()}</span><br>
+      ${m.content}
+    </div>
+  `).join('') || '<div class="empty">memoria vacía</div>';
+}
+
+async function refreshChatHistory() {
+  const r = await api('/api/chat/history');
+  const log = $('chat-log');
+  log.innerHTML = r.history.map(renderTurn).join('');
+  log.scrollTop = log.scrollHeight;
+}
+
+function renderTurn(t) {
+  const activity = (t.tool_activity && t.tool_activity.length)
+    ? `<div class="tool-activity">🔧 ${t.tool_activity.map(a => `<code>${a.tool}</code>`).join(' ')}</div>`
+    : '';
+  return `<div class="msg ${t.role}">${escapeHtml(t.content)}${activity}</div>`;
+}
+
+function escapeHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function sendChat(ev) {
+  ev.preventDefault();
+  const input = $('chat-input');
+  const message = input.value.trim();
+  if (!message) return false;
+  input.value = '';
+  const log = $('chat-log');
+  log.innerHTML += renderTurn({role: 'user', content: message});
+  log.scrollTop = log.scrollHeight;
+
+  const turn = await api('/api/chat', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({message})
+  });
+  log.innerHTML += renderTurn(turn);
+  log.scrollTop = log.scrollHeight;
+  refreshAll();
+  return false;
+}
+
+async function setObjective() {
+  const input = $('objective-input');
+  const objective = input.value.trim();
+  if (!objective) return;
+  input.value = '';
+  await api('/api/objective', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({objective})
+  });
+  refreshState();
+}
+
+async function refreshAll() {
+  await Promise.all([refreshState(), refreshApprovals(), refreshBudget(), refreshAgents(), refreshBrain()]);
+}
+
+refreshAll();
+refreshChatHistory();
+setInterval(refreshAll, 5000);
+</script>
+</body>
+</html>
