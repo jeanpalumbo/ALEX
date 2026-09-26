@@ -112,3 +112,28 @@ def test_chat_history_accumulates_across_turns():
     service.chat("second")
 
     assert [t.content for t in service.history if t.role == "user"] == ["first", "second"]
+
+
+def test_chat_spends_from_the_ceo_llm_budget_when_one_is_configured():
+    orchestrator = build_orchestrator()
+    orchestrator.budget.set_budget("ceo_llm", 1.0)
+    response = LLMResponse(
+        text="ok", tool_calls=[], stop_reason="end_turn",
+        raw_content=[{"type": "text", "text": "ok"}], input_tokens=1000, output_tokens=500,
+    )
+    service = CEOService(orchestrator, model=ScriptedModel([response]))
+
+    service.chat("hi")
+
+    status = orchestrator.budget.status("ceo_llm")
+    assert status["spent"] > 0
+
+
+def test_chat_without_a_ceo_llm_budget_configured_does_not_error():
+    # build_orchestrator() never calls set_budget("ceo_llm", ...) -- must be
+    # a silent no-op, not a crash, since not every deployment tracks it.
+    response = LLMResponse(text="ok", tool_calls=[], stop_reason="end_turn", raw_content=[{"type": "text", "text": "ok"}])
+    service = CEOService(build_orchestrator(), model=ScriptedModel([response]))
+
+    turn = service.chat("hi")
+    assert turn.content == "ok"

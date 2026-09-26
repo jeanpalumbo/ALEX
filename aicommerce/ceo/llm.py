@@ -31,6 +31,8 @@ class LLMResponse:
     tool_calls: list[ToolCall]
     stop_reason: str
     raw_content: list  # for feeding back into the next turn as assistant content
+    input_tokens: int = 0
+    output_tokens: int = 0
 
 
 class CEOModel:
@@ -85,9 +87,12 @@ class CEOModel:
             elif block.type == "tool_use":
                 tool_calls.append(ToolCall(id=block.id, name=block.name, input=block.input))
 
+        usage = getattr(response, "usage", None)
         return LLMResponse(
             text="\n".join(text_parts),
             tool_calls=tool_calls,
             stop_reason=response.stop_reason,
             raw_content=[b.model_dump() for b in response.content],
+            input_tokens=getattr(usage, "input_tokens", 0) or 0,
+            output_tokens=getattr(usage, "output_tokens", 0) or 0,
         )

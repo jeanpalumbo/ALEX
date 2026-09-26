@@ -8,15 +8,18 @@ permissions/budget/approvals/brain — nothing here is a second, separate chatbo
 """
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
 
 from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
 from aicommerce.ceo.llm import CEOModel, LLMNotConfigured
+from aicommerce.ceo.model_router import ModelRouter
 from aicommerce.ceo.orchestrator import Orchestrator
 from aicommerce.ceo.state import CEOState, CycleStage
 from aicommerce.ceo.tools import TOOL_SCHEMAS, CEOTools
+from aicommerce.control_plane.budget import BudgetExceededError
 
 SYSTEM_PROMPT = """You are the AI CEO of an AI Commerce Operating System — a real, small \
 ecommerce company whose owner is Jean. You are not a generic assistant: you operate this \
@@ -40,6 +43,10 @@ a goal to work on.
 """
 
 
+class _LLMBudgetExhausted(RuntimeError):
+    """Internal control-flow signal: the ceo_llm budget ran out mid-turn."""
+
+
 @dataclass
 class ChatTurn:
     role: str  # "user" | "assistant"
@@ -54,6 +61,10 @@ class CEOService:
         self.state = CEOState()
         self.tools = CEOTools(orchestrator, self.state)
         self.model = model or CEOModel()
+        # ModelRouter separates "which model, at what cost/latency" from this
+        # class's own chat loop (master plan Milestone 4). Any duck-typed
+        # fake with .configured/.call() works here too, same as before.
+        self.router = ModelRouter(self.model, events=getattr(orchestrator, "events", None))
         self.history: list[ChatTurn] = []
 
     @property
@@ -78,13 +89,18 @@ class CEOService:
 
         self.state.set_stage(CycleStage.OBSERVE)
         messages = self._build_messages()
+        correlation_id = str(uuid.uuid4())
 
         tool_activity: list[dict] = []
         final_text = ""
         try:
             for _ in range(6):  # bounded agentic loop — never spins forever
                 self.state.set_stage(CycleStage.DECIDE)
-                response = self.model.call(SYSTEM_PROMPT, messages, tools=TOOL_SCHEMAS)
+                routed = self.router.call(
+                    SYSTEM_PROMPT, messages, tools=TOOL_SCHEMAS, task="ceo_chat", correlation_id=correlation_id
+                )
+                self._spend_llm_budget(routed.estimated_cost)
+                response = routed.response
                 messages.append({"role": "assistant", "content": response.raw_content})
 
                 if not response.tool_calls:
@@ -108,6 +124,8 @@ class CEOService:
                 final_text = response.text or "(stopped after reaching the tool-call limit for this turn)"
         except LLMNotConfigured as exc:
             final_text = f"UNKNOWN: {exc}"
+        except _LLMBudgetExhausted as exc:
+            final_text = f"UNKNOWN: {exc} (this turn stopped early; whatever it already found is above.)"
         except Exception as exc:  # noqa: BLE001 — surface to the human, keep the console alive
             self.state.set_error(str(exc))
             final_text = f"UNKNOWN: the CEO hit an internal error talking to the model: {exc}"
@@ -127,6 +145,20 @@ class CEOService:
         )
         self.state.set_stage(CycleStage.IDLE)
         return turn
+
+    def _spend_llm_budget(self, cost: float) -> None:
+        """Best-effort: enforce the `ceo_llm` budget if the deployment defined
+        one. If it didn't (e.g. a lightweight test orchestrator), this is a
+        no-op rather than an error — budget enforcement here is a policy
+        choice, not a hard requirement for CEOService to function."""
+        if cost <= 0:
+            return
+        try:
+            self.orchestrator.budget.spend("ceo_llm", cost)
+        except KeyError:
+            pass
+        except BudgetExceededError as exc:
+            raise _LLMBudgetExhausted(str(exc)) from exc
 
     def _build_messages(self) -> list[dict]:
         # Keep the last N turns as plain text; tool_use/tool_result blocks from
