@@ -51,6 +51,7 @@ class System:
             QAAgent(),
             approval_ttl_seconds=config.APPROVAL_TTL_SECONDS,
             events=self.events,
+            kill_switch_db_path=config.DATA_DIR / "kill_switch.db",
         )
         self.ceo = CEOService(self.orchestrator, CEOModel())
         self.preflight = self._build_preflight()

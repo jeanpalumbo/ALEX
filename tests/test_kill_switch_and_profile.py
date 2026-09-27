@@ -89,6 +89,66 @@ def test_approval_request_gets_a_deadline_and_expires():
     assert outcome.approval_request_id not in [r.id for r in orchestrator.approvals.pending()]
 
 
+def test_kill_switch_survives_a_new_orchestrator_instance_against_the_same_db(tmp_path):
+    db_path = tmp_path / "kill_switch.db"
+
+    registry = AgentRegistry()
+    permissions = PermissionManager()
+    budget = BudgetGuard()
+    approvals = ApprovalQueue()
+    brain = CompanyBrain(":memory:")
+    registry.register(AgentSpec(name="research", mission="m"), EchoAgent("research"))
+    permissions.define_role(Role(name="r", allowed_actions=frozenset({"do_research"})))
+    permissions.assign_role("research", "r")
+
+    orchestrator1 = Orchestrator(
+        registry, permissions, budget, approvals, brain, kill_switch_db_path=db_path
+    )
+    orchestrator1.engage_kill_switch("simulated incident", by="jean")
+    assert orchestrator1.kill_switch_engaged is True
+
+    # Simulate a process restart: a brand new Orchestrator pointed at the
+    # same db must come up already engaged, not silently reset to "allow".
+    orchestrator2 = Orchestrator(
+        registry, permissions, budget, approvals, brain, kill_switch_db_path=db_path
+    )
+    assert orchestrator2.kill_switch_engaged is True
+    assert orchestrator2.kill_switch_reason == "simulated incident"
+
+    outcome = orchestrator2.run_cycle(
+        objective="test", agent_name="research", action="do_research", budget_scope="research"
+    )
+    assert outcome.status == TaskStatus.DENIED
+
+
+def test_disengaging_kill_switch_persists_across_restart(tmp_path):
+    db_path = tmp_path / "kill_switch.db"
+    registry = AgentRegistry()
+    permissions = PermissionManager()
+    budget = BudgetGuard()
+    approvals = ApprovalQueue()
+    brain = CompanyBrain(":memory:")
+
+    orchestrator1 = Orchestrator(
+        registry, permissions, budget, approvals, brain, kill_switch_db_path=db_path
+    )
+    orchestrator1.engage_kill_switch("temp")
+    orchestrator1.disengage_kill_switch()
+
+    orchestrator2 = Orchestrator(
+        registry, permissions, budget, approvals, brain, kill_switch_db_path=db_path
+    )
+    assert orchestrator2.kill_switch_engaged is False
+    assert orchestrator2.kill_switch_reason == ""
+
+
+def test_without_a_db_path_kill_switch_is_in_memory_only_as_before():
+    orchestrator = build_orchestrator()
+    assert orchestrator.kill_switch_engaged is False
+    orchestrator.engage_kill_switch("x")
+    assert orchestrator.kill_switch_engaged is True
+
+
 def test_profile_offline_blocks_shopify_even_with_credentials(monkeypatch):
     from aicommerce import config
     from aicommerce.agents.shopify_agent import ShopifyAgent

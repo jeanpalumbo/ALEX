@@ -11,8 +11,11 @@ PENDING_APPROVAL and wait for `approve_and_execute`.
 """
 from __future__ import annotations
 
+import sqlite3
+import threading
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 from typing import Optional
 
 from aicommerce.agents.base import Agent, AgentResult
@@ -44,6 +47,14 @@ class TaskOutcome:
 
 REQUIRES_APPROVAL_RISKS = {"high", "critical"}
 
+_KILL_SWITCH_SCHEMA = """
+CREATE TABLE IF NOT EXISTS kill_switch_state (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    engaged INTEGER NOT NULL,
+    reason TEXT NOT NULL
+);
+"""
+
 
 class Orchestrator:
     def __init__(
@@ -56,6 +67,7 @@ class Orchestrator:
         qa_agent: Optional[QAAgent] = None,
         approval_ttl_seconds: int = 1800,
         events: Optional[EventBus] = None,
+        kill_switch_db_path: Optional[str | Path] = None,
     ) -> None:
         self.registry = registry
         self.permissions = permissions
@@ -68,8 +80,26 @@ class Orchestrator:
         # Kill switch: while engaged, run_cycle refuses every new action
         # (read or write) before touching permissions/budget/agents. Chat and
         # memory queries still work since they don't go through run_cycle.
+        # Persisted to SQLite when `kill_switch_db_path` is given, so an
+        # engaged kill switch survives a process restart instead of silently
+        # reverting to "allow everything" — that reversal would defeat the
+        # point of an emergency stop.
+        self._kill_switch_conn: Optional[sqlite3.Connection] = None
+        self._kill_switch_lock = threading.Lock()
         self.kill_switch_engaged = False
         self.kill_switch_reason = ""
+        if kill_switch_db_path is not None:
+            Path(kill_switch_db_path).parent.mkdir(parents=True, exist_ok=True)
+            self._kill_switch_conn = sqlite3.connect(str(kill_switch_db_path), check_same_thread=False)
+            with self._kill_switch_lock:
+                self._kill_switch_conn.executescript(_KILL_SWITCH_SCHEMA)
+                self._kill_switch_conn.commit()
+                row = self._kill_switch_conn.execute(
+                    "SELECT engaged, reason FROM kill_switch_state WHERE id = 1"
+                ).fetchone()
+            if row:
+                self.kill_switch_engaged = bool(row[0])
+                self.kill_switch_reason = row[1]
 
     def _publish(self, event_type: str, payload: dict) -> None:
         if self.events is not None:
@@ -188,9 +218,21 @@ class Orchestrator:
     # ------------------------------------------------------------------
     # Kill switch
     # ------------------------------------------------------------------
+    def _save_kill_switch_state(self) -> None:
+        if self._kill_switch_conn is None:
+            return
+        with self._kill_switch_lock:
+            self._kill_switch_conn.execute(
+                "INSERT INTO kill_switch_state (id, engaged, reason) VALUES (1, ?, ?) "
+                "ON CONFLICT(id) DO UPDATE SET engaged = excluded.engaged, reason = excluded.reason",
+                (int(self.kill_switch_engaged), self.kill_switch_reason),
+            )
+            self._kill_switch_conn.commit()
+
     def engage_kill_switch(self, reason: str, by: str = "human") -> None:
         self.kill_switch_engaged = True
         self.kill_switch_reason = reason
+        self._save_kill_switch_state()
         self._publish("kill_switch.engaged", {"reason": reason, "by": by})
         self.brain.record(
             MemoryRecord(
@@ -204,6 +246,8 @@ class Orchestrator:
 
     def disengage_kill_switch(self, by: str = "human") -> None:
         self.kill_switch_engaged = False
+        self.kill_switch_reason = ""
+        self._save_kill_switch_state()
         self._publish("kill_switch.disengaged", {"by": by})
         self.brain.record(
             MemoryRecord(
