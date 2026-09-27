@@ -148,7 +148,21 @@ TOOL_SCHEMAS: list[dict] = [
             "set_price -> {\"variant_id\": int, \"price\": \"9.99\"}; "
             "set_inventory -> {\"inventory_item_id\": int, \"location_id\": int, \"available\": int}; "
             "delete_product -> {\"product_id\": int}; "
-            "read_products -> {\"limit\": int, \"status\": \"any\"|\"active\"|\"draft\"}."
+            "read_products -> {\"limit\": int, \"status\": \"any\"|\"active\"|\"draft\"}. "
+            "\n\nagent_name='engineering' (this repository's own code, sandboxed): "
+            "current_branch -> {}; read_file -> {\"path\": str}; list_files -> {\"pattern\": str} "
+            "(glob, e.g. \"aicommerce/**/*.py\"); git_status -> {}; git_diff -> {\"against\": str}; "
+            "run_tests -> {} (runs the real pytest suite, can take a while); "
+            "create_branch -> {\"name\": str} (name must NOT be master/main) -- do this BEFORE "
+            "write_file or commit, which both refuse to run on master/main; "
+            "write_file -> {\"path\": str, \"content\": str}; commit -> {\"message\": str}. "
+            "All of the above are low-risk/reversible (local git only, no push exists) and should "
+            "be proposed with risk='low', reversible=True. "
+            "merge_to_master -> {\"branch\": str} is DIFFERENT: it is hardcoded high-risk at the "
+            "control-plane level (Orchestrator forces it to pending_approval regardless of what "
+            "risk/reversible you pass) because it's the only path from a sandbox branch into "
+            "master. Always run_tests and git_diff first so the approval request Jean sees is "
+            "backed by evidence you actually checked, not just a request to trust you."
         ),
         "input_schema": {
             "type": "object",

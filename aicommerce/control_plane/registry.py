@@ -22,6 +22,13 @@ class AgentSpec:
     escalation_policy: str = "escalate to CEO on failure or risk breach"
     kpis: tuple[str, ...] = field(default_factory=tuple)
     model_policy: str = "tier-1"  # conceptual tier, see master context section 28
+    # Actions that ALWAYS require human approval, enforced by the Orchestrator
+    # regardless of what risk/reversible the caller (the CEO's tool call)
+    # claims. This is the code-level backstop for "el modelo propone; los
+    # servicios deterministas validan" — a prompt telling the CEO to always
+    # pass risk='high' for writes is guidance, not a guarantee; this is the
+    # guarantee.
+    high_risk_actions: frozenset[str] = field(default_factory=frozenset)
 
 
 class AgentRegistry:

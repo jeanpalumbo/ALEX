@@ -63,6 +63,7 @@ BRAIN_DB_PATH = DATA_DIR / "brain.db"
 DAILY_BUDGET_LIMIT = float(os.getenv("DAILY_BUDGET_LIMIT", "20.0"))
 SHOPIFY_BUDGET_LIMIT = float(os.getenv("SHOPIFY_BUDGET_LIMIT", "10.0"))
 CEO_LLM_BUDGET_LIMIT = float(os.getenv("CEO_LLM_BUDGET_LIMIT", "5.0"))
+ENGINEERING_BUDGET_LIMIT = float(os.getenv("ENGINEERING_BUDGET_LIMIT", "0.0"))  # cost=0 for local git/tests today
 
 # === Approvals ===
 # Every approval request gets a deadline (now + this many seconds) unless the

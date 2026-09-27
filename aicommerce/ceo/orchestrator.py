@@ -143,6 +143,13 @@ class Orchestrator:
         except PermissionDeniedError as exc:
             return self._deny(objective, agent_name, action, str(exc))
 
+        # Code-level backstop: some actions always require approval no matter
+        # what risk/reversible the caller passed. A prompt telling the CEO to
+        # self-report risk='high' for writes is guidance; this is enforced.
+        spec = self.registry.get_spec(agent_name)
+        if spec is not None and action in spec.high_risk_actions:
+            risk, reversible = "critical", False
+
         # DECIDE: does this need a human? (section 12 — high-risk/irreversible)
         if risk in REQUIRES_APPROVAL_RISKS or not reversible:
             from datetime import datetime, timedelta, timezone

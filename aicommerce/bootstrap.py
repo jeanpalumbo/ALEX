@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import timedelta
 
 from aicommerce import config
+from aicommerce.agents.engineering_agent import EngineeringAgent
 from aicommerce.agents.shopify_agent import ShopifyAgent
 from aicommerce.agents.stubs import QAAgent
 from aicommerce.brain.store import CompanyBrain
@@ -70,8 +71,25 @@ class System:
                 tools=("shopify_admin_api",),
                 limits={"requires_approval_for": "all write actions"},
                 kpis=("catalog_accuracy", "order_fulfillment_latency"),
+                high_risk_actions=frozenset(ShopifyAgent.WRITE_ACTIONS),
             ),
             self.shopify_agent,
+        )
+
+        self.engineering_agent = EngineeringAgent()
+        self.registry.register(
+            AgentSpec(
+                name="engineering",
+                mission="Read, edit, test and commit code on a sandbox branch of this "
+                "repository. Never touches master directly; merging to master always "
+                "requires human approval.",
+                authority=tuple(EngineeringAgent.READ_ACTIONS | EngineeringAgent.WRITE_ACTIONS),
+                tools=("git", "pytest"),
+                limits={"protected_branches": sorted(EngineeringAgent.MERGE_ACTIONS)},
+                kpis=("test_pass_rate", "review_turnaround"),
+                high_risk_actions=frozenset(EngineeringAgent.MERGE_ACTIONS),
+            ),
+            self.engineering_agent,
         )
 
     def _configure_permissions(self) -> None:
@@ -92,10 +110,22 @@ class System:
         self.permissions.assign_role("shopify", "shopify_read")
         self.permissions.assign_role("shopify", "shopify_write")
 
+        self.permissions.define_role(
+            Role(
+                name="engineering_full",
+                allowed_actions=frozenset(
+                    EngineeringAgent.READ_ACTIONS | EngineeringAgent.WRITE_ACTIONS | EngineeringAgent.MERGE_ACTIONS
+                ),
+                allowed_tools=frozenset({"git", "pytest"}),
+            )
+        )
+        self.permissions.assign_role("engineering", "engineering_full")
+
     def _configure_budgets(self) -> None:
         self.budget.set_budget("daily", config.DAILY_BUDGET_LIMIT)
         self.budget.set_budget("shopify", config.SHOPIFY_BUDGET_LIMIT)
         self.budget.set_budget("ceo_llm", config.CEO_LLM_BUDGET_LIMIT)
+        self.budget.set_budget("engineering", config.ENGINEERING_BUDGET_LIMIT)
 
     def _wire_events(self) -> None:
         self.events.subscribe("approval.required", lambda e: None)  # placeholder hook point
