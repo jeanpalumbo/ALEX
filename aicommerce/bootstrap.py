@@ -53,8 +53,9 @@ class System:
             events=self.events,
             kill_switch_db_path=config.DATA_DIR / "kill_switch.db",
         )
-        self.ceo = CEOService(self.orchestrator, CEOModel())
+        self.ceo = CEOService(self.orchestrator, CEOModel(), scheduler=self.scheduler)
         self.preflight = self._build_preflight()
+        self.ceo.tools.preflight_provider = self.preflight.run
         self._configure_scheduler()
 
     # ------------------------------------------------------------------

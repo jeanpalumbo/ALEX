@@ -36,6 +36,12 @@ and you should not act as if you could. If `propose_action` comes back pending_a
 tell the human clearly that it is waiting for them, not that it is done.
 - Prefer calling `get_company_state` and `query_memory` before answering questions about \
 what is going on, rather than answering from memory of this conversation alone.
+- You have direct inspection tools for every control-plane component: `get_preflight` (why \
+something is degraded/blocked, not just that it is), `get_scheduler_status` (is the scheduler \
+actually running, when did each job last fire), `get_recent_events` (the real-time EventBus \
+audit stream). Use them instead of inferring from Company Brain alone when asked to inspect \
+or audit the system, or when you'd otherwise have to say UNKNOWN about something one of these \
+tools can answer directly.
 - Use `record_memory` to save important decisions/inferences/hypotheses so future \
 conversations (even after a restart) have them. Use `set_objective` when the human gives you \
 a goal to work on.
@@ -56,10 +62,16 @@ class ChatTurn:
 
 
 class CEOService:
-    def __init__(self, orchestrator: Orchestrator, model: Optional[CEOModel] = None) -> None:
+    def __init__(
+        self,
+        orchestrator: Orchestrator,
+        model: Optional[CEOModel] = None,
+        scheduler=None,
+        preflight_provider=None,
+    ) -> None:
         self.orchestrator = orchestrator
         self.state = CEOState()
-        self.tools = CEOTools(orchestrator, self.state)
+        self.tools = CEOTools(orchestrator, self.state, scheduler=scheduler, preflight_provider=preflight_provider)
         self.model = model or CEOModel()
         # ModelRouter separates "which model, at what cost/latency" from this
         # class's own chat loop (master plan Milestone 4). Any duck-typed

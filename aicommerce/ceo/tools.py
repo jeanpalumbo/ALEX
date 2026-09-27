@@ -9,11 +9,12 @@ Orchestrator.run_cycle (permissions -> budget -> QA -> approval).
 from __future__ import annotations
 
 import json
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
 from aicommerce.ceo.orchestrator import Orchestrator, TaskStatus
 from aicommerce.ceo.state import CEOState
+from aicommerce.control_plane.scheduler import Scheduler
 
 TOOL_SCHEMAS: list[dict] = [
     {
@@ -81,6 +82,41 @@ TOOL_SCHEMAS: list[dict] = [
         "input_schema": {"type": "object", "properties": {"objective": {"type": "string"}}, "required": ["objective"]},
     },
     {
+        "name": "get_preflight",
+        "description": (
+            "Get the ReadinessPreflight report: overall result (ready/blocked/degraded/"
+            "requires_approval), which specific checks failed, and why. Call this to explain "
+            "*why* something is degraded/blocked instead of guessing — e.g. if asked why "
+            "Shopify calls keep failing, or why preflight isn't READY."
+        ),
+        "input_schema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "get_scheduler_status",
+        "description": (
+            "List every job registered with the Scheduler (name, interval, last run time). "
+            "Call this before claiming a scheduled/autonomous job is or isn't running."
+        ),
+        "input_schema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "get_recent_events",
+        "description": (
+            "Read the most recent entries from the EventBus (the real-time control-plane "
+            "audit stream: action.executed/denied/failed/qa_rejected/pending_approval, "
+            "kill_switch.engaged/disengaged, model.call/model.call_failed). Call this instead "
+            "of inferring activity from Company Brain alone when asked what has actually "
+            "happened, or to check whether the EventBus itself is live."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "event_type": {"type": "string", "description": "optional exact event type to filter by"},
+                "limit": {"type": "integer", "default": 20},
+            },
+        },
+    },
+    {
         "name": "propose_action",
         "description": (
             "Propose that a registered agent perform an action. This is the ONLY way "
@@ -118,9 +154,17 @@ TOOL_SCHEMAS: list[dict] = [
 class CEOTools:
     """Binds the tool schemas above to real callables against a live system."""
 
-    def __init__(self, orchestrator: Orchestrator, state: CEOState) -> None:
+    def __init__(
+        self,
+        orchestrator: Orchestrator,
+        state: CEOState,
+        scheduler: Optional[Scheduler] = None,
+        preflight_provider: Optional[Callable[[], Any]] = None,
+    ) -> None:
         self.orchestrator = orchestrator
         self.state = state
+        self.scheduler = scheduler
+        self.preflight_provider = preflight_provider
 
     def dispatch(self, name: str, tool_input: dict) -> Any:
         handler: Callable[..., Any] = getattr(self, f"_tool_{name}", None)
@@ -213,6 +257,41 @@ class CEOTools:
             )
         )
         return {"ok": True}
+
+    def _tool_get_preflight(self) -> dict:
+        if self.preflight_provider is None:
+            return {"error": "no preflight provider wired into this CEO instance"}
+        report = self.preflight_provider()
+        return {
+            "result": report.result.value,
+            "failed_checks": report.failed_checks,
+            "reasons": report.reasons,
+        }
+
+    def _tool_get_scheduler_status(self) -> dict:
+        if self.scheduler is None:
+            return {"error": "no scheduler wired into this CEO instance"}
+        return {
+            "jobs": [
+                {
+                    "name": j.name,
+                    "interval_seconds": j.interval.total_seconds(),
+                    "last_run": j.last_run.isoformat() if j.last_run else None,
+                }
+                for j in self.scheduler.jobs()
+            ]
+        }
+
+    def _tool_get_recent_events(self, event_type: str | None = None, limit: int = 20) -> dict:
+        if self.orchestrator.events is None:
+            return {"error": "no EventBus wired into this orchestrator"}
+        events = self.orchestrator.events.history(event_type, limit=limit)
+        return {
+            "events": [
+                {"type": e.type, "payload": e.payload, "timestamp": e.timestamp.isoformat()}
+                for e in events
+            ]
+        }
 
     def _tool_propose_action(
         self,
