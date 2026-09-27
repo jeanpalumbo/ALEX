@@ -100,6 +100,23 @@
       <h2>Activity / events</h2>
       <div id="events-list"><div class="empty">cargando...</div></div>
     </div>
+    <div class="panel" style="max-height: 200px;">
+      <h2>Decision log</h2>
+      <div id="decisions-list"><div class="empty">cargando...</div></div>
+    </div>
+    <div class="panel" id="errors-panel">
+      <h2>Errors / blockers</h2>
+      <div id="errors-list"><div class="empty">cargando...</div></div>
+    </div>
+    <div class="panel" id="reports-panel">
+      <h2>Reports</h2>
+      <div style="display:flex; gap:6px; margin-bottom:8px;">
+        <button class="btn-ghost" onclick="runReport('daily')">Daily brief</button>
+        <button class="btn-ghost" onclick="runReport('eod')">End-of-day</button>
+        <button class="btn-ghost" onclick="runReport('executive')">Executive</button>
+      </div>
+      <pre id="report-output" class="empty" style="white-space:pre-wrap; font-size:11px; margin:0;">sin informe generado todavía</pre>
+    </div>
   </div>
 </div>
 
@@ -195,6 +212,46 @@ async function refreshBrain() {
   `).join('') || '<div class="empty">memoria vacía</div>';
 }
 
+async function refreshDecisions() {
+  const r = await api('/api/brain?kind=decision&limit=15');
+  $('decisions-list').innerHTML = r.records.map(m => `
+    <div class="mem-item">
+      <span class="tag">[${m.confidence}] ${new Date(m.timestamp).toLocaleTimeString()} · ${escapeHtml((m.tags||[]).join(','))}</span><br>
+      ${escapeHtml(m.content)}
+    </div>
+  `).join('') || '<div class="empty">sin decisiones registradas</div>';
+}
+
+async function refreshErrors() {
+  const [state, events] = await Promise.all([
+    api('/api/state'),
+    api('/api/events?limit=100'),
+  ]);
+  const problems = [];
+  if (state.ceo_state.last_error) {
+    problems.push(`<div class="mem-item">${badge('LAST ERROR', 'blocked')} ${escapeHtml(state.ceo_state.last_error)}</div>`);
+  }
+  if (state.preflight.result !== 'ready') {
+    problems.push(`<div class="mem-item">${badge('PREFLIGHT ' + state.preflight.result.toUpperCase(), 'degraded')} ${escapeHtml((state.preflight.reasons||[]).join('; '))}</div>`);
+  }
+  if (state.kill_switch_engaged) {
+    problems.push(`<div class="mem-item">${badge('KILL SWITCH', 'blocked')} ${escapeHtml(state.kill_switch_reason)}</div>`);
+  }
+  const failedEvents = events.events.filter(e => ['action.failed','action.denied','action.qa_rejected','model.call_failed'].includes(e.type)).slice(-10).reverse();
+  for (const e of failedEvents) {
+    problems.push(`<div class="mem-item">${badge(e.type, 'blocked')} <span class="tag">${new Date(e.timestamp).toLocaleTimeString()}</span><br>${escapeHtml(JSON.stringify(e.payload))}</div>`);
+  }
+  $('errors-list').innerHTML = problems.join('') || '<div class="empty">sin errores ni bloqueos detectados</div>';
+}
+
+async function runReport(period) {
+  const out = $('report-output');
+  out.textContent = 'generando...';
+  out.className = '';
+  const r = await api(`/api/reports/status?period=${period}`);
+  out.textContent = JSON.stringify(r, null, 2);
+}
+
 async function refreshChatHistory() {
   const r = await api('/api/chat/history');
   const log = $('chat-log');
@@ -282,7 +339,10 @@ async function refreshEvents() {
 }
 
 async function refreshAll() {
-  await Promise.all([refreshState(), refreshApprovals(), refreshBudget(), refreshAgents(), refreshBrain(), refreshEvents()]);
+  await Promise.all([
+    refreshState(), refreshApprovals(), refreshBudget(), refreshAgents(),
+    refreshBrain(), refreshEvents(), refreshDecisions(), refreshErrors(),
+  ]);
 }
 
 refreshAll();

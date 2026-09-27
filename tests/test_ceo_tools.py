@@ -153,3 +153,22 @@ def test_get_recent_events_filters_by_type():
     result = tools.dispatch("get_recent_events", {"event_type": "action.denied"})
     assert len(result["events"]) == 1
     assert result["events"][0]["type"] == "action.denied"
+
+
+def test_generate_status_report_tool_without_preflight_provider_errors():
+    tools, _ = build()
+    result = tools.dispatch("generate_status_report", {})
+    assert "error" in result
+
+
+def test_generate_status_report_tool_reflects_real_state():
+    from aicommerce.control_plane.preflight import ReadinessPreflight
+
+    pf = ReadinessPreflight()
+    tools, orchestrator = build(events=EventBus(), preflight_provider=pf.run)
+
+    tools.dispatch("propose_action", {"agent_name": "research", "action": "do_research", "risk": "low"})
+    result = tools.dispatch("generate_status_report", {"period": "daily"})
+
+    assert result["estado"] == "ready"
+    assert len(result["acciones_ejecutadas"]) == 1

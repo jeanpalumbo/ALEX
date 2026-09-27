@@ -30,6 +30,7 @@ from pydantic import BaseModel
 from aicommerce import backup, config
 from aicommerce.bootstrap import get_system
 from aicommerce.brain.models import MemoryKind
+from aicommerce.reports import generate_status_report
 
 _scheduler_stop = threading.Event()
 
@@ -352,6 +353,18 @@ def restore_backup(body: RestoreRequest) -> dict:
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
     return {"restored": restored, "note": "restart the server for the restored data to take effect"}
+
+
+# ----------------------------------------------------------------------
+# Reports (master plan Fase 3)
+# ----------------------------------------------------------------------
+@api.get("/reports/status")
+def get_status_report(period: str = "daily") -> dict:
+    system = get_system()
+    report = generate_status_report(
+        system.orchestrator, system.ceo.state, system.preflight.run(), registry=system.registry, period=period
+    )
+    return report.to_dict()
 
 
 app.include_router(api)

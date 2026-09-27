@@ -117,6 +117,21 @@ TOOL_SCHEMAS: list[dict] = [
         },
     },
     {
+        "name": "generate_status_report",
+        "description": (
+            "Generate a real CEO status report (Daily Brief / End-of-Day / Executive) from "
+            "actual data: preflight, objective, executed/blocked actions in the period, "
+            "pending approvals, budget, agents, recent decisions, experiments, problems and "
+            "risks. Use this when asked for a status report, daily brief, EOD report, or "
+            "executive summary — then narrate it in your own words, but every number and "
+            "claim must come from this tool's output, not be invented."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {"period": {"type": "string", "enum": ["daily", "eod", "executive"], "default": "daily"}},
+        },
+    },
+    {
         "name": "propose_action",
         "description": (
             "Propose that a registered agent perform an action. This is the ONLY way "
@@ -292,6 +307,16 @@ class CEOTools:
                 for e in events
             ]
         }
+
+    def _tool_generate_status_report(self, period: str = "daily") -> dict:
+        if self.preflight_provider is None:
+            return {"error": "no preflight provider wired into this CEO instance"}
+        from aicommerce.reports import generate_status_report
+
+        report = generate_status_report(
+            self.orchestrator, self.state, self.preflight_provider(), period=period
+        )
+        return report.to_dict()
 
     def _tool_propose_action(
         self,
