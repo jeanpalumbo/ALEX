@@ -172,3 +172,8 @@ def test_generate_status_report_tool_reflects_real_state():
 
     assert result["estado"] == "ready"
     assert len(result["acciones_ejecutadas"]) == 1
+
+
+def test_finance_is_a_default_voter_for_technical_votes():
+    tools, _ = build()
+    assert "finance" in tools.voter_agent_names

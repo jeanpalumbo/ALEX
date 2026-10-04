@@ -151,7 +151,7 @@ def test_all_persona_agents_registered_with_their_own_budgets(tmp_path, monkeypa
     monkeypatch.setattr(config, "DATA_DIR", tmp_path)
 
     system = System()
-    for name in ("research", "store_ops", "engineering_lead"):
+    for name in ("research", "store_ops", "engineering_lead", "finance"):
         assert system.registry.get_instance(name) is not None, f"{name} not registered"
         assert system.registry.get_spec(name).mission
         assert name in system.budget.scopes()
@@ -161,6 +161,7 @@ def test_all_persona_agents_registered_with_their_own_budgets(tmp_path, monkeypa
     # shared one -- confirms they're independent actors, not aliases
     assert system.research_agent.router is not system.store_ops_agent.router
     assert system.store_ops_agent.router is not system.engineering_lead_agent.router
+    assert system.finance_agent.router is not system.research_agent.router
 
 
 def test_ceo_has_its_own_named_identity(tmp_path, monkeypatch):

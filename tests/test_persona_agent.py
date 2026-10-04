@@ -1,4 +1,4 @@
-from aicommerce.agents.persona import RESEARCH_PERSONA, Persona, PersonaAgent
+from aicommerce.agents.persona import FINANCE_PERSONA, RESEARCH_PERSONA, Persona, PersonaAgent
 from aicommerce.brain.store import CompanyBrain
 from aicommerce.ceo.llm import LLMResponse
 from aicommerce.ceo.model_router import ModelRouter
@@ -127,24 +127,36 @@ def test_custom_persona_is_not_tied_to_research():
 def test_every_persona_has_a_self_correction_style():
     """Jean's explicit ask: every employee needs real self-correction built
     in, not just a generic one. Each should be distinguishable."""
-    from aicommerce.agents.persona import CEO_PERSONA, ENGINEERING_PERSONA, STORE_OPS_PERSONA
+    from aicommerce.agents.persona import CEO_PERSONA, ENGINEERING_PERSONA, FINANCE_PERSONA, STORE_OPS_PERSONA
 
-    personas = [CEO_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, ENGINEERING_PERSONA]
+    personas = [CEO_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, ENGINEERING_PERSONA, FINANCE_PERSONA]
     styles = {p.self_correction_style for p in personas}
     assert len(styles) == len(personas)  # all distinct, not copy-pasted
     for p in personas:
         assert p.self_correction_style in p.system_prompt()
 
 
-def test_all_four_core_personas_have_distinct_full_identities():
-    from aicommerce.agents.persona import CEO_PERSONA, ENGINEERING_PERSONA, STORE_OPS_PERSONA
+def test_all_five_core_personas_have_distinct_full_identities():
+    from aicommerce.agents.persona import CEO_PERSONA, ENGINEERING_PERSONA, FINANCE_PERSONA, STORE_OPS_PERSONA
 
-    personas = [CEO_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, ENGINEERING_PERSONA]
+    personas = [CEO_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, ENGINEERING_PERSONA, FINANCE_PERSONA]
     names = {p.name for p in personas}
-    assert len(names) == 4  # no duplicate identities
+    assert len(names) == 5  # no duplicate identities
     for p in personas:
         for field_value in (p.mission, p.personality, p.career_motivation, p.operating_principles):
             assert len(field_value) > 50  # real depth, not a placeholder stub
+
+
+def test_finance_persona_votes_against_spend_without_free_validation_first():
+    finance_model = FakeModel(
+        text="VOTE: AGAINST\nWe haven't tried the free version of this yet. Automatic no at this stage."
+    )
+    agent = PersonaAgent(FINANCE_PERSONA, ModelRouter(finance_model), CompanyBrain(":memory:"))
+
+    result = agent.execute({"action": "think", "params": {"prompt": "Should we spend $200 on ads?"}})
+
+    assert result.success is True
+    assert "free version" in result.output
 
 
 def test_store_ops_and_engineering_lead_personas_reason_distinctly(monkeypatch):

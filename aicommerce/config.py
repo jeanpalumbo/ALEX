@@ -95,6 +95,7 @@ ENGINEERING_BUDGET_LIMIT = float(os.getenv("ENGINEERING_BUDGET_LIMIT", "0.0"))  
 RESEARCH_BUDGET_LIMIT = float(os.getenv("RESEARCH_BUDGET_LIMIT", "5.0"))  # persona agents call the real model
 STORE_OPS_BUDGET_LIMIT = float(os.getenv("STORE_OPS_BUDGET_LIMIT", "5.0"))
 ENGINEERING_LEAD_BUDGET_LIMIT = float(os.getenv("ENGINEERING_LEAD_BUDGET_LIMIT", "5.0"))
+FINANCE_BUDGET_LIMIT = float(os.getenv("FINANCE_BUDGET_LIMIT", "5.0"))
 
 # === Telegram bridge — talk to the CEO from anywhere, no shared network needed ===
 # Leave TELEGRAM_BOT_TOKEN empty to disable the bridge entirely (default).

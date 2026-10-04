@@ -11,7 +11,13 @@ from datetime import timedelta
 
 from aicommerce import config
 from aicommerce.agents.engineering_agent import EngineeringAgent
-from aicommerce.agents.persona import ENGINEERING_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, PersonaAgent
+from aicommerce.agents.persona import (
+    ENGINEERING_PERSONA,
+    FINANCE_PERSONA,
+    RESEARCH_PERSONA,
+    STORE_OPS_PERSONA,
+    PersonaAgent,
+)
 from aicommerce.agents.shopify_agent import ShopifyAgent
 from aicommerce.agents.stubs import QAAgent
 from aicommerce.brain.store import CompanyBrain
@@ -154,6 +160,22 @@ class System:
             self.engineering_lead_agent,
         )
 
+        self.finance_agent = PersonaAgent(
+            FINANCE_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
+        )
+        self.registry.register(
+            AgentSpec(
+                name="finance",
+                mission=FINANCE_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": FINANCE_PERSONA.name, "role": FINANCE_PERSONA.role},
+                kpis=("spend_discipline", "runway_accuracy"),
+            ),
+            self.finance_agent,
+        )
+
     def _configure_permissions(self) -> None:
         self.permissions.define_role(
             Role(
@@ -193,6 +215,7 @@ class System:
         self.permissions.assign_role("research", "persona_think")
         self.permissions.assign_role("store_ops", "persona_think")
         self.permissions.assign_role("engineering_lead", "persona_think")
+        self.permissions.assign_role("finance", "persona_think")
 
     def _configure_budgets(self) -> None:
         self.budget.set_budget("daily", config.DAILY_BUDGET_LIMIT)
@@ -202,6 +225,7 @@ class System:
         self.budget.set_budget("research", config.RESEARCH_BUDGET_LIMIT)
         self.budget.set_budget("store_ops", config.STORE_OPS_BUDGET_LIMIT)
         self.budget.set_budget("engineering_lead", config.ENGINEERING_LEAD_BUDGET_LIMIT)
+        self.budget.set_budget("finance", config.FINANCE_BUDGET_LIMIT)
         self.budget.set_budget("opus_review", config.OPUS_REVIEW_BUDGET_LIMIT)
 
     def _wire_events(self) -> None:
@@ -307,6 +331,14 @@ class System:
                 "activity (ask the engineering tool agent's own history via your memory) for "
                 "anything worth flagging -- risk, tech debt, a change that deserved more "
                 "scrutiny. If there's nothing new, say so briefly."
+            ),
+            "finance": (
+                "Autonomous check-in, not a message from Jean. Review current budget status "
+                "and recent spend across every scope, and the CEO's current objective. Flag "
+                "anything that looks like spend creeping in before it was validated for free, "
+                "or any budget scope trending toward its limit. The company's default right now "
+                "is $0 real spend until something shows real traction -- if everything is still "
+                "at $0 or trivial, say so briefly rather than manufacturing a concern."
             ),
         }
 

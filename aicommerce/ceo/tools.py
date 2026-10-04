@@ -239,7 +239,7 @@ class CEOTools:
         scheduler: Optional[Scheduler] = None,
         preflight_provider: Optional[Callable[[], Any]] = None,
         opus_router: Optional[ModelRouter] = None,
-        voter_agent_names: tuple[str, ...] = ("research", "store_ops", "engineering_lead"),
+        voter_agent_names: tuple[str, ...] = ("research", "store_ops", "engineering_lead", "finance"),
     ) -> None:
         self.orchestrator = orchestrator
         self.state = state
