@@ -9,6 +9,8 @@ silently falling back to a fabricated answer (Reality-First).
 from __future__ import annotations
 
 import json
+import threading
+from datetime import date
 from dataclasses import dataclass
 from typing import Any, Optional
 
@@ -17,6 +19,10 @@ from aicommerce import config
 
 class LLMNotConfigured(RuntimeError):
     pass
+
+
+class OllamaLimitReached(LLMNotConfigured):
+    """Daily Ollama call cap hit; FallbackModel treats it as 'try the next model'."""
 
 
 @dataclass
@@ -251,6 +257,7 @@ class FallbackModel:
             raise ValueError("FallbackModel requires at least one model")
         self.models = models
         self.model = "/".join(getattr(m, "model", "unknown") for m in models)
+        self.last_model: Optional[str] = None
 
     @property
     def configured(self) -> bool:
@@ -276,6 +283,7 @@ class FallbackModel:
                 last_exc = exc
                 continue
             self.free = getattr(m, "free", False)
+            self.last_model = getattr(m, "model", "unknown")
             return response
         raise LLMNotConfigured(
             f"No model in the fallback chain is configured or reachable. Last error: {last_exc}"
@@ -317,6 +325,21 @@ class OllamaModel:
         self.model = model or config.OLLAMA_MODEL
         self.api_key = api_key if api_key is not None else config.OLLAMA_API_KEY
         self._client = None
+        self._calls_lock = threading.Lock()
+        self._calls_day = date.today()
+        self._calls_today = 0
+
+    def _reserve_call(self) -> None:
+        cap = config.OLLAMA_MAX_CALLS_PER_DAY
+        if cap <= 0:
+            return
+        with self._calls_lock:
+            today = date.today()
+            if today != self._calls_day:
+                self._calls_day, self._calls_today = today, 0
+            if self._calls_today >= cap:
+                raise OllamaLimitReached(f"Ollama daily call cap ({cap}) reached; falling back.")
+            self._calls_today += 1
 
     @property
     def configured(self) -> bool:
@@ -335,7 +358,12 @@ class OllamaModel:
             # Local Ollama ignores the key entirely; Ollama Cloud requires
             # the real OLLAMA_API_KEY as a Bearer token -- the openai SDK
             # sends whatever api_key we pass as `Authorization: Bearer ...`.
-            self._client = openai.OpenAI(base_url=self.base_url, api_key=self.api_key or "ollama")
+            self._client = openai.OpenAI(
+                base_url=self.base_url,
+                api_key=self.api_key or "ollama",
+                timeout=config.OLLAMA_TIMEOUT_SECONDS,
+                max_retries=0,
+            )
         return self._client
 
     def call(
@@ -346,6 +374,7 @@ class OllamaModel:
         max_tokens: int = 4096,
     ) -> LLMResponse:
         client = self._client_or_raise()
+        self._reserve_call()
         oi_messages = [{"role": "system", "content": system}] + _anthropic_messages_to_openai(messages)
         kwargs: dict[str, Any] = dict(model=self.model, messages=oi_messages, max_tokens=max_tokens)
         if tools:

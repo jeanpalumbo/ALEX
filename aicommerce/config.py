@@ -76,6 +76,13 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
 # Empty for local Ollama (it ignores the key). Only set for Ollama Cloud
 # (OLLAMA_BASE_URL=https://ollama.com/v1); keep it in .env, never in code.
 OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY", "")
+# Seconds to wait for one Ollama call before falling back to the next model
+# (the openai SDK default is 10 min x 2 retries, which freezes the 24/7 loop).
+OLLAMA_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "60"))
+# Hard cap on Ollama calls per calendar day, per process. 0 = no cap (local).
+# With Ollama Cloud, set a cap so 24/7 agents cannot burn the plan's included
+# credits; once reached, calls fall back to the next model in the chain.
+OLLAMA_MAX_CALLS_PER_DAY = int(os.getenv("OLLAMA_MAX_CALLS_PER_DAY", "0"))
 
 # === Shopify (optional — ShopifyAgent runs in DEGRADED/BLOCKED mode without it) ===
 SHOPIFY_STORE = os.getenv("SHOPIFY_STORE", "")
