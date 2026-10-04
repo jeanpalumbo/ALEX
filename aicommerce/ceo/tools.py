@@ -12,6 +12,8 @@ import json
 from typing import Any, Callable, Optional
 
 from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
+from aicommerce.brain.tasks import TaskBoard
+from aicommerce.brain.tasks import TaskStatus as BoardTaskStatus
 from aicommerce.ceo.model_router import ModelRouter
 from aicommerce.ceo.orchestrator import Orchestrator, TaskStatus
 from aicommerce.ceo.state import CEOState
@@ -145,6 +147,13 @@ TOOL_SCHEMAS: list[dict] = [
             "Jean can bring it into a conversation with Claude and have it executed for real, "
             "without starting from zero. Only call this for work Jean has actually approved -- "
             "never speculatively."
+            "\n\ngeneration_path matters: 'free_local'/'free_api' means Mateo (design) found a "
+            "zero-cost path (a local tool, free-tier API, open-source repo) that covers this brief "
+            "-- the default, expected case. 'needs_paid_claude_tools' means the free path genuinely "
+            "can't deliver what's needed and real cost (Jean's own Claude Code session/tools) is "
+            "required -- this case must already have gone through `request_technical_vote` before "
+            "you call this tool; say so in approval_reference. Never record 'needs_paid_claude_tools' "
+            "speculatively or as a convenience over trying the free path first."
         ),
         "input_schema": {
             "type": "object",
@@ -156,9 +165,20 @@ TOOL_SCHEMAS: list[dict] = [
                 "product": {"type": "string", "description": "which product/offer this is for"},
                 "key_message": {"type": "string", "description": "the one thing this asset must communicate"},
                 "target_audience": {"type": "string"},
+                "generation_path": {
+                    "type": "string",
+                    "enum": ["free_local", "free_api", "needs_paid_claude_tools"],
+                    "default": "free_local",
+                    "description": "which path covers this brief -- see tool description",
+                },
+                "generation_path_reasoning": {
+                    "type": "string",
+                    "description": "which specific free tool/API/repo was chosen (or why none sufficed)",
+                },
                 "approval_reference": {
                     "type": "string",
-                    "description": "the approval request id or decision that authorized this work",
+                    "description": "the approval request id or decision that authorized this work -- "
+                    "for needs_paid_claude_tools, the request_technical_vote result",
                 },
                 "notes": {"type": "string", "description": "anything else Claude will need to execute this well"},
             },
@@ -187,6 +207,90 @@ TOOL_SCHEMAS: list[dict] = [
                 },
             },
             "required": ["proposal"],
+        },
+    },
+    {
+        "name": "provide_missing_config",
+        "description": (
+            "Apply a configuration value Jean JUST gave you in this conversation, so the system "
+            "doesn't stay blocked waiting on a manual .env edit. Use this when you need something "
+            "to actually launch (a Shopify store/token, switching PROFILE from 'offline' to "
+            "'sandbox' once Jean is ready for real external calls, etc.) -- ask Jean for it "
+            "plainly in your own words first, then call this tool ONLY with the exact value he "
+            "just typed. NEVER invent, guess, or reuse a value from anywhere else -- if Jean "
+            "hasn't given you the value in THIS conversation, you don't have it. Only the keys "
+            "listed in the enum are allowed; anything else (API keys to Anthropic/OpenRouter, the "
+            "console auth token) is intentionally out of reach of this tool."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "enum": [
+                        "SHOPIFY_STORE",
+                        "SHOPIFY_TOKEN",
+                        "SHOPIFY_API_VERSION",
+                        "PROFILE",
+                    ],
+                },
+                "value": {"type": "string", "description": "the exact value Jean gave you"},
+            },
+            "required": ["key", "value"],
+        },
+    },
+    {
+        "name": "create_task",
+        "description": (
+            "Create a real, tracked task under an objective, owned by a specific agent. This is "
+            "the ONLY way work becomes checkable later -- 'I told Elena to look into X' in chat "
+            "is not a task; this is. Use this whenever you delegate something that should be "
+            "trackable to completion, not just a one-off question. Group related tasks under the "
+            "same `objective` string so progress on a goal can be seen as a whole."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "objective": {"type": "string", "description": "the goal this task belongs to, e.g. 'validate product X'"},
+                "title": {"type": "string", "description": "what this specific task is"},
+                "owner": {"type": "string", "description": "the agent name actually responsible (e.g. 'research', 'marketing')"},
+            },
+            "required": ["objective", "title", "owner"],
+        },
+    },
+    {
+        "name": "update_task_status",
+        "description": (
+            "Update a task's real status: pending, in_progress, blocked, done, or cancelled. "
+            "Call this the moment status actually changes -- don't let tasks sit stale while you "
+            "tell Jean something is 'in progress' in words only. A task already 'done' or "
+            "'cancelled' cannot be moved to another status (create a new task instead) -- that's "
+            "enforced, not a suggestion. If marking 'blocked', say what it's blocked on in notes."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "task_id": {"type": "string"},
+                "status": {"type": "string", "enum": ["pending", "in_progress", "blocked", "done", "cancelled"]},
+                "notes": {"type": "string", "description": "why/what changed, especially for 'blocked'"},
+            },
+            "required": ["task_id", "status"],
+        },
+    },
+    {
+        "name": "list_tasks",
+        "description": (
+            "List real tasks with their actual current status, optionally filtered by objective, "
+            "owner, or status. Use this before telling Jean what's done/pending/blocked, instead "
+            "of reconstructing it from memory or chat history -- this is the ground truth."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "objective": {"type": "string"},
+                "owner": {"type": "string"},
+                "status": {"type": "string", "enum": ["pending", "in_progress", "blocked", "done", "cancelled"]},
+            },
         },
     },
     {
@@ -236,14 +340,31 @@ TOOL_SCHEMAS: list[dict] = [
             "'engineering' tool agent to actually touch code, especially for anything "
             "non-trivial. She decides the approach; 'engineering' executes the git/test "
             "mechanics of whatever she (or you) directed."
-            "\n\nIMPORTANT -- which action to use for research/store_ops/engineering_lead: "
-            "action='think_background' -> {\"prompt\": str} is the DEFAULT for routine, day-to-day "
-            "delegation (this is what '24/7' actually means here) -- it runs on a free open-"
-            "weight model, costs ~$0, but is noticeably weaker reasoning. Use action='think' -> "
-            "{\"prompt\": str} (the paid, stronger model) only when the matter is genuinely "
-            "important enough that you'd also consider `request_technical_vote` for it -- don't "
-            "default to the paid path for ordinary work. risk='low', reversible=True, cost=0 for "
-            "both (real cost, if any, is metered and charged automatically after the call)."
+            "\n\nagent_name='marketing' is Sofia Reyes, Head of Performance Marketing & Growth -- "
+            "delegate campaign structure, channel/targeting strategy, and creative-angle direction "
+            "to her. She has no ad-account access of her own: any real spend she proposes still "
+            "requires `request_technical_vote` and your approval, same as every other cost-bearing "
+            "decision. She works from Elena's research, not her own invented market read."
+            "\n\nagent_name='design' is Mateo Fonseca, Creative Director (Visual & Ad Design) -- "
+            "delegate creative-brief direction to him for ads/store visuals. He cannot generate "
+            "actual image/video files himself; his real output is a brief recorded via "
+            "`record_content_brief` for Jean/Claude Code to execute. Never report a design task as "
+            "'done' based on his think output alone -- it is a brief, not a finished asset."
+            "\n\nagent_name='rnd' is Noor Kaelin, Head of R&D & Future Strategy -- delegate "
+            "'what else could this company/team become' exploration to them: new business lines "
+            "or fields this same team's skills could run, not new products for the current store "
+            "(that's Elena). Noor's output is always a labeled HYPOTHESIS for Elena to validate, "
+            "never a conclusion -- relay it as exactly that, never as something already decided, "
+            "and never let it skip Elena's validation or Nadia's spend-gating."
+            "\n\nIMPORTANT -- which action to use for research/store_ops/engineering_lead/"
+            "marketing/design/rnd: action='think_background' -> {\"prompt\": str} is the DEFAULT for "
+            "routine, day-to-day delegation (this is what '24/7' actually means here) -- it runs "
+            "on a free open-weight model, costs ~$0, but is noticeably weaker reasoning. Use "
+            "action='think' -> {\"prompt\": str} (the paid, stronger model) only when the matter "
+            "is genuinely important enough that you'd also consider `request_technical_vote` for "
+            "it -- don't default to the paid path for ordinary work. risk='low', reversible=True, "
+            "cost=0 for both (real cost, if any, is metered and charged automatically after the "
+            "call)."
         ),
         "input_schema": {
             "type": "object",
@@ -271,7 +392,10 @@ class CEOTools:
         scheduler: Optional[Scheduler] = None,
         preflight_provider: Optional[Callable[[], Any]] = None,
         opus_router: Optional[ModelRouter] = None,
-        voter_agent_names: tuple[str, ...] = ("research", "store_ops", "engineering_lead", "finance"),
+        voter_agent_names: tuple[str, ...] = (
+            "research", "store_ops", "engineering_lead", "finance", "marketing", "design", "rnd",
+        ),
+        tasks: Optional[TaskBoard] = None,
     ) -> None:
         self.orchestrator = orchestrator
         self.state = state
@@ -279,6 +403,7 @@ class CEOTools:
         self.preflight_provider = preflight_provider
         self.opus_router = opus_router
         self.voter_agent_names = voter_agent_names
+        self.tasks = tasks
 
     def dispatch(self, name: str, tool_input: dict) -> Any:
         handler: Callable[..., Any] = getattr(self, f"_tool_{name}", None)
@@ -423,6 +548,8 @@ class CEOTools:
         product: str,
         key_message: str,
         target_audience: str = "",
+        generation_path: str = "free_local",
+        generation_path_reasoning: str = "",
         approval_reference: str = "",
         notes: str = "",
     ) -> dict:
@@ -431,6 +558,8 @@ class CEOTools:
             "product": product,
             "key_message": key_message,
             "target_audience": target_audience,
+            "generation_path": generation_path,
+            "generation_path_reasoning": generation_path_reasoning,
             "approval_reference": approval_reference,
             "notes": notes,
             "status": "pending_execution",
@@ -438,13 +567,14 @@ class CEOTools:
         record = MemoryRecord(
             kind=MemoryKind.DECISION,
             content=(
-                f"CONTENT BRIEF [{asset_type}] for {product}: {key_message}"
+                f"CONTENT BRIEF [{asset_type}] for {product}: {key_message} "
+                f"(path: {generation_path})"
                 + (f" (audience: {target_audience})" if target_audience else "")
                 + (f" (ref: {approval_reference})" if approval_reference else "")
             ),
             source="ai_ceo",
             confidence=Confidence.FACT,
-            tags=("content_brief", asset_type),
+            tags=("content_brief", asset_type, generation_path),
             metadata=brief,
         )
         self.orchestrator.brain.record(record)
@@ -472,6 +602,100 @@ class CEOTools:
             )
         )
         return vote.to_dict()
+
+    _SELF_SERVICE_CONFIG_KEYS = frozenset(
+        {"SHOPIFY_STORE", "SHOPIFY_TOKEN", "SHOPIFY_API_VERSION", "PROFILE"}
+    )
+
+    def _tool_provide_missing_config(self, key: str, value: str) -> dict:
+        from dotenv import set_key
+
+        from aicommerce import config
+
+        if key not in self._SELF_SERVICE_CONFIG_KEYS:
+            return {"error": f"'{key}' is not a self-service key. Allowed: {sorted(self._SELF_SERVICE_CONFIG_KEYS)}"}
+
+        if key == "PROFILE" and value not in ("offline", "sandbox", "live"):
+            return {"error": "PROFILE must be one of: offline, sandbox, live"}
+
+        set_key(str(config.ENV_PATH), key, value)
+        setattr(config, key, value)
+
+        applied_live = False
+        shopify_agent = self.orchestrator.registry.get_instance("shopify")
+        if shopify_agent is not None:
+            if key == "SHOPIFY_STORE":
+                shopify_agent.store = value
+                applied_live = True
+            elif key == "SHOPIFY_TOKEN":
+                shopify_agent.token = value
+                applied_live = True
+            elif key == "SHOPIFY_API_VERSION":
+                shopify_agent.api_version = value
+                applied_live = True
+        if key == "PROFILE":
+            applied_live = True  # ShopifyAgent reads config.PROFILE live, no restart needed
+
+        is_secret = "TOKEN" in key or "KEY" in key or "SECRET" in key
+        self.orchestrator.brain.record(
+            MemoryRecord(
+                kind=MemoryKind.DECISION,
+                content=f"Jean provided config value for {key} (applied_live={applied_live})"
+                + ("" if is_secret else f": {value}"),
+                source="ai_ceo",
+                confidence=Confidence.FACT,
+                tags=("config_update", key),
+            )
+        )
+        return {"key": key, "applied_live": applied_live, "status": "ok"}
+
+    def _require_tasks(self) -> Optional[dict]:
+        if self.tasks is None:
+            return {"error": "no TaskBoard wired into this CEO instance"}
+        return None
+
+    def _tool_create_task(self, objective: str, title: str, owner: str) -> dict:
+        if (err := self._require_tasks()) is not None:
+            return err
+        task = self.tasks.create(objective=objective, title=title, owner=owner)
+        return {
+            "id": task.id, "objective": task.objective, "title": task.title,
+            "owner": task.owner, "status": task.status.value,
+        }
+
+    def _tool_update_task_status(self, task_id: str, status: str, notes: str = "") -> dict:
+        if (err := self._require_tasks()) is not None:
+            return err
+        try:
+            task = self.tasks.update_status(task_id, BoardTaskStatus(status), notes=notes)
+        except KeyError as exc:
+            return {"error": str(exc)}
+        except ValueError as exc:  # InvalidTaskTransition
+            return {"error": str(exc)}
+        return {
+            "id": task.id, "objective": task.objective, "title": task.title,
+            "owner": task.owner, "status": task.status.value, "notes": task.notes,
+        }
+
+    def _tool_list_tasks(
+        self, objective: str = "", owner: str = "", status: str = ""
+    ) -> dict:
+        if (err := self._require_tasks()) is not None:
+            return err
+        tasks = self.tasks.list(
+            objective=objective or None,
+            owner=owner or None,
+            status=BoardTaskStatus(status) if status else None,
+        )
+        return {
+            "tasks": [
+                {
+                    "id": t.id, "objective": t.objective, "title": t.title,
+                    "owner": t.owner, "status": t.status.value, "notes": t.notes,
+                }
+                for t in tasks
+            ]
+        }
 
     def _tool_propose_action(
         self,

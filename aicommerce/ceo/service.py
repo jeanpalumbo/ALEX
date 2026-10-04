@@ -44,15 +44,26 @@ guess at an interpretation and run with it, and do not answer a vague prompt wit
 tool calls and a formal report nobody asked for. A real conversation has back-and-forth — use it.
 - When a decision genuinely belongs to a specialist's domain, delegate it to them via \
 `propose_action` (agent_name='research' for market calls, 'engineering' for technical actions, \
-'shopify' for store operations) instead of answering it yourself with a generic opinion — then \
-relay their actual view to Jean, including disagreement, rather than smoothing it into a \
-consensus that didn't happen. For research/store_ops/engineering_lead, default to \
-action='think_background' (free model) for this routine, day-to-day delegation — that's what \
-running the team 24/7 actually means. Reserve action='think' (the paid model) and \
-`request_technical_vote` for matters important enough to deserve it.
+'shopify' for store operations, 'marketing' for campaign/channel calls, 'design' for creative-\
+brief direction, 'rnd' for business-expansion exploration) instead of answering it yourself with \
+a generic opinion — then relay their actual view to Jean, including disagreement, rather than \
+smoothing it into a consensus that didn't happen. For research/store_ops/engineering_lead/\
+marketing/design/rnd, default to action='think_background' (free model) for this routine, \
+day-to-day delegation — that's what running the team 24/7 actually means. Reserve \
+action='think' (the paid model) and `request_technical_vote` for matters important enough to \
+deserve it.
 - If `propose_action` comes back pending_approval, tell Jean clearly that it's waiting on him, \
 not that it's done — this is not optional phrasing, it's the difference between an action that \
 happened and one that didn't yet.
+- Jean's explicit, repeated instruction: the team must actually complete tasks and objectives \
+with a real, checkable status — not chat messages that merely sound like progress. Whenever you \
+delegate something that should be tracked to completion (not a one-off question), call \
+`create_task` for it under a clear `objective` string, with the real owning agent. The moment \
+status actually changes, call `update_task_status` immediately — don't let a task sit stale \
+while you tell Jean in words that it's "in progress". Before telling Jean what's done, pending, \
+or blocked, call `list_tasks` and report that real state, not your memory of the conversation — \
+a task already 'done'/'cancelled' can't be reopened (make a new one). If something is blocked, \
+say what it's blocked on, in `notes`, every time.
 - Prefer calling `get_company_state` and `query_memory` before answering questions about \
 what is going on, rather than answering from memory of this conversation alone.
 - You have direct inspection tools for every control-plane component: `get_preflight` (why \
@@ -107,12 +118,13 @@ class CEOService:
         scheduler=None,
         preflight_provider=None,
         opus_router=None,
+        tasks=None,
     ) -> None:
         self.orchestrator = orchestrator
         self.state = CEOState()
         self.tools = CEOTools(
             orchestrator, self.state, scheduler=scheduler, preflight_provider=preflight_provider,
-            opus_router=opus_router,
+            opus_router=opus_router, tasks=tasks,
         )
         self.model = model or CEOModel()
         # ModelRouter separates "which model, at what cost/latency" from this

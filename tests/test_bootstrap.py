@@ -143,15 +143,16 @@ def test_research_persona_agent_registered_with_own_budget(tmp_path, monkeypatch
 
 def test_all_persona_agents_registered_with_their_own_budgets(tmp_path, monkeypatch):
     """Jean's explicit ask: every employee configured the same way -- not
-    just Elena. Confirms Marcus (store_ops) and Priya (engineering_lead)
-    are wired up exactly like Elena (research)."""
+    just Elena. Confirms Marcus (store_ops), Priya (engineering_lead),
+    Sofia (marketing), and Mateo (design) are wired up exactly like Elena
+    (research)."""
     from aicommerce import config
 
     monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
     monkeypatch.setattr(config, "DATA_DIR", tmp_path)
 
     system = System()
-    for name in ("research", "store_ops", "engineering_lead", "finance"):
+    for name in ("research", "store_ops", "engineering_lead", "finance", "marketing", "design", "rnd"):
         assert system.registry.get_instance(name) is not None, f"{name} not registered"
         assert system.registry.get_spec(name).mission
         assert name in system.budget.scopes()
@@ -162,6 +163,35 @@ def test_all_persona_agents_registered_with_their_own_budgets(tmp_path, monkeypa
     assert system.research_agent.router is not system.store_ops_agent.router
     assert system.store_ops_agent.router is not system.engineering_lead_agent.router
     assert system.finance_agent.router is not system.research_agent.router
+    assert system.marketing_agent.router is not system.design_agent.router
+    assert system.design_agent.router is not system.research_agent.router
+
+
+def test_marketing_and_design_personas_have_real_identities(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    assert "Sofia Reyes" in system.marketing_agent.persona.name
+    assert "Mateo Fonseca" in system.design_agent.persona.name
+    assert system.marketing_agent.background_router is system.background_router
+    assert system.design_agent.background_router is system.background_router
+
+
+def test_rnd_persona_registered_with_real_identity(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    assert system.registry.get_instance("rnd") is not None
+    assert "Noor Kaelin" in system.rnd_agent.persona.name
+    assert "rnd" in system.budget.scopes()
+    assert system.permissions.can_act("rnd", "think") is True
+    assert system.rnd_agent.background_router is system.background_router
 
 
 def test_ceo_has_its_own_named_identity(tmp_path, monkeypatch):
@@ -179,17 +209,21 @@ def test_ceo_has_its_own_named_identity(tmp_path, monkeypatch):
 
 def test_ceo_primary_model_is_the_free_tier_not_claude(tmp_path, monkeypatch):
     """Jean's explicit, repeated instruction: talking to the team must cost
-    nothing. The CEO's own day-to-day chat model must be the free one; the
-    paid model (CEOModel/Claude) stays reserved for personas' 'think' and
-    the Opus vote review."""
+    nothing. The CEO's own day-to-day chat model must be a free-tier chain
+    (local Ollama first, OpenRouter fallback -- live traffic showed
+    OpenRouter's shared pool rate-limiting mid-conversation); the paid model
+    (CEOModel/Claude) stays reserved for personas' 'think' and the Opus vote
+    review."""
     from aicommerce import config
-    from aicommerce.ceo.llm import OpenRouterModel
+    from aicommerce.ceo.llm import FallbackModel, OllamaModel, OpenRouterModel
 
     monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
     monkeypatch.setattr(config, "DATA_DIR", tmp_path)
 
     system = System()
-    assert isinstance(system.ceo.model, OpenRouterModel)
+    assert isinstance(system.ceo.model, FallbackModel)
+    assert isinstance(system.ceo.model.models[0], OllamaModel)
+    assert isinstance(system.ceo.model.models[1], OpenRouterModel)
     assert system.ceo.router.model is system.ceo.model
 
 
@@ -251,12 +285,13 @@ def test_persona_autonomous_tick_actually_goes_through_the_orchestrator(tmp_path
         text="Nothing new since last check-in.", tool_calls=[], stop_reason="end_turn", raw_content=[],
         input_tokens=10, output_tokens=5,
     )
-    # Autonomous ticks now go through the FREE background router, not the
-    # paid one -- mock that one instead, and expect $0 actually charged.
-    monkeypatch.setattr(system.research_agent.background_router.model, "call", lambda *a, **k: fake_response)
-    monkeypatch.setattr(
-        type(system.research_agent.background_router.model), "configured", property(lambda self: True)
-    )
+    # Autonomous ticks now go through the FREE background router (a
+    # FallbackModel chain), not the paid one -- mock its first model (Ollama)
+    # directly, since that's what FallbackModel.call() actually invokes, and
+    # expect $0 actually charged.
+    ollama_model = system.background_router.model.models[0]
+    monkeypatch.setattr(ollama_model, "call", lambda *a, **k: fake_response)
+    monkeypatch.setattr(type(ollama_model), "configured", property(lambda self: True))
 
     ran = system.scheduler.run_due()
     assert "autonomous_research_tick" in ran

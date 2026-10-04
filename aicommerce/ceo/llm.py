@@ -234,3 +234,103 @@ class OpenRouterModel:
             kwargs["tools"] = _anthropic_tools_to_openai(tools)
         response = client.chat.completions.create(**kwargs)
         return _openai_response_to_llm_response(response)
+
+
+class FallbackModel:
+    """Tries each model in order, falling back to the next only when the
+    current one is unconfigured or its call raises -- gives the free-tier
+    background path real resilience (e.g. local Ollama down -> OpenRouter;
+    OpenRouter rate-limited -> local Ollama) without the caller (ModelRouter/
+    PersonaAgent) needing to know a fallback chain exists. `free` mirrors the
+    first model that actually answers, so ModelRouter still records real $0
+    cost for a free model that happened to be second in the chain.
+    """
+
+    def __init__(self, *models) -> None:
+        if not models:
+            raise ValueError("FallbackModel requires at least one model")
+        self.models = models
+        self.model = "/".join(getattr(m, "model", "unknown") for m in models)
+
+    @property
+    def configured(self) -> bool:
+        return any(m.configured for m in self.models)
+
+    def call(
+        self,
+        system: str,
+        messages: list[dict],
+        tools: Optional[list[dict]] = None,
+        max_tokens: int = 4096,
+    ) -> LLMResponse:
+        last_exc: Optional[Exception] = None
+        for m in self.models:
+            if not m.configured:
+                continue
+            try:
+                response = m.call(system, messages, tools=tools, max_tokens=max_tokens)
+            except LLMNotConfigured as exc:
+                last_exc = exc
+                continue
+            except Exception as exc:  # noqa: BLE001 — try the next model, don't crash the caller
+                last_exc = exc
+                continue
+            self.free = getattr(m, "free", False)
+            return response
+        raise LLMNotConfigured(
+            f"No model in the fallback chain is configured or reachable. Last error: {last_exc}"
+        )
+
+
+class OllamaModel:
+    """Local, zero-cost model via Ollama's OpenAI-compatible endpoint
+    (default http://localhost:11434/v1) -- no account, no API key, runs
+    entirely on Jean's own GPU. Reuses the same Anthropic<->OpenAI converter
+    functions as OpenRouterModel, so it's a real drop-in: same messages/tools
+    in, same LLMResponse shape out -- any persona can use this instead of
+    (or alongside) OpenRouterModel without CEOService/PersonaAgent changing.
+
+    Requires Ollama installed and running locally with the configured model
+    already pulled (`ollama pull <model>`) -- this code never installs
+    Ollama, starts the service, or pulls models for you. `free = True` tells
+    ModelRouter to record the real cost ($0).
+    """
+
+    free = True
+
+    def __init__(self, base_url: Optional[str] = None, model: Optional[str] = None) -> None:
+        self.base_url = base_url or config.OLLAMA_BASE_URL
+        self.model = model or config.OLLAMA_MODEL
+        self._client = None
+
+    @property
+    def configured(self) -> bool:
+        return bool(self.base_url and self.model)
+
+    def _client_or_raise(self):
+        if not self.configured:
+            raise LLMNotConfigured(
+                "OLLAMA_MODEL/OLLAMA_BASE_URL not set. Install Ollama, run "
+                "`ollama pull <model>` for the model named in OLLAMA_MODEL, "
+                "and make sure Ollama is running (see .env.example)."
+            )
+        if self._client is None:
+            import openai
+
+            self._client = openai.OpenAI(base_url=self.base_url, api_key="ollama")
+        return self._client
+
+    def call(
+        self,
+        system: str,
+        messages: list[dict],
+        tools: Optional[list[dict]] = None,
+        max_tokens: int = 4096,
+    ) -> LLMResponse:
+        client = self._client_or_raise()
+        oi_messages = [{"role": "system", "content": system}] + _anthropic_messages_to_openai(messages)
+        kwargs: dict[str, Any] = dict(model=self.model, messages=oi_messages, max_tokens=max_tokens)
+        if tools:
+            kwargs["tools"] = _anthropic_tools_to_openai(tools)
+        response = client.chat.completions.create(**kwargs)
+        return _openai_response_to_llm_response(response)

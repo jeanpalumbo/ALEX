@@ -12,16 +12,20 @@ from datetime import timedelta
 from aicommerce import config
 from aicommerce.agents.engineering_agent import EngineeringAgent
 from aicommerce.agents.persona import (
+    DESIGN_PERSONA,
     ENGINEERING_PERSONA,
     FINANCE_PERSONA,
+    MARKETING_PERSONA,
     RESEARCH_PERSONA,
+    RND_PERSONA,
     STORE_OPS_PERSONA,
     PersonaAgent,
 )
 from aicommerce.agents.shopify_agent import ShopifyAgent
 from aicommerce.agents.stubs import QAAgent
 from aicommerce.brain.store import CompanyBrain
-from aicommerce.ceo.llm import CEOModel, OpenRouterModel
+from aicommerce.brain.tasks import TaskBoard
+from aicommerce.ceo.llm import CEOModel, FallbackModel, OllamaModel, OpenRouterModel
 from aicommerce.ceo.model_router import ModelRouter
 from aicommerce.ceo.orchestrator import Orchestrator
 from aicommerce.ceo.service import CEOService
@@ -39,6 +43,7 @@ class System:
         config.DATA_DIR.mkdir(parents=True, exist_ok=True)
 
         self.brain = CompanyBrain(config.BRAIN_DB_PATH)
+        self.tasks = TaskBoard(config.DATA_DIR / "tasks.db")
         self.registry = AgentRegistry()
         self.permissions = PermissionManager()
         self.budget = BudgetGuard()
@@ -66,9 +71,13 @@ class System:
         # real tool-use support -- see aicommerce/ceo/llm.py), per Jean's
         # explicit instruction: talking to the team costs nothing; money
         # only enters via request_technical_vote (personas' paid 'think' +
-        # Opus) for decisions he actually approves spending on.
+        # Opus) for decisions he actually approves spending on. Local Ollama
+        # first, OpenRouter as fallback -- live traffic showed OpenRouter's
+        # shared pool rate-limiting the CEO's own chat mid-conversation, so
+        # it gets the same resilience as the persona background router.
         self.ceo = CEOService(
-            self.orchestrator, OpenRouterModel(), scheduler=self.scheduler, opus_router=self.opus_router
+            self.orchestrator, FallbackModel(OllamaModel(), OpenRouterModel()),
+            scheduler=self.scheduler, opus_router=self.opus_router, tasks=self.tasks,
         )
         self.preflight = self._build_preflight()
         self.ceo.tools.preflight_provider = self.preflight.run
@@ -77,9 +86,13 @@ class System:
     # ------------------------------------------------------------------
     def _register_agents(self) -> None:
         # One shared free-tier router for every persona's autonomous check-ins.
-        # Inert (raises LLMNotConfigured on call) until OPENROUTER_API_KEY is
-        # set -- see aicommerce/ceo/llm.py:OpenRouterModel.
-        self.background_router = ModelRouter(OpenRouterModel(), events=self.events)
+        # Local Ollama first (no shared-pool rate limits, runs on Jean's own
+        # GPU/CPU), OpenRouter as fallback if Ollama is unreachable/unpulled.
+        # Inert (raises LLMNotConfigured on call) only if NEITHER is
+        # configured -- see aicommerce/ceo/llm.py:FallbackModel.
+        self.background_router = ModelRouter(
+            FallbackModel(OllamaModel(), OpenRouterModel()), events=self.events
+        )
         # Independent technical review for important decisions (voting.py) --
         # a real, separate Anthropic call (Opus, not the CEO's own Sonnet),
         # metered on its own budget scope so a vote can't silently drain
@@ -181,6 +194,54 @@ class System:
             self.finance_agent,
         )
 
+        self.marketing_agent = PersonaAgent(
+            MARKETING_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
+        )
+        self.registry.register(
+            AgentSpec(
+                name="marketing",
+                mission=MARKETING_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": MARKETING_PERSONA.name, "role": MARKETING_PERSONA.role},
+                kpis=("cac_accuracy", "test_to_scale_discipline"),
+            ),
+            self.marketing_agent,
+        )
+
+        self.design_agent = PersonaAgent(
+            DESIGN_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
+        )
+        self.registry.register(
+            AgentSpec(
+                name="design",
+                mission=DESIGN_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": DESIGN_PERSONA.name, "role": DESIGN_PERSONA.role},
+                kpis=("brief_clarity", "creative_performance"),
+            ),
+            self.design_agent,
+        )
+
+        self.rnd_agent = PersonaAgent(
+            RND_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
+        )
+        self.registry.register(
+            AgentSpec(
+                name="rnd",
+                mission=RND_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": RND_PERSONA.name, "role": RND_PERSONA.role},
+                kpis=("hypothesis_hit_rate", "idea_to_validation_handoff_rate"),
+            ),
+            self.rnd_agent,
+        )
+
     def _configure_permissions(self) -> None:
         self.permissions.define_role(
             Role(
@@ -221,6 +282,9 @@ class System:
         self.permissions.assign_role("store_ops", "persona_think")
         self.permissions.assign_role("engineering_lead", "persona_think")
         self.permissions.assign_role("finance", "persona_think")
+        self.permissions.assign_role("marketing", "persona_think")
+        self.permissions.assign_role("design", "persona_think")
+        self.permissions.assign_role("rnd", "persona_think")
 
     def _configure_budgets(self) -> None:
         self.budget.set_budget("daily", config.DAILY_BUDGET_LIMIT)
@@ -231,6 +295,9 @@ class System:
         self.budget.set_budget("store_ops", config.STORE_OPS_BUDGET_LIMIT)
         self.budget.set_budget("engineering_lead", config.ENGINEERING_LEAD_BUDGET_LIMIT)
         self.budget.set_budget("finance", config.FINANCE_BUDGET_LIMIT)
+        self.budget.set_budget("marketing", config.MARKETING_BUDGET_LIMIT)
+        self.budget.set_budget("design", config.DESIGN_BUDGET_LIMIT)
+        self.budget.set_budget("rnd", config.RND_BUDGET_LIMIT)
         self.budget.set_budget("opus_review", config.OPUS_REVIEW_BUDGET_LIMIT)
 
     def _wire_events(self) -> None:
@@ -351,6 +418,31 @@ class System:
                 "or any budget scope trending toward its limit. The company's default right now "
                 "is $0 real spend until something shows real traction -- if everything is still "
                 "at $0 or trivial, say so briefly rather than manufacturing a concern."
+            ),
+            "marketing": (
+                "Autonomous check-in, not a message from Jean. Review the CEO's current "
+                "objective, Elena's latest research, and your own memory for a real campaign/"
+                "creative-angle/channel question worth flagging. Never propose actual ad spend "
+                "here -- that still requires request_technical_vote. If there's nothing new "
+                "since your last check-in, say so briefly."
+            ),
+            "design": (
+                "Autonomous check-in, not a message from Jean. Review any pending content "
+                "briefs and Sofia's latest campaign direction for anything that needs a creative "
+                "brief drafted or revised. Remember you cannot generate actual image/video "
+                "files yourself -- record a brief via record_content_brief if one is genuinely "
+                "needed, otherwise say briefly that there's nothing new."
+            ),
+            "rnd": (
+                "Autonomous check-in, not a message from Jean. Review the CEO's current "
+                "objective and your own memory for a genuinely new business-expansion angle -- a "
+                "new line, field, or application of this same team's skills -- worth flagging as "
+                "a hypothesis for Elena to validate. Label it explicitly as HYPOTHESIS with what "
+                "evidence would confirm or kill it and who on the team would run it. Never "
+                "propose spending anything, and never suggest starting something new before the "
+                "current product has shown real traction. If there's nothing new since your "
+                "last check-in, say so briefly rather than manufacturing a speculative idea just "
+                "to have one."
             ),
         }
 

@@ -64,6 +64,16 @@ OPUS_VOTE_WEIGHT = int(os.getenv("OPUS_VOTE_WEIGHT", "2"))
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3.8-27b:free")
 
+# === Local Ollama model (optional) — zero-cost, runs on Jean's own GPU,  ===
+# === no account/API key, no shared-pool rate limits. Requires Ollama    ===
+# === installed and running locally with OLLAMA_MODEL already pulled    ===
+# === (`ollama pull <model>`) -- this code never installs Ollama, starts ===
+# === the service, or pulls models for you. qwen2.5:7b was picked as the ===
+# === default because it fits comfortably in 6GB of VRAM quantized; a    ===
+# === ~27B model does NOT fit a 6GB card and will be extremely slow/OOM. ===
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
+
 # === Shopify (optional — ShopifyAgent runs in DEGRADED/BLOCKED mode without it) ===
 SHOPIFY_STORE = os.getenv("SHOPIFY_STORE", "")
 SHOPIFY_TOKEN = os.getenv("SHOPIFY_TOKEN", "")
@@ -101,6 +111,9 @@ RESEARCH_BUDGET_LIMIT = float(os.getenv("RESEARCH_BUDGET_LIMIT", "5.0"))  # pers
 STORE_OPS_BUDGET_LIMIT = float(os.getenv("STORE_OPS_BUDGET_LIMIT", "5.0"))
 ENGINEERING_LEAD_BUDGET_LIMIT = float(os.getenv("ENGINEERING_LEAD_BUDGET_LIMIT", "5.0"))
 FINANCE_BUDGET_LIMIT = float(os.getenv("FINANCE_BUDGET_LIMIT", "5.0"))
+MARKETING_BUDGET_LIMIT = float(os.getenv("MARKETING_BUDGET_LIMIT", "5.0"))
+DESIGN_BUDGET_LIMIT = float(os.getenv("DESIGN_BUDGET_LIMIT", "5.0"))
+RND_BUDGET_LIMIT = float(os.getenv("RND_BUDGET_LIMIT", "5.0"))
 
 # === Telegram bridge — talk to the CEO from anywhere, no shared network needed ===
 # Leave TELEGRAM_BOT_TOKEN empty to disable the bridge entirely (default).

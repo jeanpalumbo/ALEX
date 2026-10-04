@@ -213,3 +213,44 @@ def test_record_content_brief_without_optional_fields_still_works():
     )
     assert result["status"] == "pending_execution"
     assert result["target_audience"] == ""
+
+
+def test_create_task_without_taskboard_wired_returns_error_not_crash():
+    tools, _ = build()  # build() doesn't pass tasks= -- tools.tasks is None
+    result = tools.dispatch("create_task", {"objective": "obj", "title": "t", "owner": "research"})
+    assert "error" in result
+
+
+def test_create_update_and_list_task_round_trip_through_dispatch():
+    from aicommerce.brain.tasks import TaskBoard
+
+    tools, _ = build()
+    tools.tasks = TaskBoard()
+
+    created = tools.dispatch(
+        "create_task", {"objective": "validate product X", "title": "run demand research", "owner": "research"}
+    )
+    assert created["status"] == "pending"
+    task_id = created["id"]
+
+    updated = tools.dispatch(
+        "update_task_status", {"task_id": task_id, "status": "in_progress", "notes": "started"}
+    )
+    assert updated["status"] == "in_progress"
+    assert updated["notes"] == "started"
+
+    listed = tools.dispatch("list_tasks", {"objective": "validate product X"})
+    assert len(listed["tasks"]) == 1
+    assert listed["tasks"][0]["id"] == task_id
+
+
+def test_update_task_status_on_done_task_returns_error_not_crash():
+    from aicommerce.brain.tasks import TaskBoard
+
+    tools, _ = build()
+    tools.tasks = TaskBoard()
+    created = tools.dispatch("create_task", {"objective": "obj", "title": "t", "owner": "research"})
+    tools.dispatch("update_task_status", {"task_id": created["id"], "status": "done"})
+
+    result = tools.dispatch("update_task_status", {"task_id": created["id"], "status": "in_progress"})
+    assert "error" in result
