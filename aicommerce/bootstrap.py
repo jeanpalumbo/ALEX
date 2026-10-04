@@ -11,7 +11,7 @@ from datetime import timedelta
 
 from aicommerce import config
 from aicommerce.agents.engineering_agent import EngineeringAgent
-from aicommerce.agents.persona import RESEARCH_PERSONA, PersonaAgent
+from aicommerce.agents.persona import ENGINEERING_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, PersonaAgent
 from aicommerce.agents.shopify_agent import ShopifyAgent
 from aicommerce.agents.stubs import QAAgent
 from aicommerce.brain.store import CompanyBrain
@@ -109,6 +109,36 @@ class System:
             self.research_agent,
         )
 
+        self.store_ops_agent = PersonaAgent(
+            STORE_OPS_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain
+        )
+        self.registry.register(
+            AgentSpec(
+                name="store_ops",
+                mission=STORE_OPS_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": STORE_OPS_PERSONA.name, "role": STORE_OPS_PERSONA.role},
+                kpis=("margin_accuracy", "stockout_rate"),
+            ),
+            self.store_ops_agent,
+        )
+
+        self.engineering_lead_agent = PersonaAgent(
+            ENGINEERING_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain
+        )
+        self.registry.register(
+            AgentSpec(
+                name="engineering_lead",
+                mission=ENGINEERING_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": ENGINEERING_PERSONA.name, "role": ENGINEERING_PERSONA.role},
+                kpis=("regression_rate", "review_quality"),
+            ),
+            self.engineering_lead_agent,
+        )
+
     def _configure_permissions(self) -> None:
         self.permissions.define_role(
             Role(
@@ -142,6 +172,8 @@ class System:
             Role(name="persona_think", allowed_actions=frozenset({"think"}), allowed_tools=frozenset({"anthropic_model"}))
         )
         self.permissions.assign_role("research", "persona_think")
+        self.permissions.assign_role("store_ops", "persona_think")
+        self.permissions.assign_role("engineering_lead", "persona_think")
 
     def _configure_budgets(self) -> None:
         self.budget.set_budget("daily", config.DAILY_BUDGET_LIMIT)
@@ -149,6 +181,8 @@ class System:
         self.budget.set_budget("ceo_llm", config.CEO_LLM_BUDGET_LIMIT)
         self.budget.set_budget("engineering", config.ENGINEERING_BUDGET_LIMIT)
         self.budget.set_budget("research", config.RESEARCH_BUDGET_LIMIT)
+        self.budget.set_budget("store_ops", config.STORE_OPS_BUDGET_LIMIT)
+        self.budget.set_budget("engineering_lead", config.ENGINEERING_LEAD_BUDGET_LIMIT)
 
     def _wire_events(self) -> None:
         self.events.subscribe("approval.required", lambda e: None)  # placeholder hook point
@@ -219,6 +253,76 @@ class System:
                 "autonomous_ceo_tick",
                 timedelta(seconds=config.AUTONOMOUS_TICK_INTERVAL_SECONDS),
                 autonomous_tick,
+            )
+
+        if config.AUTONOMOUS_PERSONA_TICKS:
+            self._configure_persona_autonomy()
+
+    def _configure_persona_autonomy(self) -> None:
+        """Each persona checks in on its own schedule instead of only acting
+        when the CEO explicitly delegates to it -- this is what makes them
+        "working 24/7" rather than purely reactive. Still goes through
+        Orchestrator.run_cycle like any other action: same budget scope,
+        same permission check, same audit trail, same event publishing.
+        Nothing here grants a persona new authority -- `think` was already
+        its only permitted action; this just calls it on a timer too."""
+        checkins = {
+            "research": (
+                "Autonomous check-in, not a message from Jean. Review the CEO's current "
+                "objective (if any) and your own memory. If there's a real market/pricing/"
+                "competitive question relevant to the current objective that you haven't "
+                "already answered, give your professional read on it now, tagged FACT/"
+                "INFERENCE/HYPOTHESIS/UNKNOWN as always. If there's nothing new to add since "
+                "your last check-in, say so briefly -- do not manufacture busywork."
+            ),
+            "store_ops": (
+                "Autonomous check-in, not a message from Jean. Review the CEO's current "
+                "objective and your own memory for anything store-operations-relevant "
+                "(catalog readiness, pricing/margin concerns, fulfillment risk). If nothing "
+                "has changed since your last check-in, say so briefly rather than restating "
+                "old findings as if they were new."
+            ),
+            "engineering_lead": (
+                "Autonomous check-in, not a message from Jean. Review recent engineering "
+                "activity (ask the engineering tool agent's own history via your memory) for "
+                "anything worth flagging -- risk, tech debt, a change that deserved more "
+                "scrutiny. If there's nothing new, say so briefly."
+            ),
+        }
+
+        for agent_name, prompt in checkins.items():
+            def make_tick(agent_name: str, prompt: str):
+                def tick() -> None:
+                    outcome = self.orchestrator.run_cycle(
+                        objective=self.ceo.state.objective or "autonomous persona check-in",
+                        agent_name=agent_name,
+                        action="think",
+                        budget_scope=agent_name,
+                        cost=config.AUTONOMOUS_PERSONA_TICK_ESTIMATED_COST,
+                        risk="low",
+                        reversible=True,
+                        params={"prompt": prompt},
+                    )
+                    if outcome.status.value != "executed":
+                        from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
+
+                        self.brain.record(
+                            MemoryRecord(
+                                kind=MemoryKind.EPISODIC,
+                                content=f"Autonomous check-in for '{agent_name}' did not execute: "
+                                f"{outcome.status.value} — {outcome.detail}",
+                                source="scheduler",
+                                confidence=Confidence.FACT,
+                                tags=("autonomous_tick", agent_name),
+                            )
+                        )
+
+                return tick
+
+            self.scheduler.add_job(
+                f"autonomous_{agent_name}_tick",
+                timedelta(seconds=config.AUTONOMOUS_PERSONA_TICK_INTERVAL_SECONDS),
+                make_tick(agent_name, prompt),
             )
 
 

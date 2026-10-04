@@ -139,3 +139,96 @@ def test_research_persona_agent_registered_with_own_budget(tmp_path, monkeypatch
     assert "research" in system.budget.scopes()
     assert system.permissions.can_act("research", "think") is True
     assert system.permissions.can_act("research", "delete_everything") is False
+
+
+def test_all_persona_agents_registered_with_their_own_budgets(tmp_path, monkeypatch):
+    """Jean's explicit ask: every employee configured the same way -- not
+    just Elena. Confirms Marcus (store_ops) and Priya (engineering_lead)
+    are wired up exactly like Elena (research)."""
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    for name in ("research", "store_ops", "engineering_lead"):
+        assert system.registry.get_instance(name) is not None, f"{name} not registered"
+        assert system.registry.get_spec(name).mission
+        assert name in system.budget.scopes()
+        assert system.permissions.can_act(name, "think") is True
+
+    # each persona agent has its own ModelRouter/CEOModel instance, not a
+    # shared one -- confirms they're independent actors, not aliases
+    assert system.research_agent.router is not system.store_ops_agent.router
+    assert system.store_ops_agent.router is not system.engineering_lead_agent.router
+
+
+def test_ceo_has_its_own_named_identity(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    from aicommerce.ceo.service import SYSTEM_PROMPT
+
+    assert "Alex Rivera" in SYSTEM_PROMPT
+    assert "pending_approval" in SYSTEM_PROMPT  # operational specifics still present on top
+
+
+def test_persona_autonomy_disabled_by_default(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(config, "AUTONOMOUS_PERSONA_TICKS", False)
+
+    system = System()
+    job_names = {j.name for j in system.scheduler.jobs()}
+    assert "autonomous_research_tick" not in job_names
+    assert "autonomous_store_ops_tick" not in job_names
+    assert "autonomous_engineering_lead_tick" not in job_names
+
+
+def test_persona_autonomy_when_enabled_registers_one_job_per_persona_with_separate_budgets(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(config, "AUTONOMOUS_PERSONA_TICKS", True)
+    monkeypatch.setattr(config, "AUTONOMOUS_PERSONA_TICK_INTERVAL_SECONDS", 999999)
+
+    system = System()
+    job_names = {j.name for j in system.scheduler.jobs()}
+    assert {"autonomous_research_tick", "autonomous_store_ops_tick", "autonomous_engineering_lead_tick"} <= job_names
+
+
+def test_persona_autonomous_tick_actually_goes_through_the_orchestrator(tmp_path, monkeypatch):
+    """Not a mock of the scheduling -- runs the real job function and checks
+    the real budget/brain effects, same as a CEO-delegated 'think' call."""
+    from aicommerce import config
+    from aicommerce.ceo.llm import LLMResponse
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(config, "AUTONOMOUS_PERSONA_TICKS", True)
+    monkeypatch.setattr(config, "AUTONOMOUS_PERSONA_TICK_INTERVAL_SECONDS", 999999)
+    monkeypatch.setattr(config, "AUTONOMOUS_PERSONA_TICK_ESTIMATED_COST", 0.01)
+
+    system = System()
+
+    fake_response = LLMResponse(
+        text="Nothing new since last check-in.", tool_calls=[], stop_reason="end_turn", raw_content=[],
+        input_tokens=10, output_tokens=5,
+    )
+    monkeypatch.setattr(system.research_agent.router.model, "call", lambda *a, **k: fake_response)
+    monkeypatch.setattr(type(system.research_agent.router.model), "configured", property(lambda self: True))
+
+    ran = system.scheduler.run_due()
+    assert "autonomous_research_tick" in ran
+
+    assert system.budget.status("research")["spent"] > 0
+    from aicommerce.brain.models import MemoryKind
+
+    records = system.brain.query(kind=MemoryKind.EPISODIC, tags=["elena_voss"])
+    assert any("Nothing new since last check-in" in r.content for r in records)

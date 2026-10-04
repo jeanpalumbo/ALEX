@@ -122,3 +122,43 @@ def test_custom_persona_is_not_tied_to_research():
         operating_principles="o",
     )
     assert "Test Person" in persona.system_prompt()
+
+
+def test_every_persona_has_a_self_correction_style():
+    """Jean's explicit ask: every employee needs real self-correction built
+    in, not just a generic one. Each should be distinguishable."""
+    from aicommerce.agents.persona import CEO_PERSONA, ENGINEERING_PERSONA, STORE_OPS_PERSONA
+
+    personas = [CEO_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, ENGINEERING_PERSONA]
+    styles = {p.self_correction_style for p in personas}
+    assert len(styles) == len(personas)  # all distinct, not copy-pasted
+    for p in personas:
+        assert p.self_correction_style in p.system_prompt()
+
+
+def test_all_four_core_personas_have_distinct_full_identities():
+    from aicommerce.agents.persona import CEO_PERSONA, ENGINEERING_PERSONA, STORE_OPS_PERSONA
+
+    personas = [CEO_PERSONA, RESEARCH_PERSONA, STORE_OPS_PERSONA, ENGINEERING_PERSONA]
+    names = {p.name for p in personas}
+    assert len(names) == 4  # no duplicate identities
+    for p in personas:
+        for field_value in (p.mission, p.personality, p.career_motivation, p.operating_principles):
+            assert len(field_value) > 50  # real depth, not a placeholder stub
+
+
+def test_store_ops_and_engineering_lead_personas_reason_distinctly(monkeypatch):
+    from aicommerce.agents.persona import ENGINEERING_PERSONA, STORE_OPS_PERSONA
+
+    marcus_model = FakeModel(text="Marcus says: not without proven fulfillment capacity.")
+    priya_model = FakeModel(text="Priya says: this diff is too broad, split it.")
+
+    marcus = PersonaAgent(STORE_OPS_PERSONA, ModelRouter(marcus_model), CompanyBrain(":memory:"))
+    priya = PersonaAgent(ENGINEERING_PERSONA, ModelRouter(priya_model), CompanyBrain(":memory:"))
+
+    r1 = marcus.execute({"action": "think", "params": {"prompt": "should we list this product?"}})
+    r2 = priya.execute({"action": "think", "params": {"prompt": "is this change safe to merge?"}})
+
+    assert "fulfillment" in r1.output
+    assert "split it" in r2.output
+    assert marcus_model.calls[0]["system"] != priya_model.calls[0]["system"]  # genuinely different identities

@@ -51,6 +51,14 @@ AUTONOMOUS_LLM_TICKS = os.getenv("AUTONOMOUS_LLM_TICKS", "false").lower() == "tr
 AUTONOMOUS_TICK_INTERVAL_SECONDS = int(os.getenv("AUTONOMOUS_TICK_INTERVAL_SECONDS", "3600"))
 AUTONOMOUS_TICK_ESTIMATED_COST = float(os.getenv("AUTONOMOUS_TICK_ESTIMATED_COST", "0.05"))
 
+# Same idea, one level down: each persona (research/store_ops/engineering_lead)
+# can check in on its own schedule instead of only acting when the CEO
+# explicitly delegates to it. Off by default for the same reason -- every
+# tick is a real, separately-budgeted model call per persona.
+AUTONOMOUS_PERSONA_TICKS = os.getenv("AUTONOMOUS_PERSONA_TICKS", "false").lower() == "true"
+AUTONOMOUS_PERSONA_TICK_INTERVAL_SECONDS = int(os.getenv("AUTONOMOUS_PERSONA_TICK_INTERVAL_SECONDS", "14400"))  # 4h
+AUTONOMOUS_PERSONA_TICK_ESTIMATED_COST = float(os.getenv("AUTONOMOUS_PERSONA_TICK_ESTIMATED_COST", "0.05"))
+
 # === Web server ===
 HOST = os.getenv("CEO_CONSOLE_HOST", "127.0.0.1")
 PORT = int(os.getenv("CEO_CONSOLE_PORT", "8420"))
@@ -65,6 +73,8 @@ SHOPIFY_BUDGET_LIMIT = float(os.getenv("SHOPIFY_BUDGET_LIMIT", "10.0"))
 CEO_LLM_BUDGET_LIMIT = float(os.getenv("CEO_LLM_BUDGET_LIMIT", "5.0"))
 ENGINEERING_BUDGET_LIMIT = float(os.getenv("ENGINEERING_BUDGET_LIMIT", "0.0"))  # cost=0 for local git/tests today
 RESEARCH_BUDGET_LIMIT = float(os.getenv("RESEARCH_BUDGET_LIMIT", "5.0"))  # persona agents call the real model
+STORE_OPS_BUDGET_LIMIT = float(os.getenv("STORE_OPS_BUDGET_LIMIT", "5.0"))
+ENGINEERING_LEAD_BUDGET_LIMIT = float(os.getenv("ENGINEERING_LEAD_BUDGET_LIMIT", "5.0"))
 
 # === Telegram bridge — talk to the CEO from anywhere, no shared network needed ===
 # Leave TELEGRAM_BOT_TOKEN empty to disable the bridge entirely (default).

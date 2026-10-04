@@ -171,6 +171,15 @@ TOOL_SCHEMAS: list[dict] = [
             "than agreeing with whatever you proposed -- that disagreement is useful, report it "
             "to Jean rather than smoothing it over. risk='low', reversible=True, cost=0 (her "
             "actual model cost is metered and charged automatically after the call)."
+            "\n\nagent_name='store_ops' is Marcus Chen, Head of Store Operations -- delegate "
+            "catalog strategy, pricing/margin, and fulfillment-capacity judgment to him the same "
+            "way (action='think' -> {\"prompt\": str}). He will refuse to bless a listing plan "
+            "that assumes supply/fulfillment that hasn't been proven."
+            "\n\nagent_name='engineering_lead' is Priya Nair, Lead Backend Engineer -- delegate "
+            "technical/architecture judgment to her the same way (action='think' -> "
+            "{\"prompt\": str}) BEFORE directing the 'engineering' tool agent to actually touch "
+            "code, especially for anything non-trivial. She decides the approach; 'engineering' "
+            "executes the git/test mechanics of whatever she (or you) directed."
         ),
         "input_schema": {
             "type": "object",
