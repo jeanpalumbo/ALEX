@@ -31,6 +31,7 @@ from aicommerce import backup, config
 from aicommerce.bootstrap import get_system
 from aicommerce.brain.models import MemoryKind
 from aicommerce.reports import generate_status_report
+from aicommerce.webapp.office import get_office_agents
 
 _scheduler_stop = threading.Event()
 
@@ -360,6 +361,21 @@ def restore_backup(body: RestoreRequest) -> dict:
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
     return {"restored": restored, "note": "restart the server for the restored data to take effect"}
+
+
+# ----------------------------------------------------------------------
+# Office visualization (pixel-art office) -- real data only, see
+# aicommerce/webapp/office.py for how status/task are derived from TaskBoard.
+# ----------------------------------------------------------------------
+@api.get("/office/agents")
+def get_office_agents_endpoint() -> dict:
+    import datetime as _dt
+
+    system = get_system()
+    return {
+        "server_time": _dt.datetime.now(_dt.timezone.utc).isoformat(),
+        "agents": get_office_agents(system),
+    }
 
 
 # ----------------------------------------------------------------------

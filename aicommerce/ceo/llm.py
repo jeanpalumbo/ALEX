@@ -283,24 +283,39 @@ class FallbackModel:
 
 
 class OllamaModel:
-    """Local, zero-cost model via Ollama's OpenAI-compatible endpoint
-    (default http://localhost:11434/v1) -- no account, no API key, runs
-    entirely on Jean's own GPU. Reuses the same Anthropic<->OpenAI converter
+    """Ollama's OpenAI-compatible endpoint -- works against either LOCAL
+    Ollama (default http://localhost:11434/v1, no account/API key, runs on
+    Jean's own GPU, genuinely $0) or OLLAMA CLOUD (base_url
+    https://ollama.com/v1 + a real OLLAMA_API_KEY, a paid subscription --
+    see https://ollama.com/settings/keys). Which one is active is entirely
+    determined by OLLAMA_BASE_URL/OLLAMA_API_KEY in .env; the code path is
+    identical either way. Reuses the same Anthropic<->OpenAI converter
     functions as OpenRouterModel, so it's a real drop-in: same messages/tools
-    in, same LLMResponse shape out -- any persona can use this instead of
-    (or alongside) OpenRouterModel without CEOService/PersonaAgent changing.
+    in, same LLMResponse shape out.
 
-    Requires Ollama installed and running locally with the configured model
-    already pulled (`ollama pull <model>`) -- this code never installs
-    Ollama, starts the service, or pulls models for you. `free = True` tells
-    ModelRouter to record the real cost ($0).
+    `free = True` always -- for local this is literally true ($0/call); for
+    Cloud it reflects that Jean explicitly pre-paid a flat monthly
+    subscription to fix a real latency problem (single-GPU request
+    queuing), not a per-call spend he didn't approve. It is NOT free in the
+    sense of "no money ever changes hands" once Cloud is configured --
+    going over the plan's included credits does cost more. Document that
+    distinction to Jean rather than letting the `free` flag imply otherwise.
+
+    Requires Ollama installed and running locally (for the local case) with
+    the configured model already pulled (`ollama pull <model>`) -- this code
+    never installs Ollama, starts the service, pulls models, or signs Jean
+    up for Ollama Cloud. He does the subscription himself; this code only
+    consumes the API key once he provides it.
     """
 
     free = True
 
-    def __init__(self, base_url: Optional[str] = None, model: Optional[str] = None) -> None:
+    def __init__(
+        self, base_url: Optional[str] = None, model: Optional[str] = None, api_key: Optional[str] = None,
+    ) -> None:
         self.base_url = base_url or config.OLLAMA_BASE_URL
         self.model = model or config.OLLAMA_MODEL
+        self.api_key = api_key if api_key is not None else config.OLLAMA_API_KEY
         self._client = None
 
     @property
@@ -317,7 +332,10 @@ class OllamaModel:
         if self._client is None:
             import openai
 
-            self._client = openai.OpenAI(base_url=self.base_url, api_key="ollama")
+            # Local Ollama ignores the key entirely; Ollama Cloud requires
+            # the real OLLAMA_API_KEY as a Bearer token -- the openai SDK
+            # sends whatever api_key we pass as `Authorization: Bearer ...`.
+            self._client = openai.OpenAI(base_url=self.base_url, api_key=self.api_key or "ollama")
         return self._client
 
     def call(
