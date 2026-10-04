@@ -125,3 +125,17 @@ def test_engineering_read_action_executes_immediately_without_approval(tmp_path,
         risk="low",
     )
     assert outcome.status.value == "executed"
+
+
+def test_research_persona_agent_registered_with_own_budget(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    assert system.registry.get_instance("research") is not None
+    assert system.registry.get_spec("research").mission  # non-empty, real persona mission
+    assert "research" in system.budget.scopes()
+    assert system.permissions.can_act("research", "think") is True
+    assert system.permissions.can_act("research", "delete_everything") is False

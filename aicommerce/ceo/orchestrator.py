@@ -334,6 +334,17 @@ class Orchestrator:
         # MEASURE + LEARN
         if cost > 0:
             self.budget.spend(budget_scope, cost, from_reservation=True)
+        # Some agents (PersonaAgent) don't know their real cost until after a
+        # real model call completes, so they report it on the result instead
+        # of it being declared up front. Only fall back to that when the
+        # caller declared no cost at all -- if `cost` was already declared
+        # (and therefore already reserved/spent above), that's the source of
+        # truth and result.cost must not be charged again on top of it.
+        if cost <= 0 and result.cost > 0:
+            try:
+                self.budget.spend(budget_scope, result.cost)
+            except BudgetExceededError:
+                pass  # the work already happened; don't pretend it didn't, just don't go negative
 
         self.brain.record(
             MemoryRecord(
@@ -342,10 +353,10 @@ class Orchestrator:
                 source=agent_name,
                 confidence=Confidence.FACT,
                 tags=("executed", agent_name),
-                metadata={"cost": cost},
+                metadata={"cost": cost, "actual_cost": result.cost},
             )
         )
-        self._publish("action.executed", {"agent": agent_name, "action": action, "cost": cost})
+        self._publish("action.executed", {"agent": agent_name, "action": action, "cost": cost or result.cost})
         return TaskOutcome(status=TaskStatus.EXECUTED, agent_result=result)
 
     def _deny(self, objective: str, agent_name: str, action: str, reason: str) -> TaskOutcome:

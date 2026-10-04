@@ -163,6 +163,14 @@ TOOL_SCHEMAS: list[dict] = [
             "risk/reversible you pass) because it's the only path from a sandbox branch into "
             "master. Always run_tests and git_diff first so the approval request Jean sees is "
             "backed by evidence you actually checked, not just a request to trust you."
+            "\n\nagent_name='research' is Elena Voss, Senior Market Research Lead -- a real "
+            "specialist with her own judgment, not another tool. Delegate open-ended research/"
+            "analysis to her instead of doing it yourself: action='think' -> {\"prompt\": str} "
+            "(give her the actual question/context, not just a keyword). She has her own memory "
+            "(tagged to her, persists across tasks) and will push back on weak evidence rather "
+            "than agreeing with whatever you proposed -- that disagreement is useful, report it "
+            "to Jean rather than smoothing it over. risk='low', reversible=True, cost=0 (her "
+            "actual model cost is metered and charged automatically after the call)."
         ),
         "input_schema": {
             "type": "object",

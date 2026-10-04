@@ -11,10 +11,12 @@ from datetime import timedelta
 
 from aicommerce import config
 from aicommerce.agents.engineering_agent import EngineeringAgent
+from aicommerce.agents.persona import RESEARCH_PERSONA, PersonaAgent
 from aicommerce.agents.shopify_agent import ShopifyAgent
 from aicommerce.agents.stubs import QAAgent
 from aicommerce.brain.store import CompanyBrain
 from aicommerce.ceo.llm import CEOModel
+from aicommerce.ceo.model_router import ModelRouter
 from aicommerce.ceo.orchestrator import Orchestrator
 from aicommerce.ceo.service import CEOService
 from aicommerce.control_plane.approvals import ApprovalQueue
@@ -92,6 +94,21 @@ class System:
             self.engineering_agent,
         )
 
+        self.research_agent = PersonaAgent(
+            RESEARCH_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain
+        )
+        self.registry.register(
+            AgentSpec(
+                name="research",
+                mission=RESEARCH_PERSONA.mission,
+                authority=("think",),
+                tools=("anthropic_model",),
+                limits={"persona": RESEARCH_PERSONA.name, "role": RESEARCH_PERSONA.role},
+                kpis=("recommendation_accuracy", "evidence_quality"),
+            ),
+            self.research_agent,
+        )
+
     def _configure_permissions(self) -> None:
         self.permissions.define_role(
             Role(
@@ -121,11 +138,17 @@ class System:
         )
         self.permissions.assign_role("engineering", "engineering_full")
 
+        self.permissions.define_role(
+            Role(name="persona_think", allowed_actions=frozenset({"think"}), allowed_tools=frozenset({"anthropic_model"}))
+        )
+        self.permissions.assign_role("research", "persona_think")
+
     def _configure_budgets(self) -> None:
         self.budget.set_budget("daily", config.DAILY_BUDGET_LIMIT)
         self.budget.set_budget("shopify", config.SHOPIFY_BUDGET_LIMIT)
         self.budget.set_budget("ceo_llm", config.CEO_LLM_BUDGET_LIMIT)
         self.budget.set_budget("engineering", config.ENGINEERING_BUDGET_LIMIT)
+        self.budget.set_budget("research", config.RESEARCH_BUDGET_LIMIT)
 
     def _wire_events(self) -> None:
         self.events.subscribe("approval.required", lambda e: None)  # placeholder hook point

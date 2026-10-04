@@ -64,6 +64,15 @@ DAILY_BUDGET_LIMIT = float(os.getenv("DAILY_BUDGET_LIMIT", "20.0"))
 SHOPIFY_BUDGET_LIMIT = float(os.getenv("SHOPIFY_BUDGET_LIMIT", "10.0"))
 CEO_LLM_BUDGET_LIMIT = float(os.getenv("CEO_LLM_BUDGET_LIMIT", "5.0"))
 ENGINEERING_BUDGET_LIMIT = float(os.getenv("ENGINEERING_BUDGET_LIMIT", "0.0"))  # cost=0 for local git/tests today
+RESEARCH_BUDGET_LIMIT = float(os.getenv("RESEARCH_BUDGET_LIMIT", "5.0"))  # persona agents call the real model
+
+# === Telegram bridge — talk to the CEO from anywhere, no shared network needed ===
+# Leave TELEGRAM_BOT_TOKEN empty to disable the bridge entirely (default).
+# TELEGRAM_ALLOWED_CHAT_ID starts empty; the bridge tells the first sender
+# their chat_id in "bootstrap mode" without forwarding anything to the CEO
+# until you set this and restart.
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_ALLOWED_CHAT_ID = os.getenv("TELEGRAM_ALLOWED_CHAT_ID", "")
 
 # === Approvals ===
 # Every approval request gets a deadline (now + this many seconds) unless the

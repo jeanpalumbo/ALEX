@@ -64,10 +64,17 @@ async def lifespan(app: FastAPI):
 
     thread = threading.Thread(target=loop, name="scheduler-loop", daemon=True)
     thread.start()
+
+    from aicommerce.telegram_bridge import TelegramBridge
+
+    telegram = TelegramBridge(system)
+    telegram.start()  # no-op if TELEGRAM_BOT_TOKEN isn't set
+
     try:
         yield
     finally:
         _scheduler_stop.set()
+        telegram.stop()
 
 
 app = FastAPI(title="AI Commerce OS — CEO Console", lifespan=lifespan)
