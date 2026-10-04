@@ -56,8 +56,13 @@ OPUS_VOTE_WEIGHT = int(os.getenv("OPUS_VOTE_WEIGHT", "2"))
 # === persona check-ins ONLY, never for real interactive reasoning.      ===
 # Leave OPENROUTER_API_KEY empty to disable; autonomous check-ins then
 # report blocked (not silently billed to the paid model).
+# Default is a specific free model, not the "openrouter/free" auto-router
+# alias -- verified live on 2026-10-04 that the alias can route a request
+# to a content-safety classifier model instead of an actual chat model
+# (got back a literal "User Safety: safe" instead of real reasoning).
+# qwen/qwen3.8-27b:free was verified live to give real, coherent answers.
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/free")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3.8-27b:free")
 
 # === Shopify (optional — ShopifyAgent runs in DEGRADED/BLOCKED mode without it) ===
 SHOPIFY_STORE = os.getenv("SHOPIFY_STORE", "")
