@@ -139,3 +139,8 @@ aicommerce/
 tests/               109 tests covering every module above, including the CEO chat loop, Shopify agent (mocked HTTP), kill switch, backup/restore, and an adversarial evaluation suite
 run_ceo_console.py   Entry point: starts the web server
 ```
+
+## Windows: actualizar y reiniciar todo
+
+- `configurar_ollama.bat` — pide la clave de Ollama Cloud (oculta) y deja en `.env` el modelo `gpt-oss:120b`, timeout 60 s y tope de 500 llamadas/día.
+- `actualizar_y_reiniciar.bat` — `git pull`, instala dependencias, reinicia la consola del CEO (`:8420`) y la oficina pixel 2D (`:5173`, token copiado automáticamente) y abre el navegador.
