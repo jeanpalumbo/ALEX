@@ -39,6 +39,13 @@ if not CONSOLE_TOKEN:
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 CEO_MODEL = os.getenv("CEO_MODEL", "claude-sonnet-5")
 
+# === Free-tier background model (optional) — for low-stakes autonomous ===
+# === persona check-ins ONLY, never for real interactive reasoning.      ===
+# Leave OPENROUTER_API_KEY empty to disable; autonomous check-ins then
+# report blocked (not silently billed to the paid model).
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/free")
+
 # === Shopify (optional — ShopifyAgent runs in DEGRADED/BLOCKED mode without it) ===
 SHOPIFY_STORE = os.getenv("SHOPIFY_STORE", "")
 SHOPIFY_TOKEN = os.getenv("SHOPIFY_TOKEN", "")

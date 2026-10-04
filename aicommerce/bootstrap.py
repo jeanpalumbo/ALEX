@@ -15,7 +15,7 @@ from aicommerce.agents.persona import ENGINEERING_PERSONA, RESEARCH_PERSONA, STO
 from aicommerce.agents.shopify_agent import ShopifyAgent
 from aicommerce.agents.stubs import QAAgent
 from aicommerce.brain.store import CompanyBrain
-from aicommerce.ceo.llm import CEOModel
+from aicommerce.ceo.llm import CEOModel, OpenRouterModel
 from aicommerce.ceo.model_router import ModelRouter
 from aicommerce.ceo.orchestrator import Orchestrator
 from aicommerce.ceo.service import CEOService
@@ -63,6 +63,11 @@ class System:
 
     # ------------------------------------------------------------------
     def _register_agents(self) -> None:
+        # One shared free-tier router for every persona's autonomous check-ins.
+        # Inert (raises LLMNotConfigured on call) until OPENROUTER_API_KEY is
+        # set -- see aicommerce/ceo/llm.py:OpenRouterModel.
+        self.background_router = ModelRouter(OpenRouterModel(), events=self.events)
+
         self.shopify_agent = ShopifyAgent()
         self.registry.register(
             AgentSpec(
@@ -95,7 +100,8 @@ class System:
         )
 
         self.research_agent = PersonaAgent(
-            RESEARCH_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain
+            RESEARCH_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
         )
         self.registry.register(
             AgentSpec(
@@ -110,7 +116,8 @@ class System:
         )
 
         self.store_ops_agent = PersonaAgent(
-            STORE_OPS_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain
+            STORE_OPS_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
         )
         self.registry.register(
             AgentSpec(
@@ -125,7 +132,8 @@ class System:
         )
 
         self.engineering_lead_agent = PersonaAgent(
-            ENGINEERING_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain
+            ENGINEERING_PERSONA, ModelRouter(CEOModel(), events=self.events), self.brain,
+            background_router=self.background_router,
         )
         self.registry.register(
             AgentSpec(
@@ -169,7 +177,11 @@ class System:
         self.permissions.assign_role("engineering", "engineering_full")
 
         self.permissions.define_role(
-            Role(name="persona_think", allowed_actions=frozenset({"think"}), allowed_tools=frozenset({"anthropic_model"}))
+            Role(
+                name="persona_think",
+                allowed_actions=frozenset({"think", "think_background"}),
+                allowed_tools=frozenset({"anthropic_model"}),
+            )
         )
         self.permissions.assign_role("research", "persona_think")
         self.permissions.assign_role("store_ops", "persona_think")
@@ -296,9 +308,9 @@ class System:
                     outcome = self.orchestrator.run_cycle(
                         objective=self.ceo.state.objective or "autonomous persona check-in",
                         agent_name=agent_name,
-                        action="think",
+                        action="think_background",
                         budget_scope=agent_name,
-                        cost=config.AUTONOMOUS_PERSONA_TICK_ESTIMATED_COST,
+                        cost=0.0,  # free-tier model: real cost is $0, or it fails cleanly if unconfigured
                         risk="low",
                         reversible=True,
                         params={"prompt": prompt},

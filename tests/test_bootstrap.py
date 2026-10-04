@@ -221,14 +221,19 @@ def test_persona_autonomous_tick_actually_goes_through_the_orchestrator(tmp_path
         text="Nothing new since last check-in.", tool_calls=[], stop_reason="end_turn", raw_content=[],
         input_tokens=10, output_tokens=5,
     )
-    monkeypatch.setattr(system.research_agent.router.model, "call", lambda *a, **k: fake_response)
-    monkeypatch.setattr(type(system.research_agent.router.model), "configured", property(lambda self: True))
+    # Autonomous ticks now go through the FREE background router, not the
+    # paid one -- mock that one instead, and expect $0 actually charged.
+    monkeypatch.setattr(system.research_agent.background_router.model, "call", lambda *a, **k: fake_response)
+    monkeypatch.setattr(
+        type(system.research_agent.background_router.model), "configured", property(lambda self: True)
+    )
 
     ran = system.scheduler.run_due()
     assert "autonomous_research_tick" in ran
 
-    assert system.budget.status("research")["spent"] > 0
+    assert system.budget.status("research")["spent"] == 0.0  # genuinely free -- nothing charged
     from aicommerce.brain.models import MemoryKind
 
     records = system.brain.query(kind=MemoryKind.EPISODIC, tags=["elena_voss"])
     assert any("Nothing new since last check-in" in r.content for r in records)
+    assert any("persona_autonomous_task" in r.tags for r in records)

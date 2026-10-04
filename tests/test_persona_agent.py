@@ -162,3 +162,43 @@ def test_store_ops_and_engineering_lead_personas_reason_distinctly(monkeypatch):
     assert "fulfillment" in r1.output
     assert "split it" in r2.output
     assert marcus_model.calls[0]["system"] != priya_model.calls[0]["system"]  # genuinely different identities
+
+
+def test_think_background_without_a_background_router_fails_cleanly():
+    agent = PersonaAgent(RESEARCH_PERSONA, ModelRouter(FakeModel()), CompanyBrain(":memory:"))
+    result = agent.execute({"action": "think_background", "params": {"prompt": "anything new?"}})
+    assert result.success is False
+    assert "no background/free-tier model configured" in result.error
+
+
+def test_think_background_uses_the_free_router_not_the_paid_one():
+    paid_model = FakeModel(text="PAID response")
+    free_model = FakeModel(text="FREE response")
+    agent = PersonaAgent(
+        RESEARCH_PERSONA, ModelRouter(paid_model), CompanyBrain(":memory:"),
+        background_router=ModelRouter(free_model),
+    )
+
+    result = agent.execute({"action": "think_background", "params": {"prompt": "anything new?"}})
+
+    assert result.success is True
+    assert result.output == "FREE response"
+    assert len(paid_model.calls) == 0
+    assert len(free_model.calls) == 1
+
+
+def test_think_background_records_memory_tagged_differently_from_think():
+    free_model = FakeModel(text="nothing new")
+    brain = CompanyBrain(":memory:")
+    agent = PersonaAgent(
+        RESEARCH_PERSONA, ModelRouter(FakeModel()), brain, background_router=ModelRouter(free_model)
+    )
+
+    agent.execute({"action": "think_background", "params": {"prompt": "check in"}})
+
+    from aicommerce.brain.models import MemoryKind
+
+    records = brain.query(kind=MemoryKind.EPISODIC, tags=["elena_voss"])
+    assert len(records) == 1
+    assert "persona_autonomous_task" in records[0].tags
+    assert "persona_task" not in records[0].tags

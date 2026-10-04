@@ -18,6 +18,7 @@ and approval when warranted. A personality is not a bypass.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from aicommerce.agents.base import Agent, AgentResult
 from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
@@ -83,26 +84,47 @@ class PersonaAgent(Agent):
     is the one action every PersonaAgent supports — open-ended reasoning
     scoped to their role, not a fixed menu of operations like a tool agent."""
 
-    def __init__(self, persona: Persona, router: ModelRouter, brain: CompanyBrain) -> None:
+    def __init__(
+        self,
+        persona: Persona,
+        router: ModelRouter,
+        brain: CompanyBrain,
+        background_router: Optional[ModelRouter] = None,
+    ) -> None:
         self.persona = persona
         self.name = persona.name.lower().replace(" ", "_")
         self.router = router
+        self.background_router = background_router
         self.brain = brain
 
     def execute(self, task: dict) -> AgentResult:
         action = task.get("action")
-        if action != "think":
-            return AgentResult(success=False, error=f"PersonaAgent only supports action='think', got '{action}'")
+        if action == "think":
+            router, tag = self.router, "persona_task"
+        elif action == "think_background":
+            if self.background_router is None:
+                return AgentResult(
+                    success=False,
+                    error=f"{self.persona.name} has no background/free-tier model configured — "
+                    "set OPENROUTER_API_KEY in .env to enable autonomous check-ins, or use "
+                    "action='think' to reason on the paid model instead",
+                )
+            router, tag = self.background_router, "persona_autonomous_task"
+        else:
+            return AgentResult(
+                success=False,
+                error=f"PersonaAgent only supports action='think'/'think_background', got '{action}'",
+            )
 
         params = task.get("params", {})
         prompt = params.get("prompt")
         if not prompt:
             return AgentResult(success=False, error="params.prompt is required")
 
-        if not self.router.configured:
+        if not router.configured:
             return AgentResult(
                 success=False,
-                error=f"{self.persona.name}'s model is not configured (ANTHROPIC_API_KEY missing)",
+                error=f"{self.persona.name}'s model is not configured for this action",
             )
 
         own_memory = self.brain.query(tags=[self.name], limit=10)
@@ -114,10 +136,10 @@ class PersonaAgent(Agent):
         )
 
         try:
-            routed = self.router.call(
+            routed = router.call(
                 self.persona.system_prompt(),
                 [{"role": "user", "content": prompt + memory_context}],
-                task=f"persona:{self.name}",
+                task=f"persona:{self.name}:{action}",
             )
         except Exception as exc:  # noqa: BLE001 — surfaced as a failed result, not a crash
             return AgentResult(success=False, error=f"{self.persona.name} hit a model error: {exc}")
@@ -129,7 +151,7 @@ class PersonaAgent(Agent):
                 content=f"Task: {prompt!r}\n\nResponse: {text}",
                 source=self.name,
                 confidence=Confidence.FACT,
-                tags=(self.name, "persona_task"),
+                tags=(self.name, tag),
             )
         )
         return AgentResult(

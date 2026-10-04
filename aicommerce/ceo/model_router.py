@@ -85,12 +85,13 @@ class ModelRouter:
             raise
 
         latency_ms = (time.monotonic() - start) * 1000
-        cost = estimate_cost(response.input_tokens, response.output_tokens)
+        is_free = getattr(self.model, "free", False)
+        cost = 0.0 if is_free else estimate_cost(response.input_tokens, response.output_tokens)
         self._publish(
             "model.call",
             {
                 "task": task,
-                "provider": "anthropic",
+                "provider": "free" if is_free else "anthropic",
                 "model": getattr(self.model, "model", "unknown"),
                 "latency_ms": round(latency_ms, 1),
                 "input_tokens": response.input_tokens,
