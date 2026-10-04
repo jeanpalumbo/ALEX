@@ -12,18 +12,19 @@ export class OfficeWorldError extends Error {}
 export const TILE_SIZE = 16;
 
 /**
- * Leyenda: # pared, B estanteria, W ventana, d escritorio, P planta, T mesa,
- * . suelo, s silla (puesto de trabajo), X puerta. Solo . s X se pueden pisar.
+ * Leyenda: # pared, W ventana, M pizarra, B estanteria, d escritorio, P planta,
+ * T mesa, . suelo, r alfombra, s silla (puesto), X puerta. Se pisan . r s X.
  */
 const DESK_XS = [3, 8, 13, 18, 23]
 const WIDTH = 28
 
 function buildLayout(): readonly string[] {
   const blank = '#' + '.'.repeat(WIDTH - 2) + '#'
+  const wall = '#'.repeat(WIDTH)
   const put = (row: string, x: number, str: string) => row.slice(0, x) + str + row.slice(x + str.length)
   const rows: string[] = Array.from({ length: 15 }, () => blank)
-  rows[0] = '#'.repeat(WIDTH)
-  rows[1] = put(put(put(put(blank, 1, 'BB'), 8, 'WW'), 18, 'WW'), WIDTH - 3, 'BB')
+  rows[0] = put(put(put(put(wall, 5, 'WW'), 12, 'MM'), 17, 'WW'), 23, 'WW')
+  rows[1] = put(put(blank, 1, 'BB'), WIDTH - 3, 'BB')
   for (const [deskY, seatY] of [[3, 4], [8, 9]] as const) {
     let desk = blank
     let seat = blank
@@ -34,18 +35,19 @@ function buildLayout(): readonly string[] {
     rows[deskY] = desk
     rows[seatY] = seat
   }
-  rows[6] = put(put(blank, 1, 'P'), WIDTH - 3, 'P')
-  rows[11] = put(blank, 11, 'TTTT')
-  rows[12] = put(blank, 11, 'TTTT')
-  rows[13] = put(put(blank, 1, 'P'), WIDTH - 2, 'P')
-  rows[14] = put('#'.repeat(WIDTH), 7, 'XX')
+  rows[6] = put(put(blank, 1, 'P'), WIDTH - 2, 'P')
+  rows[10] = put(blank, 10, 'rrrrrr')
+  rows[11] = put(blank, 10, 'rTTTTr')
+  rows[12] = put(blank, 10, 'rTTTTr')
+  rows[13] = put(put(put(blank, 1, 'P'), WIDTH - 2, 'P'), 10, 'rrrrrr')
+  rows[14] = put(wall, 7, 'XX')
   return rows
 }
 
 export const OFFICE_LAYOUT: readonly string[] = buildLayout()
 
 
-const WALKABLE = new Set([".", "s", "X"]);
+const WALKABLE = new Set([".", "s", "X", "r"]);
 const DELTAS: Record<Dir, Point> = {
   up: { x: 0, y: -1 },
   down: { x: 0, y: 1 },
@@ -168,9 +170,9 @@ export class OfficeWorld {
     this.map = map;
     this.rng = options.rng ?? Math.random;
     this.stepMs = options.stepMs ?? 260;
-    this.wander = options.wander ?? true;
+    this.wander = options.wander ?? false;
     this.wanderTiles = [];
-    map.rows.forEach((row, y) => [...row].forEach((t, x) => t === "." && this.wanderTiles.push({ x, y })));
+    map.rows.forEach((row, y) => [...row].forEach((t, x) => (t === "." || t === "r") && this.wanderTiles.push({ x, y })));
     this.agents = seeds.map((seed, i) => {
       const seat = seats[i] as Point;
       return { ...seed, seat, mover: newMover(seat, "up"), path: [], waitMs: this.rollWait() };

@@ -69,7 +69,7 @@ export default function App() {
 
       <main className="office-main">
         <section className="office-scene-wrap">
-          <OfficeScene agents={agents} selectedId={selectedId} onSelect={handleSelect} />
+          <OfficeScene agents={agents} selectedId={selectedId} stale={connection === 'error'} onSelect={handleSelect} />
           <p className="sync-note">Flechas o WASD para moverte · Z, Enter o Espacio para hablar con quien tengas delante · clic en un agente.</p>
           <ul className="office-roster" aria-label="Lista de agentes (accesible por teclado)">
             {agents.map((a) => (
