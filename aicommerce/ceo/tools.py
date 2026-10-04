@@ -134,6 +134,38 @@ TOOL_SCHEMAS: list[dict] = [
         },
     },
     {
+        "name": "record_content_brief",
+        "description": (
+            "Record a structured content brief AFTER Jean has approved a plan that requires "
+            "real creative output (a landing page, flyer, product image, video, ad copy, social "
+            "post). You and the specialist agents cannot generate that content yourselves -- you "
+            "are isolated API calls with no access to Claude Code's real tools (Artifact, Adobe "
+            "creative tools, etc.), which only exist in a live conversation with Jean. This tool "
+            "does NOT create anything; it writes a clear, structured spec to Company Brain so "
+            "Jean can bring it into a conversation with Claude and have it executed for real, "
+            "without starting from zero. Only call this for work Jean has actually approved -- "
+            "never speculatively."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "asset_type": {
+                    "type": "string",
+                    "enum": ["landing_page", "flyer", "product_image", "video", "ad_copy", "social_post", "other"],
+                },
+                "product": {"type": "string", "description": "which product/offer this is for"},
+                "key_message": {"type": "string", "description": "the one thing this asset must communicate"},
+                "target_audience": {"type": "string"},
+                "approval_reference": {
+                    "type": "string",
+                    "description": "the approval request id or decision that authorized this work",
+                },
+                "notes": {"type": "string", "description": "anything else Claude will need to execute this well"},
+            },
+            "required": ["asset_type", "product", "key_message"],
+        },
+    },
+    {
         "name": "request_technical_vote",
         "description": (
             "For an important decision, run a real vote: each specialist (Elena/research, "
@@ -384,6 +416,39 @@ class CEOTools:
             self.orchestrator, self.state, self.preflight_provider(), period=period
         )
         return report.to_dict()
+
+    def _tool_record_content_brief(
+        self,
+        asset_type: str,
+        product: str,
+        key_message: str,
+        target_audience: str = "",
+        approval_reference: str = "",
+        notes: str = "",
+    ) -> dict:
+        brief = {
+            "asset_type": asset_type,
+            "product": product,
+            "key_message": key_message,
+            "target_audience": target_audience,
+            "approval_reference": approval_reference,
+            "notes": notes,
+            "status": "pending_execution",
+        }
+        record = MemoryRecord(
+            kind=MemoryKind.DECISION,
+            content=(
+                f"CONTENT BRIEF [{asset_type}] for {product}: {key_message}"
+                + (f" (audience: {target_audience})" if target_audience else "")
+                + (f" (ref: {approval_reference})" if approval_reference else "")
+            ),
+            source="ai_ceo",
+            confidence=Confidence.FACT,
+            tags=("content_brief", asset_type),
+            metadata=brief,
+        )
+        self.orchestrator.brain.record(record)
+        return {"recorded_id": record.id, "status": "pending_execution", **brief}
 
     def _tool_request_technical_vote(self, proposal: str) -> dict:
         from aicommerce import config

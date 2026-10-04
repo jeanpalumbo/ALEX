@@ -117,6 +117,10 @@
       </div>
       <pre id="report-output" class="empty" style="white-space:pre-wrap; font-size:11px; margin:0;">sin informe generado todavía</pre>
     </div>
+    <div class="panel" style="max-height: 220px;">
+      <h2>Content briefs (ready for Claude to execute)</h2>
+      <div id="content-briefs-list"><div class="empty">cargando...</div></div>
+    </div>
   </div>
 </div>
 
@@ -220,6 +224,16 @@ async function refreshDecisions() {
       ${escapeHtml(m.content)}
     </div>
   `).join('') || '<div class="empty">sin decisiones registradas</div>';
+}
+
+async function refreshContentBriefs() {
+  const r = await api('/api/brain?tag=content_brief&limit=15');
+  $('content-briefs-list').innerHTML = r.records.map(m => `
+    <div class="mem-item">
+      <span class="tag">${new Date(m.timestamp).toLocaleTimeString()}</span><br>
+      ${escapeHtml(m.content)}
+    </div>
+  `).join('') || '<div class="empty">sin briefs pendientes</div>';
 }
 
 async function refreshErrors() {
@@ -341,7 +355,7 @@ async function refreshEvents() {
 async function refreshAll() {
   await Promise.all([
     refreshState(), refreshApprovals(), refreshBudget(), refreshAgents(),
-    refreshBrain(), refreshEvents(), refreshDecisions(), refreshErrors(),
+    refreshBrain(), refreshEvents(), refreshDecisions(), refreshErrors(), refreshContentBriefs(),
   ]);
 }
 

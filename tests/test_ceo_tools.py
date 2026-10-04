@@ -177,3 +177,39 @@ def test_generate_status_report_tool_reflects_real_state():
 def test_finance_is_a_default_voter_for_technical_votes():
     tools, _ = build()
     assert "finance" in tools.voter_agent_names
+
+
+def test_record_content_brief_writes_a_structured_pending_brief():
+    tools, orchestrator = build()
+
+    result = tools.dispatch(
+        "record_content_brief",
+        {
+            "asset_type": "landing_page",
+            "product": "thermal mug",
+            "key_message": "keeps drinks hot for 12 hours",
+            "target_audience": "office workers",
+            "approval_reference": "approval-123",
+        },
+    )
+
+    assert result["status"] == "pending_execution"
+    assert result["asset_type"] == "landing_page"
+
+    from aicommerce.brain.models import MemoryKind
+
+    records = orchestrator.brain.query(kind=MemoryKind.DECISION, tags=["content_brief"])
+    assert len(records) == 1
+    assert records[0].metadata["product"] == "thermal mug"
+    assert records[0].metadata["status"] == "pending_execution"
+    assert "approval-123" in records[0].content
+
+
+def test_record_content_brief_without_optional_fields_still_works():
+    tools, orchestrator = build()
+    result = tools.dispatch(
+        "record_content_brief",
+        {"asset_type": "flyer", "product": "mug", "key_message": "stays hot"},
+    )
+    assert result["status"] == "pending_execution"
+    assert result["target_audience"] == ""
