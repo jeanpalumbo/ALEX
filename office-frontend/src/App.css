@@ -116,3 +116,16 @@
     animation: none !important;
   }
 }
+
+.office-canvas {
+  display: block;
+  width: 100%;
+  max-width: 1120px;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  border: 4px solid #2b2d4a;
+  border-radius: 6px;
+  background: #000;
+}
+.office-canvas:focus-visible { outline: 3px solid #f6b24a; outline-offset: 2px; }

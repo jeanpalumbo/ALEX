@@ -61,3 +61,11 @@ def test_ollama_model_call_with_tools_converts_to_openai_function_schema():
 
     call_kwargs = fake_client.chat.completions.create.call_args.kwargs
     assert call_kwargs["tools"][0]["function"]["name"] == "t"
+
+
+def test_config_exposes_ollama_api_key_and_model_constructs_without_env():
+    from aicommerce import config
+    from aicommerce.ceo.llm import OllamaModel
+
+    assert isinstance(config.OLLAMA_API_KEY, str)
+    assert OllamaModel().configured is True

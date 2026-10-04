@@ -73,6 +73,9 @@ OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3.8-27b:free")
 # === ~27B model does NOT fit a 6GB card and will be extremely slow/OOM. ===
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
+# Empty for local Ollama (it ignores the key). Only set for Ollama Cloud
+# (OLLAMA_BASE_URL=https://ollama.com/v1); keep it in .env, never in code.
+OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY", "")
 
 # === Shopify (optional — ShopifyAgent runs in DEGRADED/BLOCKED mode without it) ===
 SHOPIFY_STORE = os.getenv("SHOPIFY_STORE", "")
