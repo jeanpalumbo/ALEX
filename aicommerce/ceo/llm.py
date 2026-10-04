@@ -65,7 +65,7 @@ class CEOModel:
         system: str,
         messages: list[dict],
         tools: Optional[list[dict]] = None,
-        max_tokens: int = 1024,
+        max_tokens: int = 4096,
     ) -> LLMResponse:
         client = self._client_or_raise()
         kwargs: dict[str, Any] = dict(
@@ -141,7 +141,7 @@ class OpenRouterModel:
         system: str,
         messages: list[dict],
         tools: Optional[list[dict]] = None,
-        max_tokens: int = 1024,
+        max_tokens: int = 4096,
     ) -> LLMResponse:
         if tools:
             raise NotImplementedError("OpenRouterModel does not support tool use — text-only background reasoning")

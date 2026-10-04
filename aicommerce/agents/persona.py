@@ -135,10 +135,18 @@ class PersonaAgent(Agent):
             else "\n\nYou have no prior memory of your own yet — this is effectively your first task."
         )
 
+        institutional = self.brain.query(kind=MemoryKind.INSTITUTIONAL, limit=10)
+        institutional_context = (
+            "\n\nCompany rules/methodology you must follow (institutional, not optional):\n"
+            + "\n".join(f"- {r.content}" for r in institutional)
+            if institutional
+            else ""
+        )
+
         try:
             routed = router.call(
                 self.persona.system_prompt(),
-                [{"role": "user", "content": prompt + memory_context}],
+                [{"role": "user", "content": prompt + memory_context + institutional_context}],
                 task=f"persona:{self.name}:{action}",
             )
         except Exception as exc:  # noqa: BLE001 — surfaced as a failed result, not a crash

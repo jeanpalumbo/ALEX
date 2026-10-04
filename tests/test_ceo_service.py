@@ -81,6 +81,30 @@ def test_chat_runs_tool_then_returns_final_text():
     assert model.calls == 2
     assert "FACT:" in turn.content
     assert turn.tool_activity[0]["tool"] == "get_company_state"
+
+
+def test_chat_forces_a_final_answer_after_hitting_the_tool_call_cap():
+    """Real bug found live: the CEO kept calling tools one-at-a-time for a
+    complex delegated task and hit the old cap of 6 with no final answer.
+    After the fix, exceeding the cap triggers one forced no-tools call that
+    must still produce a real answer, not a placeholder."""
+    tool_response = LLMResponse(
+        text="", tool_calls=[ToolCall(id="c", name="get_company_state", input={})],
+        stop_reason="tool_use", raw_content=[{"type": "tool_use", "id": "c", "name": "get_company_state", "input": {}}],
+    )
+    wrapup_response = LLMResponse(
+        text="FACT: here's what I found before running out of room to keep digging.",
+        tool_calls=[], stop_reason="end_turn", raw_content=[{"type": "text", "text": "wrapup"}],
+    )
+    # 20 tool-call responses (fills the whole loop) then the forced wrap-up call
+    model = ScriptedModel([tool_response] * 20 + [wrapup_response])
+    service = CEOService(build_orchestrator(), model=model)
+
+    turn = service.chat("do something complicated")
+
+    assert model.calls == 21  # 20 loop iterations + 1 forced wrap-up
+    assert "running out of room" in turn.content
+    assert "(stopped after reaching" not in turn.content  # no more placeholder
     assert turn.tool_activity[0]["result"]["agents"] == ["research"]
 
 

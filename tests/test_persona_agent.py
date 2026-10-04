@@ -74,6 +74,27 @@ def test_persona_agent_uses_its_own_past_memory_as_context():
     assert "first task" in second_call_messages[0]["content"]  # prior memory fed back in
 
 
+def test_persona_agent_receives_institutional_rules_as_context():
+    from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
+
+    model = FakeModel(text="ok")
+    router = ModelRouter(model)
+    brain = CompanyBrain(":memory:")
+    brain.record(MemoryRecord(
+        kind=MemoryKind.INSTITUTIONAL,
+        content="Never approve a spend without free validation first.",
+        source="jean",
+        confidence=Confidence.FACT,
+    ))
+    agent = PersonaAgent(RESEARCH_PERSONA, router, brain)
+
+    agent.execute({"action": "think", "params": {"prompt": "should we spend on ads?"}})
+
+    sent_content = model.calls[0]["messages"][0]["content"]
+    assert "Never approve a spend without free validation first." in sent_content
+    assert "Company rules/methodology you must follow" in sent_content
+
+
 def test_persona_agent_rejects_unsupported_actions():
     agent = PersonaAgent(RESEARCH_PERSONA, ModelRouter(FakeModel()), CompanyBrain(":memory:"))
     result = agent.execute({"action": "delete_everything", "params": {}})

@@ -60,7 +60,7 @@ class ModelRouter:
         system: str,
         messages: list[dict],
         tools: Optional[list[dict]] = None,
-        max_tokens: int = 1024,
+        max_tokens: int = 4096,
         task: str = "ceo_chat",
         correlation_id: Optional[str] = None,
     ) -> RoutedCall:

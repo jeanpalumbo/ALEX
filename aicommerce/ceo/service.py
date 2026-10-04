@@ -148,7 +148,13 @@ class CEOService:
         tool_activity: list[dict] = []
         final_text = ""
         try:
-            for _ in range(6):  # bounded agentic loop — never spins forever
+            # 20, not 6: a real delegated task (query memory, check institutional
+            # rules, propose_action, verify events) legitimately needs more than a
+            # handful of round trips when the model calls one tool per turn rather
+            # than batching. Cost is already bounded by ceo_llm's budget, and each
+            # call is cheap -- the real risk this loop guards against is an
+            # infinite loop, and any finite cap does that.
+            for _ in range(20):
                 self.state.set_stage(CycleStage.DECIDE)
                 routed = self.router.call(
                     SYSTEM_PROMPT, messages, tools=TOOL_SCHEMAS, task="ceo_chat", correlation_id=correlation_id
@@ -175,7 +181,17 @@ class CEOService:
                     )
                 messages.append({"role": "user", "content": tool_results})
             else:
-                final_text = response.text or "(stopped after reaching the tool-call limit for this turn)"
+                # Hit the cap without a natural stop. Rather than giving up with
+                # a placeholder, force one final no-tools call so the CEO still
+                # answers using everything it already gathered this turn.
+                messages.append({
+                    "role": "user",
+                    "content": "You've used a lot of tool calls this turn. Stop calling tools now and "
+                    "give Jean your actual answer using what you've already found.",
+                })
+                wrapup = self.router.call(SYSTEM_PROMPT, messages, task="ceo_chat", correlation_id=correlation_id)
+                self._spend_llm_budget(wrapup.estimated_cost)
+                final_text = wrapup.response.text or "(no final answer produced even after a forced wrap-up)"
         except LLMNotConfigured as exc:
             final_text = f"UNKNOWN: {exc}"
         except _LLMBudgetExhausted as exc:
