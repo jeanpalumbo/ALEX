@@ -177,6 +177,22 @@ def test_ceo_has_its_own_named_identity(tmp_path, monkeypatch):
     assert "pending_approval" in SYSTEM_PROMPT  # operational specifics still present on top
 
 
+def test_ceo_primary_model_is_the_free_tier_not_claude(tmp_path, monkeypatch):
+    """Jean's explicit, repeated instruction: talking to the team must cost
+    nothing. The CEO's own day-to-day chat model must be the free one; the
+    paid model (CEOModel/Claude) stays reserved for personas' 'think' and
+    the Opus vote review."""
+    from aicommerce import config
+    from aicommerce.ceo.llm import OpenRouterModel
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    assert isinstance(system.ceo.model, OpenRouterModel)
+    assert system.ceo.router.model is system.ceo.model
+
+
 def test_opus_router_wired_with_its_own_budget(tmp_path, monkeypatch):
     from aicommerce import config
 

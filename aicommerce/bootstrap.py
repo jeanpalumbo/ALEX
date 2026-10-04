@@ -62,8 +62,13 @@ class System:
             events=self.events,
             kill_switch_db_path=config.DATA_DIR / "kill_switch.db",
         )
+        # The CEO's own day-to-day conversation runs on the FREE model (with
+        # real tool-use support -- see aicommerce/ceo/llm.py), per Jean's
+        # explicit instruction: talking to the team costs nothing; money
+        # only enters via request_technical_vote (personas' paid 'think' +
+        # Opus) for decisions he actually approves spending on.
         self.ceo = CEOService(
-            self.orchestrator, CEOModel(), scheduler=self.scheduler, opus_router=self.opus_router
+            self.orchestrator, OpenRouterModel(), scheduler=self.scheduler, opus_router=self.opus_router
         )
         self.preflight = self._build_preflight()
         self.ceo.tools.preflight_provider = self.preflight.run
@@ -237,7 +242,14 @@ class System:
             "ceo_llm_configured",
             lambda: self.ceo.llm_configured,
             on_fail=PreflightResult.BLOCKED,
-            reason="ANTHROPIC_API_KEY not set — CEO chat is disabled",
+            reason="OPENROUTER_API_KEY not set — CEO chat (free model) is disabled",
+        )
+        pf.add_check(
+            "opus_review_configured",
+            lambda: self.opus_router.configured,
+            on_fail=PreflightResult.DEGRADED,
+            reason="ANTHROPIC_API_KEY not set — Opus technical votes will fail, paid persona "
+            "'think' calls will also fail",
         )
         pf.add_check(
             "shopify_configured",
