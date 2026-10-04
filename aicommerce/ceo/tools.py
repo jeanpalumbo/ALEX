@@ -12,8 +12,10 @@ import json
 from typing import Any, Callable, Optional
 
 from aicommerce.brain.models import Confidence, MemoryKind, MemoryRecord
+from aicommerce.ceo.model_router import ModelRouter
 from aicommerce.ceo.orchestrator import Orchestrator, TaskStatus
 from aicommerce.ceo.state import CEOState
+from aicommerce.ceo.voting import run_technical_vote
 from aicommerce.control_plane.scheduler import Scheduler
 
 TOOL_SCHEMAS: list[dict] = [
@@ -132,6 +134,30 @@ TOOL_SCHEMAS: list[dict] = [
         },
     },
     {
+        "name": "request_technical_vote",
+        "description": (
+            "For an important decision, run a real vote: each specialist (Elena/research, "
+            "Marcus/store_ops, Priya/engineering_lead) votes FOR/AGAINST/ABSTAIN with real "
+            "reasoning on the exact proposal text, through their own 'think' action (real cost, "
+            "real memory), PLUS an independent review from Opus (a separate, stronger model with "
+            "no stake in the outcome) if configured. This does NOT execute anything and does NOT "
+            "replace Jean's approval -- it only produces richer evidence. Use this before "
+            "recommending something consequential to Jean, or before proposing a high-risk "
+            "action, so what you tell him is backed by more than your own read. Relay the actual "
+            "tally and dissent honestly, including if the vote came back AGAINST what you hoped."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "proposal": {
+                    "type": "string",
+                    "description": "the exact decision/proposal being voted on, stated plainly",
+                },
+            },
+            "required": ["proposal"],
+        },
+    },
+    {
         "name": "propose_action",
         "description": (
             "Propose that a registered agent perform an action. This is the ONLY way "
@@ -165,21 +191,27 @@ TOOL_SCHEMAS: list[dict] = [
             "backed by evidence you actually checked, not just a request to trust you."
             "\n\nagent_name='research' is Elena Voss, Senior Market Research Lead -- a real "
             "specialist with her own judgment, not another tool. Delegate open-ended research/"
-            "analysis to her instead of doing it yourself: action='think' -> {\"prompt\": str} "
-            "(give her the actual question/context, not just a keyword). She has her own memory "
-            "(tagged to her, persists across tasks) and will push back on weak evidence rather "
-            "than agreeing with whatever you proposed -- that disagreement is useful, report it "
-            "to Jean rather than smoothing it over. risk='low', reversible=True, cost=0 (her "
-            "actual model cost is metered and charged automatically after the call)."
+            "analysis to her instead of doing it yourself (give her the actual question/context, "
+            "not just a keyword). She has her own memory (tagged to her, persists across tasks) "
+            "and will push back on weak evidence rather than agreeing with whatever you proposed "
+            "-- that disagreement is useful, report it to Jean rather than smoothing it over."
             "\n\nagent_name='store_ops' is Marcus Chen, Head of Store Operations -- delegate "
             "catalog strategy, pricing/margin, and fulfillment-capacity judgment to him the same "
-            "way (action='think' -> {\"prompt\": str}). He will refuse to bless a listing plan "
-            "that assumes supply/fulfillment that hasn't been proven."
+            "way. He will refuse to bless a listing plan that assumes supply/fulfillment that "
+            "hasn't been proven."
             "\n\nagent_name='engineering_lead' is Priya Nair, Lead Backend Engineer -- delegate "
-            "technical/architecture judgment to her the same way (action='think' -> "
-            "{\"prompt\": str}) BEFORE directing the 'engineering' tool agent to actually touch "
-            "code, especially for anything non-trivial. She decides the approach; 'engineering' "
-            "executes the git/test mechanics of whatever she (or you) directed."
+            "technical/architecture judgment to her the same way BEFORE directing the "
+            "'engineering' tool agent to actually touch code, especially for anything "
+            "non-trivial. She decides the approach; 'engineering' executes the git/test "
+            "mechanics of whatever she (or you) directed."
+            "\n\nIMPORTANT -- which action to use for research/store_ops/engineering_lead: "
+            "action='think_background' -> {\"prompt\": str} is the DEFAULT for routine, day-to-day "
+            "delegation (this is what '24/7' actually means here) -- it runs on a free open-"
+            "weight model, costs ~$0, but is noticeably weaker reasoning. Use action='think' -> "
+            "{\"prompt\": str} (the paid, stronger model) only when the matter is genuinely "
+            "important enough that you'd also consider `request_technical_vote` for it -- don't "
+            "default to the paid path for ordinary work. risk='low', reversible=True, cost=0 for "
+            "both (real cost, if any, is metered and charged automatically after the call)."
         ),
         "input_schema": {
             "type": "object",
@@ -206,11 +238,15 @@ class CEOTools:
         state: CEOState,
         scheduler: Optional[Scheduler] = None,
         preflight_provider: Optional[Callable[[], Any]] = None,
+        opus_router: Optional[ModelRouter] = None,
+        voter_agent_names: tuple[str, ...] = ("research", "store_ops", "engineering_lead"),
     ) -> None:
         self.orchestrator = orchestrator
         self.state = state
         self.scheduler = scheduler
         self.preflight_provider = preflight_provider
+        self.opus_router = opus_router
+        self.voter_agent_names = voter_agent_names
 
     def dispatch(self, name: str, tool_input: dict) -> Any:
         handler: Callable[..., Any] = getattr(self, f"_tool_{name}", None)
@@ -348,6 +384,29 @@ class CEOTools:
             self.orchestrator, self.state, self.preflight_provider(), period=period
         )
         return report.to_dict()
+
+    def _tool_request_technical_vote(self, proposal: str) -> dict:
+        from aicommerce import config
+
+        registered_voters = [
+            name for name in self.voter_agent_names if self.orchestrator.registry.get_instance(name) is not None
+        ]
+        vote = run_technical_vote(
+            proposal, self.orchestrator, registered_voters,
+            opus_router=self.opus_router, opus_weight=config.OPUS_VOTE_WEIGHT,
+        )
+
+        self.orchestrator.brain.record(
+            MemoryRecord(
+                kind=MemoryKind.DECISION,
+                content=vote.summary_text(),
+                source="technical_vote",
+                confidence=Confidence.FACT,
+                tags=("technical_vote",),
+                metadata={"tally": vote.tally, "weighted_tally": vote.weighted_tally, "total_cost": vote.total_cost},
+            )
+        )
+        return vote.to_dict()
 
     def _tool_propose_action(
         self,

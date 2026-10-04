@@ -56,7 +56,9 @@ class System:
             events=self.events,
             kill_switch_db_path=config.DATA_DIR / "kill_switch.db",
         )
-        self.ceo = CEOService(self.orchestrator, CEOModel(), scheduler=self.scheduler)
+        self.ceo = CEOService(
+            self.orchestrator, CEOModel(), scheduler=self.scheduler, opus_router=self.opus_router
+        )
         self.preflight = self._build_preflight()
         self.ceo.tools.preflight_provider = self.preflight.run
         self._configure_scheduler()
@@ -67,6 +69,11 @@ class System:
         # Inert (raises LLMNotConfigured on call) until OPENROUTER_API_KEY is
         # set -- see aicommerce/ceo/llm.py:OpenRouterModel.
         self.background_router = ModelRouter(OpenRouterModel(), events=self.events)
+        # Independent technical review for important decisions (voting.py) --
+        # a real, separate Anthropic call (Opus, not the CEO's own Sonnet),
+        # metered on its own budget scope so a vote can't silently drain
+        # another scope's spend.
+        self.opus_router = ModelRouter(CEOModel(model=config.OPUS_MODEL), events=self.events)
 
         self.shopify_agent = ShopifyAgent()
         self.registry.register(
@@ -195,6 +202,7 @@ class System:
         self.budget.set_budget("research", config.RESEARCH_BUDGET_LIMIT)
         self.budget.set_budget("store_ops", config.STORE_OPS_BUDGET_LIMIT)
         self.budget.set_budget("engineering_lead", config.ENGINEERING_LEAD_BUDGET_LIMIT)
+        self.budget.set_budget("opus_review", config.OPUS_REVIEW_BUDGET_LIMIT)
 
     def _wire_events(self) -> None:
         self.events.subscribe("approval.required", lambda e: None)  # placeholder hook point

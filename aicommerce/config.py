@@ -39,6 +39,19 @@ if not CONSOLE_TOKEN:
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 CEO_MODEL = os.getenv("CEO_MODEL", "claude-sonnet-5")
 
+# === Opus technical review (optional) — an independent, stronger-model ===
+# === second opinion for important decisions, via a real Anthropic call. ===
+# === Uses ANTHROPIC_API_KEY (same key as the CEO's own model) unless     ===
+# === OPUS_MODEL is left empty, in which case voting runs without Opus.   ===
+OPUS_MODEL = os.getenv("OPUS_MODEL", "claude-opus-5-5")
+OPUS_REVIEW_BUDGET_LIMIT = float(os.getenv("OPUS_REVIEW_BUDGET_LIMIT", "5.0"))
+# Opus's vote in a technical vote counts for this many "votes" in the
+# weighted tally (default 2x one persona's) -- Jean's explicit call that
+# Opus's read should carry more weight than any single persona's, since
+# it's consulted specifically as the independent technical authority for
+# decisive moments, not for routine day-to-day work.
+OPUS_VOTE_WEIGHT = int(os.getenv("OPUS_VOTE_WEIGHT", "2"))
+
 # === Free-tier background model (optional) — for low-stakes autonomous ===
 # === persona check-ins ONLY, never for real interactive reasoning.      ===
 # Leave OPENROUTER_API_KEY empty to disable; autonomous check-ins then

@@ -46,7 +46,10 @@ tool calls and a formal report nobody asked for. A real conversation has back-an
 `propose_action` (agent_name='research' for market calls, 'engineering' for technical actions, \
 'shopify' for store operations) instead of answering it yourself with a generic opinion — then \
 relay their actual view to Jean, including disagreement, rather than smoothing it into a \
-consensus that didn't happen.
+consensus that didn't happen. For research/store_ops/engineering_lead, default to \
+action='think_background' (free model) for this routine, day-to-day delegation — that's what \
+running the team 24/7 actually means. Reserve action='think' (the paid model) and \
+`request_technical_vote` for matters important enough to deserve it.
 - If `propose_action` comes back pending_approval, tell Jean clearly that it's waiting on him, \
 not that it's done — this is not optional phrasing, it's the difference between an action that \
 happened and one that didn't yet.
@@ -66,6 +69,11 @@ a goal to work on.
 invent a task's completion status (COMPLETED/IN PROGRESS/etc.) for work that isn't tracked by \
 a real system yet; report only what actually happened (executed/blocked actions, pending \
 approvals, budget, decisions) for that period.
+- For a genuinely important or high-risk decision (real spend, launching something, merging to \
+master, anything you'd otherwise have to just assert your own opinion on), call \
+`request_technical_vote` with the exact proposal before recommending it to Jean. Relay the real \
+tally and any dissent honestly — a vote that came back AGAINST is more useful to him than one \
+you only mention when it agrees with you.
 - Be concise and natural. Match the register Jean uses — if he's casual, be casual; if he asks \
 for a formal report, give him one. Don't pad a short question with unrequested structure.
 """
@@ -90,10 +98,14 @@ class CEOService:
         model: Optional[CEOModel] = None,
         scheduler=None,
         preflight_provider=None,
+        opus_router=None,
     ) -> None:
         self.orchestrator = orchestrator
         self.state = CEOState()
-        self.tools = CEOTools(orchestrator, self.state, scheduler=scheduler, preflight_provider=preflight_provider)
+        self.tools = CEOTools(
+            orchestrator, self.state, scheduler=scheduler, preflight_provider=preflight_provider,
+            opus_router=opus_router,
+        )
         self.model = model or CEOModel()
         # ModelRouter separates "which model, at what cost/latency" from this
         # class's own chat loop (master plan Milestone 4). Any duck-typed

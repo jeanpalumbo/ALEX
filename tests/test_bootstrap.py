@@ -176,6 +176,19 @@ def test_ceo_has_its_own_named_identity(tmp_path, monkeypatch):
     assert "pending_approval" in SYSTEM_PROMPT  # operational specifics still present on top
 
 
+def test_opus_router_wired_with_its_own_budget(tmp_path, monkeypatch):
+    from aicommerce import config
+
+    monkeypatch.setattr(config, "BRAIN_DB_PATH", tmp_path / "brain.db")
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+
+    system = System()
+    assert system.opus_router is not None
+    assert system.opus_router.model.model == config.OPUS_MODEL
+    assert "opus_review" in system.budget.scopes()
+    assert system.ceo.tools.opus_router is system.opus_router
+
+
 def test_persona_autonomy_disabled_by_default(tmp_path, monkeypatch):
     from aicommerce import config
 
