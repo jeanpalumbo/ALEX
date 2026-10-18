@@ -72,6 +72,10 @@ class Cover:
         self.trim_y0 = kdp.BLEED_IN
         self.trim_y1 = kdp.BLEED_IN + kdp.TRIM_H_IN
 
+    def text(self, key: str, default: str) -> str:
+        """Cover text, overridable per book via the YAML `cover:` block; {n} = theme count."""
+        return str(self.book.cover.get(key, default)).format(n=len(self.book.themes))
+
     def rect_in(self, x0, y0, x1, y1, color) -> None:
         self.c.setFillColor(color)
         self.c.rect(x0 * INCH, y0 * INCH, (x1 - x0) * INCH, (y1 - y0) * INCH, stroke=0, fill=1)
@@ -104,9 +108,10 @@ class Cover:
         cx = (self.front_x0 + self.front_x1) / 2
         usable = kdp.TRIM_W_IN - 2 * 0.5
         top = self.trim_y1
-        size = self.fit_size("SOPA DE LETRAS", DISPLAY, 80, usable)
-        self.text_center("SOPA DE LETRAS", cx, top - 1.45, DISPLAY, size, WHITE)
-        self.text_center("PARA MAYORES", cx, top - 2.35, BODY_BOLD, 44, CREAM)
+        line1 = self.text("line1", "SOPA DE LETRAS")
+        size = self.fit_size(line1, DISPLAY, 80, usable)
+        self.text_center(line1, cx, top - 1.45, DISPLAY, size, WHITE)
+        self.text_center(self.text("line2", "PARA MAYORES"), cx, top - 2.35, BODY_BOLD, 44, CREAM)
 
         subtitle = self.book.subtitle
         sub_size = self.fit_size(subtitle, DISPLAY, 54, usable)
@@ -118,9 +123,14 @@ class Cover:
             self._front_grid(cx, top - 4.45)
 
         # Selling points at the bottom.
-        self.text_center("LETRA MUY GRANDE", cx, self.trim_y0 + 1.55, BODY_BOLD, 34, INK)
-        self.text_center(f"{len(self.book.themes)} pasatiempos con soluciones", cx,
-                         self.trim_y0 + 1.0, BODY, 24, DARK)
+        # Keep both lines clear of the badge in the bottom-right corner.
+        clear_w = kdp.TRIM_W_IN - 2 * 1.75
+        tagline = self.text("tagline", "LETRA MUY GRANDE")
+        self.text_center(tagline, cx, self.trim_y0 + 1.55, BODY_BOLD,
+                         self.fit_size(tagline, BODY_BOLD, 34, clear_w), INK)
+        subline = self.text("subline", "{n} pasatiempos con soluciones")
+        self.text_center(subline, cx, self.trim_y0 + 1.0, BODY,
+                         self.fit_size(subline, BODY, 24, clear_w), DARK)
         self._volume_badge(self.front_x1 - 1.05, self.trim_y0 + 1.3)
 
     def _front_grid(self, cx: float, top: float) -> None:
@@ -176,15 +186,17 @@ class Cover:
         c = self.c
         c.setFillColor(self.accent)
         c.circle(cx * INCH, cy * INCH, 0.62 * INCH, stroke=0, fill=1)
-        self.text_center("VOL.", cx, cy + 0.12, BODY_BOLD, 16, INK)
-        self.text_center(str(self.book.volume), cx, cy - 0.33, BODY_BOLD, 34, INK)
+        self.text_center(self.text("badge_top", "VOL."), cx, cy + 0.12, BODY_BOLD, 16, INK)
+        bottom = self.text("badge_bottom", str(self.book.volume))
+        size = 34 if len(bottom) <= 2 else 24
+        self.text_center(bottom, cx, cy - 0.33, BODY_BOLD, size, INK)
 
     def spine_text(self) -> None:
         if self.pages <= kdp.SPINE_TEXT_MIN_PAGES:
             return
         max_h = self.spine - 2 * kdp.SPINE_TEXT_CLEARANCE_IN
         size = min(12.0, max_h * INCH * 0.95)
-        text = (f"SOPA DE LETRAS PARA MAYORES  ·  {self.book.subtitle}  ·  "
+        text = self.text("spine", "") or (f"SOPA DE LETRAS PARA MAYORES  ·  {self.book.subtitle}  ·  "
                 f"Vol. {self.book.volume}")
         cx = (self.back_x1 + self.spine_x1) / 2
         cy = self.height_in / 2
@@ -201,19 +213,19 @@ class Cover:
         left = self.back_x0 + 0.75
         width = kdp.TRIM_W_IN - 1.5
         cx = left + width / 2
-        self.text_center("Un regalo lleno de recuerdos", cx, self.trim_y1 - 0.62, BODY_BOLD,
+        self.text_center(self.text("back_title", "Un regalo lleno de recuerdos"), cx, self.trim_y1 - 0.62, BODY_BOLD,
                          26, WHITE)
         y = self.trim_y1 - 1.75
         y = self._wrapped((self.book.blurb or DEFAULT_BLURB).format(n=len(self.book.themes)), left, y, width,
                           BODY, 17, 0.33, DARK)
         y -= 0.3
-        for bullet in BACK_BULLETS:
+        for bullet in self.book.cover.get("bullets", BACK_BULLETS):
             self.c.setFillColor(self.main)
             self.c.circle((left + 0.1) * INCH, (y + 0.08) * INCH, 4.5, stroke=0, fill=1)
             y = self._wrapped(bullet, left + 0.35, y, width - 0.35, BODY_BOLD, 16, 0.31, INK)
             y -= 0.12
         y -= 0.25
-        y = self._wrapped(BACK_CLOSING, left, y, width, BODY, 17, 0.33, DARK)
+        y = self._wrapped(self.text("closing", BACK_CLOSING), left, y, width, BODY, 17, 0.33, DARK)
         self._theme_sample(left, y - 0.35, width)
         # Bottom-right stays empty: KDP prints the barcode there.
 

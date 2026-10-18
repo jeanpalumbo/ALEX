@@ -62,6 +62,8 @@ def build_puzzles(book: Book) -> list[BookPuzzle]:
 
 
 class Interior:
+    number_label = "Nº"  # shown before each puzzle number ("Semana" in the agenda)
+
     def __init__(self, path: Path, book: Book):
         register_fonts()
         self.book = book
@@ -247,7 +249,7 @@ class Interior:
         y = self.top - 0.3 * INCH
         self.c.setFillColor(INK)
         self.c.setFont(BODY_BOLD, 16)
-        self.c.drawString(self.left, y + 4, f"Nº {bp.number}")
+        self.c.drawString(self.left, y + 4, f"{self.number_label} {bp.number}")
         self.centered(bp.theme.title, y, BODY_BOLD, TITLE_PT)
         y -= 0.42 * INCH
         y = self.paragraph(bp.theme.intro, y, BODY, INTRO_PT, 19,
@@ -349,7 +351,7 @@ class Interior:
                 top = self.top - row * slot_h - 0.1 * INCH
                 self.c.setFont(BODY_BOLD, 13)
                 self.c.setFillColor(INK)
-                label = f"Nº {bp.number} · {bp.theme.title}"
+                label = f"{self.number_label} {bp.number} · {bp.theme.title}"
                 while stringWidth(label, BODY_BOLD, 13) > slot_w and len(label) > 10:
                     label = label[:-2].rstrip() + "…"
                 self.c.drawString(x0, top, label)

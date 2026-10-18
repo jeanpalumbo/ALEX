@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
@@ -35,6 +35,9 @@ class Book:
     palette: str = "terracotta"
     blurb: str = ""
     keywords: tuple[str, ...] = ()
+    # Optional text overrides for products that are not plain puzzle books (e.g. the agenda).
+    cover: dict = field(default_factory=dict)
+    listing: dict = field(default_factory=dict)
 
 
 def load_book(path: Path | str) -> Book:
@@ -49,7 +52,8 @@ def load_book(path: Path | str) -> Book:
                 volume=int(meta["volume"]), author=meta["author"], year=int(meta["year"]),
                 themes=themes, cover_word=meta.get("cover_word", "RECUERDOS"),
                 palette=meta.get("palette", "terracotta"), blurb=meta.get("blurb", "").strip(),
-                keywords=tuple(meta.get("keywords", ())))
+                keywords=tuple(meta.get("keywords", ())), cover=meta.get("cover", {}),
+                listing=meta.get("listing", {}))
     problems = validate(book)
     if problems:
         raise ValueError("invalid theme file:\n  " + "\n  ".join(problems))

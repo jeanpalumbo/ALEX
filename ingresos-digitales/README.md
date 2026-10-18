@@ -10,7 +10,8 @@ recoge lo que **funciona hoy**.
 
 | Pieza | Estado |
 |---|---|
-| `plan_c_kdp/` — libro Vol. 1 "Recuerdos de España" | ✅ Interior, portada y ficha generados y con tests |
+| `plan_c_kdp/` — Vol. 1 "Recuerdos de España" y Vol. 2 "Años 60" | ✅ Interior, portada y ficha generados y con tests |
+| `plan_c_kdp/agenda/` — Agenda 2027 para mayores | ✅ Semana a la vista + 53 sopas, festivos según BOE (`python -m plan_c_kdp.agenda`) |
 | `shared/` — config, SQLite, wrapper de Anthropic con coste | ✅ Base lista (aún no se usa: los temas se escribieron en sesión) |
 | `plan_b_x/` — borradores para X | ⏳ Semana 2, cuando Trend Scout escriba en la Google Sheet |
 | `plan_a_etsy/`, `plan_e_pinterest/` | ⏳ Después del lanzamiento del Vol. 1 |

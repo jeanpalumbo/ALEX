@@ -68,3 +68,15 @@ Amazon tarda hasta 72 horas en revisarlo. Te llegará un correo cuando esté a l
   ("de la misma serie") y en los posts de "build in public".
 - No pidas reseñas a familiares que compartan cuenta o dirección contigo: Amazon las borra
   y puede penalizar el libro.
+
+## Agenda 2027 (`build/agenda2027/`)
+
+Mismo proceso que los libros, con estas diferencias:
+
+- **Serie:** ninguna (no es parte de "Sopa de letras para mayores").
+- **Título y subtítulo, descripción y palabras clave:** los de `build/agenda2027/listing.md`.
+- **Categorías:** buscar "agendas", "calendarios" o "planificadores", y una de "pasatiempos".
+- **Prioridad:** súbela la primera si puedes. Se vende sobre todo de noviembre a enero.
+- Los festivos nacionales ya están comprobados con el BOE del 13 de octubre de 2026.
+
+Regenerar: `python -m plan_c_kdp.agenda`.

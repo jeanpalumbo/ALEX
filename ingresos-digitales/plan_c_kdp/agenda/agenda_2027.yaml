@@ -1,0 +1,324 @@
+# Agenda 2027 para mayores — one seasonal word search per week (Mon 28 Dec 2026 – Sun 2 Jan 2028).
+# Each theme has a traditional refrán (public domain) printed on the weekly page.
+book:
+  id: agenda2027
+  title: "Agenda 2027 para mayores"
+  subtitle: "Letra grande y una sopa de letras cada semana"
+  volume: 2027
+  author: "Piero Palumbo"
+  year: 2026
+  cover_word: "AGENDA"
+  palette: "plum"
+  blurb: >-
+    Una agenda de semana a la vista con letra grande y huecos amplios para apuntar citas,
+    y al lado de cada semana una sopa de letras con un tema de esa época del año: los
+    Reyes, el Carnaval, la feria, San Juan, la vendimia, las castañas, la Navidad...
+  keywords:
+    - "agenda 2027 letra grande"
+    - "calendario 2027 para personas mayores"
+    - "agenda semanal 2027 para mayores"
+    - "regalo para abuelos y abuelas"
+    - "sopa de letras letra grande para mayores"
+    - "planificador 2027 semana vista letra grande"
+    - "agenda con pasatiempos y refranes"
+  cover:
+    line1: "AGENDA 2027"
+    line2: "PARA MAYORES"
+    tagline: "LETRA MUY GRANDE"
+    subline: "Semana a la vista · {n} sopas de letras"
+    badge_top: "AÑO"
+    badge_bottom: "2027"
+    spine: "AGENDA 2027 PARA MAYORES  ·  Letra grande y sopas de letras"
+    back_title: "Un año entero, bien organizado"
+    bullets:
+      - "Semana a la vista en letra grande, con espacio para apuntar."
+      - "Una sopa de letras cada semana, con temas de esa época del año."
+      - "Festivos nacionales marcados y un refrán para cada semana."
+      - "Páginas para datos médicos, teléfonos y cumpleaños."
+      - "Formato grande: 21,6 × 27,9 cm."
+    closing: "Un regalo práctico para padres y abuelos: les ayuda a recordar sus citas y les acompaña con un pasatiempo cada semana."
+  listing:
+    title: "Agenda 2027 para mayores en letra grande"
+    subtitle: "Semana a la vista con 53 sopas de letras, festivos y refranes. Un regalo para padres y abuelos"
+    series: "(sin serie)"
+    extra_checks:
+      - "Comprobé en el BOE la resolución con los festivos de 2027 (se publica cada otoño) y coinciden con la página de festivos."
+      - "Publicarla cuanto antes: la agenda se vende sobre todo de noviembre a enero."
+    description_html: |
+      <p><b>Una agenda pensada para que nuestros mayores lo tengan todo a mano, en letra bien grande.</b></p>
+      <p>Semana a la vista de enero a diciembre de 2027, con días grandes y espacio de sobra para apuntar citas médicas, cumpleaños y recados. Junto a cada semana, una sopa de letras con un tema de esa época del año: los Reyes Magos, el Carnaval, la Semana Santa, San Juan, la vendimia, las castañas, la lotería de Navidad...</p>
+      <ul>
+      <li>Semana a la vista en letra grande (de lunes a domingo).</li>
+      <li>53 sopas de letras de temporada, con soluciones al final.</li>
+      <li>Festivos nacionales de 2027 marcados en cada semana.</li>
+      <li>Un refrán tradicional para cada semana.</li>
+      <li>Páginas para datos personales y médicos, teléfonos importantes y cumpleaños.</li>
+      <li>Formato grande: 21,6 × 27,9 cm, en papel blanco.</li>
+      </ul>
+      <p>El regalo ideal para Navidad: útil todo el año y entretenido cada semana.</p>
+themes:
+  - id: w01-nochevieja
+    title: "Nochevieja y Año Nuevo"
+    intro: "Las uvas, las campanadas y los abrazos de medianoche: empezamos el año con buen pie."
+    refran: "Año nuevo, vida nueva."
+    words: [Uvas, Campanadas, Reloj, Brindis, Cotillón, Serpentina, Confeti, Propósitos, Matasuegras, Gorrito, Medianoche, Abrazos, Felicidad, Calendario]
+  - id: w02-reyes
+    title: "Los Reyes Magos"
+    intro: "La noche más mágica del año, con los zapatos preparados y el roscón esperando en la mesa."
+    refran: "Quien da primero da dos veces."
+    words: [Melchor, Gaspar, Baltasar, Cabalgata, Camellos, Roscón, Haba, Sorpresa, Regalos, Zapatos, Carbón, Pajes, Carta, Ilusión]
+  - id: w03-san-anton
+    title: "San Antón y los animales"
+    intro: "El 17 de enero se bendicen los animales en muchos pueblos, y las mascotas se ponen sus mejores lazos."
+    refran: "Por San Antón, la gallina pon."
+    words: [Bendición, Mascotas, Perro, Gato, Caballo, Burro, Pájaros, Conejo, Hoguera, Panecillos, Ermita, Procesión, Cerdo, Lazo]
+  - id: w04-rebajas
+    title: "Las rebajas de enero"
+    intro: "Escaparates llenos de carteles y colas en los probadores: enero es mes de buenas ofertas."
+    refran: "Lo barato sale caro."
+    words: [Rebajas, Descuento, Ofertas, Escaparate, Etiqueta, Probador, Cola, Bolsa, Recibo, Abrigo, Talla, Tienda, Precio, Cambio]
+  - id: w05-frio
+    title: "Días de frío"
+    intro: "Mañanas de escarcha y tardes junto a la estufa, con una buena taza de caldo caliente."
+    refran: "En enero, se hiela el agua en el puchero."
+    words: [Escarcha, Helada, Bufanda, Guantes, Gorro, Abrigo, Estufa, Manta, Calcetines, Chimenea, Caldo, Niebla, Nieve, Brasero]
+  - id: w06-febrero
+    title: "Febrerillo loco"
+    intro: "Un día sol y al siguiente tormenta: febrero nunca avisa de lo que va a hacer."
+    refran: "Febrerillo loco, un día peor que otro."
+    words: [Viento, Lluvia, Granizo, Nubes, Paraguas, Charco, Chubasquero, Botas, Tormenta, Arcoíris, Sol, Frío, Cielo, Relámpago]
+  - id: w07-carnaval
+    title: "Carnaval"
+    intro: "Disfraces, comparsas y chirigotas: en Carnaval todo el mundo puede ser quien quiera."
+    refran: "Cada loco con su tema."
+    words: [Disfraz, Máscara, Antifaz, Comparsa, Chirigota, Murga, Serpentina, Confeti, Carroza, Desfile, Sardina, Pelucas, Maquillaje, Cuaresma]
+  - id: w08-enamorados
+    title: "Amor y enamorados"
+    intro: "Cartas, flores y bombones: cualquier semana es buena para decir te quiero."
+    refran: "Ojos que no ven, corazón que no siente."
+    words: [Corazón, Rosas, Bombones, Carta, Beso, Abrazo, Anillo, Novios, Cupido, Flechas, Poema, Cena, Romance, Cariño]
+  - id: w09-almendros
+    title: "Almendros en flor"
+    intro: "Los almendros son los primeros en florecer y llenan el campo de blanco y rosa."
+    refran: "A buen hambre no hay pan duro."
+    words: [Almendro, Flores, Pétalos, Rama, Brote, Yema, Abejas, Miel, Polen, Campo, Ladera, Blanco, Rosado, Perfume]
+  - id: w10-aves
+    title: "Las aves que vuelven"
+    intro: "Vuelven las golondrinas y las cigüeñas a sus nidos: señal de que la primavera está cerca."
+    refran: "Marzo ventoso y abril lluvioso sacan a mayo florido y hermoso."
+    words: [Golondrina, Cigüeña, Nido, Campanario, Vuelo, Plumas, Alas, Pico, Huevos, Polluelos, Migración, Tejado, Primavera, Cielo]
+  - id: w11-huerta
+    title: "La huerta en primavera"
+    intro: "Es tiempo de preparar la tierra y plantar lo que comeremos en verano."
+    refran: "A quien madruga, Dios le ayuda."
+    words: [Semillas, Plantel, Azada, Riego, Surco, Tomate, Lechuga, Habas, Guisantes, Ajos, Cebolla, Espantapájaros, Regadera, Abono]
+  - id: w12-padre
+    title: "San José y el Día del Padre"
+    intro: "El 19 de marzo felicitamos a los padres, y en Valencia arden las Fallas."
+    refran: "De tal palo, tal astilla."
+    words: [Padre, Papá, Corbata, Regalo, Carpintero, Taller, Fallas, Ninot, Falleras, Mascletá, Buñuelos, Petardos, Familia, Cariño]
+  - id: w13-semana-santa
+    title: "Semana Santa"
+    intro: "Pasos por las calles, olor a incienso y las torrijas recién hechas en la cocina."
+    refran: "No hay mal que por bien no venga."
+    words: [Procesión, Nazareno, Costalero, Paso, Saeta, Cofradía, Incienso, Cirio, Tambor, Mantilla, Palmas, Torrijas, Capirote, Penitente]
+  - id: w14-pascua
+    title: "Pascua"
+    intro: "Días de excursión y merienda en el campo, y en muchas casas los padrinos regalan la mona."
+    refran: "Cuando el río suena, agua lleva."
+    words: [Mona, Huevos, Chocolate, Pascua, Lunes, Excursión, Merienda, Campo, Ahijado, Padrino, Bizcocho, Plumas, Familia, Picnic]
+  - id: w15-primavera
+    title: "Primavera en flor"
+    intro: "Los balcones se llenan de color y las mariposas vuelven a los jardines."
+    refran: "En abril, aguas mil."
+    words: [Margarita, Amapola, Tulipán, Lirio, Violeta, Jazmín, Geranio, Rosal, Mariposa, Abeja, Jardín, Maceta, Pradera, Brisa]
+  - id: w16-feria
+    title: "Feria de abril"
+    intro: "Casetas, farolillos y sevillanas hasta el amanecer: la feria es alegría para todo el mundo."
+    refran: "Más vale tarde que nunca."
+    words: [Caseta, Farolillos, Sevillanas, Volantes, Mantón, Caballos, Calesa, Rebujito, Albero, Portada, Tiovivo, Noria, Flamenca, Palmas]
+  - id: w17-libros
+    title: "Libros y lectura"
+    intro: "El 23 de abril se celebra el Día del Libro: buen momento para empezar una novela nueva."
+    refran: "El saber no ocupa lugar."
+    words: [Libro, Novela, Poesía, Cuento, Biblioteca, Librería, Estantería, Capítulo, Autor, Lector, Portada, Marcapáginas, Gafas, Rosa]
+  - id: w18-madre
+    title: "Día de la Madre"
+    intro: "El primer domingo de mayo es para las madres: un abrazo, unas flores y mucho cariño."
+    refran: "Madre no hay más que una."
+    words: [Madre, Mamá, Flores, Abrazo, Cariño, Desayuno, Regalo, Tarjeta, Ramo, Hijos, Nietos, Cocina, Consejo, Ternura]
+  - id: w19-mayo
+    title: "Mayo florido"
+    intro: "Cruces de mayo, patios llenos de macetas y el perfume del azahar en el aire."
+    refran: "Hasta el cuarenta de mayo no te quites el sayo."
+    words: [Cruces, Patios, Claveles, Rosas, Mayo, Macetas, Geranios, Jazmín, Azahar, Lilas, Gitanillas, Buganvilla, Perfume, Colores]
+  - id: w20-san-isidro
+    title: "San Isidro"
+    intro: "El 15 de mayo Madrid celebra a su patrón con chotis, rosquillas y romería en la pradera."
+    refran: "Quien siembra, recoge."
+    words: [Isidro, Labrador, Pradera, Chulapo, Chulapa, Rosquillas, Barquillos, Organillo, Chotis, Clavel, Mantón, Gorra, Romería, Ermita]
+  - id: w21-romerias
+    title: "Romerías"
+    intro: "Carretas engalanadas, caminos polvorientos y cantes hasta llegar a la ermita."
+    refran: "Poco a poco se va lejos."
+    words: [Romería, Carreta, Bueyes, Ermita, Peregrino, Camino, Hermandad, Sevillanas, Tamboril, Flauta, Medalla, Rocío, Simpecado, Cante]
+  - id: w22-comuniones
+    title: "Primeras comuniones"
+    intro: "Mayo es el mes de las comuniones, con trajes de marinero, vestidos blancos y fotos de recuerdo."
+    refran: "Dime con quién andas y te diré quién eres."
+    words: [Comunión, Vestido, Marinero, Recordatorio, Catequesis, Rosario, Guantes, Corona, Banquete, Tarta, Padrinos, Fotos, Regalos, Iglesia]
+  - id: w23-fin-curso
+    title: "Fin de curso"
+    intro: "Notas, despedidas y la emoción de las vacaciones: el colegio se acaba hasta septiembre."
+    refran: "Querer es poder."
+    words: [Notas, Diploma, Fiesta, Vacaciones, Verano, Maestra, Alumnos, Excursión, Mochila, Cuadernos, Despedida, Recuerdo, Aprobado, Orla]
+  - id: w24-calor
+    title: "Llega el calor"
+    intro: "Persianas bajadas a mediodía, el abanico a mano y un buen gazpacho fresquito."
+    refran: "Agua que no has de beber, déjala correr."
+    words: [Calor, Sudor, Abanico, Ventilador, Sombra, Siesta, Persiana, Toldo, Agua, Gorra, Helado, Botijo, Gazpacho, Sombrero]
+  - id: w25-fruta
+    title: "Fruta de verano"
+    intro: "Cerezas, melocotones y la primera sandía: el verano también se come."
+    refran: "Al pan, pan, y al vino, vino."
+    words: [Cerezas, Sandía, Melón, Melocotón, Albaricoque, Ciruela, Paraguayo, Nectarina, Higos, Uvas, Fresas, Frambuesa, Brevas, Picota]
+  - id: w26-san-juan
+    title: "Noche de San Juan"
+    intro: "La noche más corta del año, con hogueras, deseos y sardinas en la playa."
+    refran: "Más vale pájaro en mano que ciento volando."
+    words: [Hoguera, Fuego, Saltar, Deseos, Verbena, Arena, Sardinas, Petardos, Solsticio, Hierbas, Rocío, Medianoche, Brasas, Cohetes]
+  - id: w27-vacaciones
+    title: "Vacaciones de verano"
+    intro: "La maleta preparada, rumbo al pueblo, a la playa o a la montaña."
+    refran: "Quien tiene un amigo tiene un tesoro."
+    words: [Maleta, Viaje, Pueblo, Playa, Montaña, Toalla, Bañador, Sombrilla, Crema, Gafas, Postal, Hotel, Apartamento, Descanso]
+  - id: w28-san-fermin
+    title: "San Fermín"
+    intro: "Pamplona se viste de blanco y rojo el 6 de julio, cuando suena el chupinazo."
+    refran: "Las prisas no son buenas consejeras."
+    words: [Encierro, Pañuelo, Faja, Chupinazo, Pamplona, Peñas, Gigantes, Cabezudos, Charanga, Fiesta, Estafeta, Blanco, Rojo, Julio]
+  - id: w29-playa
+    title: "Un día de playa"
+    intro: "Castillos de arena, conchas en el cubo y la sombrilla clavada bien cerca de la orilla."
+    refran: "Camarón que se duerme se lo lleva la corriente."
+    words: [Arena, Olas, Concha, Cangrejo, Castillo, Cubo, Pala, Sombrilla, Toalla, Gaviota, Bañador, Orilla, Marea, Chiringuito]
+  - id: w30-santiago
+    title: "Santiago y el Camino"
+    intro: "El 25 de julio es Santiago, y miles de peregrinos llegan a Compostela tras muchos kilómetros."
+    refran: "Todos los caminos llevan a Roma."
+    words: [Santiago, Peregrino, Camino, Concha, Bastón, Mochila, Albergue, Flecha, Etapa, Catedral, Botafumeiro, Credencial, Sello, Compostela]
+  - id: w31-abuelos
+    title: "Día de los Abuelos"
+    intro: "El 26 de julio es el día de los abuelos: los que cuentan los mejores cuentos y dan los mejores consejos."
+    refran: "Más sabe el diablo por viejo que por diablo."
+    words: [Abuelo, Abuela, Nietos, Cuentos, Paseo, Abrazos, Consejos, Recuerdos, Fotos, Meriendas, Juegos, Cariño, Paciencia, Familia]
+  - id: w32-noches
+    title: "Noches de verano"
+    intro: "Cenas en la terraza, el canto de los grillos y largas charlas bajo las estrellas."
+    refran: "Al mal tiempo, buena cara."
+    words: [Estrellas, Luna, Grillos, Brisa, Terraza, Cena, Charla, Fresco, Luciérnaga, Farola, Paseo, Helado, Verbena, Música]
+  - id: w33-agosto
+    title: "Fiestas de agosto"
+    intro: "Mediados de agosto: muchos pueblos celebran a su patrona con misa, procesión y verbena."
+    refran: "A falta de pan, buenas son tortas."
+    words: [Virgen, Procesión, Fiestas, Patrona, Misa, Banda, Cohetes, Verbena, Orquesta, Tómbola, Peña, Pregón, Reina, Damas]
+  - id: w34-pueblo
+    title: "Fiestas del pueblo"
+    intro: "Concursos, carreras de sacos y la paella para todos en la plaza: así son las fiestas de pueblo."
+    refran: "Donde fueres, haz lo que vieres."
+    words: [Plaza, Paella, Concurso, Carrera, Sacos, Cucaña, Petanca, Baile, Charanga, Disfraces, Banderitas, Feria, Gigantes, Ronda]
+  - id: w35-helados
+    title: "Helados y refrescos"
+    intro: "Para combatir el calor de agosto, nada como un helado o una horchata bien fría."
+    refran: "Una golondrina no hace verano."
+    words: [Helado, Polo, Cucurucho, Granizado, Horchata, Limonada, Gaseosa, Sorbete, Batido, Hielo, Pajita, Vaso, Terraza, Heladero]
+  - id: w36-cole
+    title: "Vuelta al cole"
+    intro: "Mochilas nuevas, lápices sin estrenar y los nervios del primer día de colegio."
+    refran: "Nunca es tarde para aprender."
+    words: [Mochila, Libros, Cuadernos, Lápices, Estuche, Goma, Sacapuntas, Uniforme, Maestra, Pupitre, Pizarra, Recreo, Amigos, Horario]
+  - id: w37-vendimia
+    title: "Uvas y vendimia"
+    intro: "Septiembre llena las viñas de cuadrillas y los lagares de mosto."
+    refran: "Las cuentas claras y el chocolate espeso."
+    words: [Vendimia, Racimo, Uva, Viña, Cesto, Tijeras, Lagar, Mosto, Bodega, Barrica, Tinaja, Pámpano, Sarmiento, Cuadrilla]
+  - id: w38-setas
+    title: "Setas y bosque"
+    intro: "Con las primeras lluvias de otoño, los aficionados salen al monte con su cesta a buscar setas."
+    refran: "No por mucho madrugar amanece más temprano."
+    words: [Setas, Boletus, Níscalos, Bosque, Pinar, Cesta, Musgo, Hojas, Lluvia, Navaja, Champiñón, Senderismo, Helechos, Ardilla]
+  - id: w39-otono
+    title: "Llega el otoño"
+    intro: "Las hojas se vuelven doradas y el campo se llena de bellotas, castañas y granadas."
+    refran: "Hombre prevenido vale por dos."
+    words: [Otoño, Hojas, Castaño, Nogal, Bellotas, Viento, Lluvia, Paraguas, Chaqueta, Ocre, Dorado, Calabaza, Granada, Membrillo]
+  - id: w40-conservas
+    title: "Membrillo y conservas"
+    intro: "Es temporada de llenar la despensa: carne de membrillo, mermeladas y tarros de conserva."
+    refran: "Más vale maña que fuerza."
+    words: [Membrillo, Mermelada, Conservas, Tarro, Almíbar, Azúcar, Higos, Pimientos, Tomate, Cazo, Etiqueta, Despensa, Compota, Cuchara]
+  - id: w41-mascotas
+    title: "Animales de compañía"
+    intro: "Perros, gatos o canarios: los animales de casa nos dan compañía y mucho cariño."
+    refran: "Perro ladrador, poco mordedor."
+    words: [Perro, Gato, Canario, Periquito, Tortuga, Hámster, Pez, Correa, Collar, Comedero, Paseo, Veterinario, Mimos, Cachorro]
+  - id: w42-pilar
+    title: "Fiesta del Pilar"
+    intro: "El 12 de octubre Zaragoza llena la plaza de flores en la ofrenda a la Virgen del Pilar."
+    refran: "En casa del herrero, cuchillo de palo."
+    words: [Pilar, Zaragoza, Ofrenda, Flores, Jota, Baturro, Cachirulo, Basílica, Ebro, Gigantes, Cabezudos, Fiesta, Octubre, Rosario]
+  - id: w43-castanas
+    title: "Castañas asadas"
+    intro: "El humo de las castañeras en la calle anuncia que el frío ya está aquí."
+    refran: "Cría fama y échate a dormir."
+    words: [Castañas, Castañera, Asador, Cucurucho, Brasas, Humo, Bellotas, Nueces, Avellanas, Piñones, Boniato, Chaquetón, Bufanda, Hojarasca]
+  - id: w44-relojes
+    title: "Relojes y horas"
+    intro: "El último domingo de octubre se cambia la hora: toca atrasar los relojes una hora."
+    refran: "El tiempo es oro."
+    words: [Reloj, Hora, Minuto, Segundo, Despertador, Agujas, Cuco, Péndulo, Campanadas, Arena, Calendario, Agenda, Cambio, Puntual]
+  - id: w45-santos
+    title: "Todos los Santos"
+    intro: "El 1 de noviembre recordamos a los que ya no están, con flores, buñuelos y huesos de santo."
+    refran: "Haz bien y no mires a quién."
+    words: [Santos, Flores, Crisantemos, Recuerdo, Huesos, Buñuelos, Panellets, Castañas, Velas, Familia, Memoria, Tenorio, Visita, Oración]
+  - id: w46-cuchara
+    title: "Guisos de cuchara"
+    intro: "Con el frío vuelven los platos de cuchara que calientan el cuerpo y el corazón."
+    refran: "A cada cerdo le llega su San Martín."
+    words: [Cocido, Lentejas, Fabada, Potaje, Garbanzos, Alubias, Puchero, Caldo, Cuchara, Chorizo, Morcilla, Sopa, Olla, Fuego]
+  - id: w47-lluvia
+    title: "Días de lluvia"
+    intro: "Tardes de lluvia detrás del cristal, con una manta y un buen pasatiempo."
+    refran: "Nunca llueve a gusto de todos."
+    words: [Lluvia, Paraguas, Charcos, Botas, Chubasquero, Gotas, Nubes, Truenos, Ventana, Cristal, Goteras, Manta, Tormenta, Llovizna]
+  - id: w48-musica
+    title: "Música y bandas"
+    intro: "El 22 de noviembre es Santa Cecilia, patrona de los músicos y de las bandas de cada pueblo."
+    refran: "Quien canta, su mal espanta."
+    words: [Banda, Música, Trompeta, Clarinete, Tambor, Bombo, Platillos, Tuba, Flauta, Director, Partitura, Concierto, Quiosco, Pasodoble]
+  - id: w49-adornos
+    title: "Preparando la Navidad"
+    intro: "Sacamos las cajas de los adornos y montamos el árbol y el belén con toda la familia."
+    refran: "Lo bueno, si breve, dos veces bueno."
+    words: [Belén, Árbol, Adornos, Luces, Guirnaldas, Estrella, Espumillón, Bolas, Musgo, Figuritas, Pastores, Portal, Nacimiento, Villancicos]
+  - id: w50-puente
+    title: "El puente de diciembre"
+    intro: "Entre el día de la Constitución y la Inmaculada, muchos aprovechan para viajar o ir de compras."
+    refran: "El que algo quiere, algo le cuesta."
+    words: [Puente, Constitución, Inmaculada, Viaje, Escapada, Frío, Mercadillo, Turrón, Compras, Familia, Descanso, Nieve, Montaña, Chocolate]
+  - id: w51-loteria
+    title: "La lotería de Navidad"
+    intro: "Todo el país pendiente de los niños que cantan los números el 22 de diciembre."
+    refran: "Muchos pocos hacen un mucho."
+    words: [Lotería, Décimo, Participación, Bombo, Bolas, Gordo, Premio, Pedrea, Reintegro, Niños, Cantar, Número, Suerte, Ilusión]
+  - id: w52-navidad
+    title: "Nochebuena y Navidad"
+    intro: "La familia reunida alrededor de la mesa, con villancicos y turrón hasta muy tarde."
+    refran: "Hoy por ti, mañana por mí."
+    words: [Nochebuena, Navidad, Cena, Turrón, Polvorones, Mazapán, Villancicos, Zambomba, Pandereta, Belén, Regalos, Familia, Mantel, Cordero]
+  - id: w53-despedida
+    title: "Despedimos el año"
+    intro: "Repasamos el año con cariño y brindamos por todo lo bueno que está por venir."
+    refran: "Año de nieves, año de bienes."
+    words: [Despedida, Recuerdos, Balance, Fotos, Uvas, Campanadas, Deseos, Propósitos, Brindis, Esperanza, Abrazos, Gracias, Futuro, Familia]

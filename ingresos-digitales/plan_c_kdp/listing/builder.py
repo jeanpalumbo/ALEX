@@ -26,6 +26,8 @@ PRICE_USD = 9.99
 
 
 def title_and_subtitle(book: Book) -> tuple[str, str]:
+    if "title" in book.listing:
+        return book.listing["title"], book.listing["subtitle"]
     title = f"{book.title}: {book.subtitle}"
     subtitle = (f"{len(book.themes)} pasatiempos en letra muy grande con temas de "
                 f"nostalgia y soluciones. Un regalo para padres y abuelos. Vol. {book.volume}")
@@ -33,6 +35,8 @@ def title_and_subtitle(book: Book) -> tuple[str, str]:
 
 
 def description_html(book: Book) -> str:
+    if "description_html" in book.listing:
+        return book.listing["description_html"].strip()
     sample = ", ".join(t.title.lower() for t in book.themes[:6])
     return f"""<p><b>Un regalo lleno de recuerdos para nuestros mayores.</b></p>
 <p>{len(book.themes)} sopas de letras en letra muy grande con temas que traen a la memoria la España de su juventud: {sample} y muchos más.</p>
@@ -54,6 +58,7 @@ def write_listing(book: Book, pages: int, out_path: Path, paper: str = "white") 
     assert len(kw) == 7 and all(len(k) <= 50 for k in kw), "KDP: 7 keywords, max 50 chars"
     width, height = kdp.cover_size_in(pages, paper)
     cost_eur, cost_usd = kdp.printing_cost(pages, "EUR"), kdp.printing_cost(pages, "USD")
+    extra_checks = "".join(f"- [ ] {c}\n" for c in book.listing.get("extra_checks", []))
     themes_list = "\n".join(f"{i}. {t.title}" for i, t in enumerate(book.themes, 1))
     keywords = "\n".join(f"{i}. {k}" for i, k in enumerate(kw, 1))
     categories = "\n".join(f"- {c}" for c in CATEGORIES)
@@ -68,7 +73,7 @@ def write_listing(book: Book, pages: int, out_path: Path, paper: str = "white") 
 | Idioma | Español |
 | Título | {title} |
 | Subtítulo | {subtitle} |
-| Serie | Sopa de letras para mayores — Volumen {book.volume} |
+| Serie | {book.listing.get("series", f"Sopa de letras para mayores — Volumen {book.volume}")} |
 | Autor | {book.author} |
 | Contenido para adultos | No |
 
@@ -123,8 +128,8 @@ def write_listing(book: Book, pages: int, out_path: Path, paper: str = "white") 
 ## 4. Checklist antes de enviar a revisión
 
 - [ ] Abrí el PDF interior y leí al menos 10 sopas (legibilidad, temas "de mayores españoles").
-- [ ] Revisé `plan_c_kdp/themes/vol1_recuerdos_de_espana.yaml` (palabras e introducciones).
-- [ ] El nombre de autor es el que quiero usar (real o seudónimo).
+- [ ] Revisé las palabras e introducciones de los temas (archivo YAML del libro).
+{extra_checks}- [ ] El nombre de autor es el que quiero usar (real o seudónimo).
 - [ ] Vista previa de KDP sin errores de márgenes ni de texto fuera de zona.
 - [ ] Declaración de IA marcada (texto: sí).
 - [ ] Pedí una copia de prueba (opcional, recomendado antes de la campaña de Navidad).
