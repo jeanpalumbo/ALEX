@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ingresos-digitales"
+version = "0.1.0"
+description = "Digital income projects: KDP puzzle books, Etsy templates, X drafts (always human-reviewed)."
+requires-python = ">=3.11"
+dependencies = [
+    "pyyaml>=6.0",
+    "reportlab>=4.0",
+    "pypdf>=4.0",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+llm = ["anthropic>=0.78"]
+dev = ["pytest>=8.0", "pypdfium2>=4.0"]
+
+[tool.setuptools.packages.find]
+include = ["shared*", "plan_c_kdp*"]
+
+[tool.setuptools.package-data]
+plan_c_kdp = ["assets/fonts/*", "themes/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

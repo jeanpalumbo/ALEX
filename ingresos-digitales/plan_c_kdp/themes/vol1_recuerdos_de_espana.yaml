@@ -1,0 +1,412 @@
+# Vol. 1 "Recuerdos de España" — themes for review by Piero.
+# Rules: single words only (3-15 letters), no song lyrics, no brands.
+# Words are written with normal Spanish spelling; the generator removes accents
+# (keeps Ñ) so the list matches the grid. Edit freely and re-run the build.
+book:
+  id: vol1
+  title: "Sopa de letras para mayores"
+  subtitle: "Recuerdos de España"
+  volume: 1
+  author: "Piero Palumbo"
+  year: 2026
+themes:
+  - id: juegos-calle
+    title: "Juegos de la calle"
+    intro: "Aquellas tardes en la calle, cuando bastaba una tiza, unas chapas o una cuerda para ser felices hasta la hora de cenar."
+    words: [Peonza, Chapas, Canicas, Comba, Rayuela, Escondite, Tula, Tabas, Cometa, Patines, Aro, Balón, Goma, Cromos, Churro]
+  - id: juguetes
+    title: "Juguetes de antes"
+    intro: "Los juguetes se cuidaban como un tesoro: muchos llegaban con los Reyes y pasaban de hermano en hermano."
+    words: [Muñeca, Triciclo, Caballito, Recortables, Tebeo, Yoyó, Diábolo, Soldaditos, Cocinita, Trompo, Pelota, Marioneta, Patinete, Futbolín, Tambor]
+  - id: escuela
+    title: "La escuela de antes"
+    intro: "Pupitres de madera, olor a tinta y la clase entera repitiendo la tabla de multiplicar en voz alta."
+    words: [Pupitre, Pizarra, Tiza, Tintero, Plumier, Cartilla, Enciclopedia, Maestro, Recreo, Borrador, Cuaderno, Mapa, Dictado, Lápiz, Estufa]
+  - id: cocina-abuela
+    title: "La cocina de la abuela"
+    intro: "El puchero al fuego desde temprano y aquel olor que llenaba toda la casa. Nadie cocinaba como la abuela."
+    words: [Puchero, Cocido, Lentejas, Croquetas, Torrijas, Natillas, Pisto, Migas, Gazpacho, Albóndigas, Flan, Potaje, Callos, Empanada, Paella]
+  - id: cacharros-cocina
+    title: "Cacharros de cocina"
+    intro: "Cazuelas de barro, el mortero y el botijo: cosas sencillas que duraban toda la vida."
+    words: [Mortero, Cazuela, Sartén, Olla, Botijo, Fresquera, Hornillo, Alacena, Lebrillo, Jarra, Embudo, Colador, Rallador, Molinillo, Fogón]
+  - id: aparatos
+    title: "Aparatos que llegaron a casa"
+    intro: "Cada aparato nuevo era un acontecimiento: la primera nevera, la primera lavadora y, sobre todo, la primera televisión."
+    words: [Nevera, Lavadora, Televisor, Radio, Tocadiscos, Transistor, Plancha, Batidora, Aspiradora, Teléfono, Ventilador, Brasero, Magnetófono, Secador, Tostadora]
+  - id: casa-pueblo
+    title: "La casa del pueblo"
+    intro: "Paredes encaladas, el patio lleno de macetas y la puerta siempre abierta para el vecino que pasaba a saludar."
+    words: [Patio, Corral, Pozo, Chimenea, Alacena, Desván, Zaguán, Macetas, Tejado, Portal, Cuadra, Granero, Huerto, Aljibe, Bodega]
+  - id: oficios
+    title: "Oficios de antes"
+    intro: "Muchos ya no existen, pero sus pregones siguen en la memoria de quienes los vimos pasar por la calle."
+    words: [Afilador, Sereno, Lechero, Herrero, Barquillero, Botijero, Colchonero, Aguador, Hojalatero, Trapero, Cartero, Zapatero, Carbonero, Telegrafista, Pregonero]
+  - id: ultramarinos
+    title: "La tienda de ultramarinos"
+    intro: "El tendero apuntaba en su libreta, despachaba a granel y siempre tenía un caramelo para los niños."
+    words: [Mostrador, Báscula, Granel, Fiado, Libreta, Garbanzos, Aceite, Bacalao, Legumbres, Galletas, Cucurucho, Embutido, Conservas, Jabón, Azúcar]
+  - id: mercado
+    title: "Día de mercado"
+    intro: "Los puestos se llenaban de voces, regateos y olor a fruta fresca. Ir al mercado era casi una fiesta."
+    words: [Puestos, Fruta, Verdura, Pescado, Carnicero, Frutera, Cesta, Balanza, Pregón, Tomates, Melones, Gallinas, Huevos, Quesos, Regateo]
+  - id: verbena
+    title: "Verbenas y fiestas del pueblo"
+    intro: "Farolillos de papel, la orquesta en la plaza y aquel primer baile con alguien especial."
+    words: [Verbena, Farolillos, Orquesta, Pasodoble, Banderitas, Tómbola, Churros, Feria, Cohetes, Gigantes, Cabezudos, Procesión, Charanga, Baile, Rifa]
+  - id: navidad
+    title: "Navidades de siempre"
+    intro: "El belén con su musgo, los villancicos con zambomba y la familia entera alrededor de la mesa."
+    words: [Belén, Musgo, Villancico, Zambomba, Pandereta, Turrón, Polvorones, Mazapán, Nochebuena, Lotería, Aguinaldo, Pastores, Estrella, Uvas, Reyes]
+  - id: reyes
+    title: "La noche de Reyes"
+    intro: "Los zapatos junto a la ventana, agua para los camellos y unos nervios que no dejaban dormir."
+    words: [Melchor, Gaspar, Baltasar, Camellos, Cabalgata, Roscón, Zapatos, Regalos, Carbón, Pajes, Ilusión, Sorpresa, Haba, Juguetes, Caramelos]
+  - id: semana-santa
+    title: "Semana Santa"
+    intro: "Pasos por calles estrechas, olor a cera e incienso, y las torrijas esperando en casa."
+    words: [Procesión, Nazareno, Capirote, Costalero, Saeta, Cofradía, Incienso, Cirio, Tambores, Mantilla, Peineta, Torrijas, Palmas, Ramos, Penitente]
+  - id: playa
+    title: "Veranos en la playa"
+    intro: "La sombrilla, la tortilla envuelta en papel de plata y tardes enteras jugando en la orilla."
+    words: [Sombrilla, Toalla, Bañador, Tortilla, Nevera, Orilla, Arena, Castillo, Cubo, Pala, Flotador, Gaviotas, Siesta, Helado, Chiringuito]
+  - id: campo
+    title: "Faenas del campo"
+    intro: "Del amanecer al anochecer, la vida giraba en torno a la tierra, el ganado y el cielo que traía la lluvia."
+    words: [Siega, Trilla, Era, Arado, Hoz, Gavilla, Vendimia, Aceituna, Labrador, Yunta, Mula, Granero, Cosecha, Pajar, Azada]
+  - id: granja
+    title: "Animales de la granja"
+    intro: "Gallinas sueltas por el corral, el burro que cargaba con todo y el gallo que hacía de despertador."
+    words: [Gallina, Gallo, Burro, Cerdo, Oveja, Cabra, Vaca, Conejo, Pato, Pollito, Caballo, Perro, Gato, Cordero, Ternero]
+  - id: transporte
+    title: "Calles y vehículos"
+    intro: "Del carro tirado por mulas al autobús de línea: cada viaje, por corto que fuera, era una aventura."
+    words: [Tranvía, Autobús, Tren, Carro, Bicicleta, Sidecar, Taxi, Barca, Tartana, Seiscientos, Locomotora, Camión, Furgoneta, Calesa, Burro]
+  - id: tren
+    title: "Viajar en tren"
+    intro: "El traqueteo de los vagones, el bocadillo envuelto y horas de charla con desconocidos que acababan siendo amigos."
+    words: [Andén, Vagón, Litera, Revisor, Maleta, Silbato, Vía, Túnel, Taquilla, Bocadillo, Ventanilla, Expreso, Carbonilla, Maquinista, Equipaje]
+  - id: radio
+    title: "Tardes de radio"
+    intro: "Toda la familia alrededor del aparato, escuchando el serial, los consultorios y los discos dedicados."
+    words: [Radionovela, Serial, Locutor, Dial, Emisora, Antena, Oyentes, Concurso, Dedicatoria, Noticias, Altavoz, Válvulas, Onda, Música, Consultorio]
+  - id: television
+    title: "La primera televisión"
+    intro: "Un solo canal, la carta de ajuste y los vecinos que venían a casa a ver el programa del sábado."
+    words: [Televisor, Canal, Antena, Pantalla, Telediario, Presentadora, Concurso, Programa, Anuncios, Carta, Ajuste, Blanco, Negro, Dibujos, Serie]
+  - id: cine-verano
+    title: "El cine de verano"
+    intro: "Sillas de tijera, el bocadillo en la mano y la película bajo las estrellas en las noches de agosto."
+    words: [Pantalla, Butaca, Taquilla, Acomodador, Linterna, Palomitas, Estreno, Película, Entrada, Galán, Intermedio, Cartelera, Vaqueros, Sesión, Proyector]
+  - id: bailes
+    title: "Bailes de toda la vida"
+    intro: "De la jota al twist: cada época tuvo su música, y en cada fiesta había alguien dispuesto a sacarle a bailar."
+    words: [Pasodoble, Jota, Chotis, Sevillanas, Bolero, Tango, Twist, Mambo, Vals, Sardana, Muñeira, Fandango, Rumba, Seguidilla, Bulerías]
+  - id: instrumentos
+    title: "Instrumentos populares"
+    intro: "La guitarra en las reuniones, la gaita en las romerías y la pandereta que nunca faltaba en Navidad."
+    words: [Guitarra, Bandurria, Laúd, Gaita, Pandereta, Castañuelas, Acordeón, Armónica, Tambor, Dulzaina, Flauta, Trompeta, Clarinete, Violín, Bombo]
+  - id: voces-cancion
+    title: "Voces de la canción"
+    intro: "Nombres que sonaban en la radio y en los tocadiscos, y cuyas canciones todavía sabemos de memoria."
+    words: [Raphael, Marisol, Serrat, Perales, Massiel, Salomé, Karina, Mocedades, Jurado, Dúrcal, Montiel, Flores, Sesto, Bravo, Iglesias]
+  - id: oeste
+    title: "Películas del oeste"
+    intro: "Diligencias, duelos al sol y pistoleros: muchas de aquellas películas se rodaron en los desiertos de Almería."
+    words: [Vaquero, Diligencia, Revólver, Caballo, Desierto, Cantina, Forajido, Pistolero, Rancho, Duelo, Espuelas, Sombrero, Bandido, Almería, Pradera]
+  - id: refranes-1
+    title: "Palabras de refranes"
+    intro: "Los refranes de los abuelos tenían respuesta para todo. ¿Recuerda en qué refrán aparece cada palabra?"
+    words: [Madruga, Ayuda, Perro, Ladrador, Mordedor, Pájaro, Mano, Volando, Camarón, Corriente, Abril, Aguas, Golondrina, Verano, Cien]
+  - id: refranes-2
+    title: "Más refranes"
+    intro: "Otra tanda de palabras sacadas de refranes de toda la vida. Diga el refrán en voz alta al encontrar cada una."
+    words: [Ojos, Corazón, Cuervos, Arrieros, Camino, Boca, Moscas, Gato, Liebre, Molino, Herrero, Cuchillo, Palo, Pasada, Cerrada]
+  - id: ropa
+    title: "La ropa de entonces"
+    intro: "El traje de los domingos, la rebeca tejida a mano y aquellos zapatos que iban al zapatero una y otra vez."
+    words: [Rebeca, Boina, Alpargatas, Mantilla, Toquilla, Enagua, Faja, Corsé, Combinación, Chaleco, Gabardina, Pañuelo, Delantal, Bata, Medias]
+  - id: costura
+    title: "Costura y labores"
+    intro: "Tardes cosiendo junto a la ventana, el costurero lleno de botones y el punto de cruz para el ajuar."
+    words: [Aguja, Dedal, Hilo, Costurero, Botones, Tijeras, Ganchillo, Bordado, Encaje, Patrón, Máquina, Ovillo, Ajuar, Calceta, Puntilla]
+  - id: barberia
+    title: "La barbería"
+    intro: "El sillón giratorio, la brocha con espuma y la charla de fútbol mientras se esperaba turno."
+    words: [Barbero, Navaja, Brocha, Espuma, Sillón, Bigote, Patillas, Tupé, Brillantina, Peine, Colonia, Afeitado, Flequillo, Espejo, Tijeras]
+  - id: objetos-casa
+    title: "Objetos de la casa"
+    intro: "La radio en la repisa, el reloj de pared, la mesa camilla... cada rincón de la casa guardaba un recuerdo."
+    words: [Camilla, Brasero, Aparador, Quinqué, Candil, Palangana, Jofaina, Orinal, Reloj, Cómoda, Mecedora, Repisa, Visillo, Tapete, Calendario]
+  - id: colada
+    title: "Día de colada"
+    intro: "Antes de la lavadora, la ropa se lavaba en el río o en el lavadero, con jabón casero y mucho brazo."
+    words: [Lavadero, Tabla, Jabón, Cubo, Pinzas, Tendedero, Cuerda, Barreño, Lejía, Colada, Sábanas, Almidón, Plancha, Río, Remojo]
+  - id: barrio
+    title: "La vida en el barrio"
+    intro: "Todos se conocían: la portera, el del quiosco, la vecina de enfrente. El barrio era una gran familia."
+    words: [Portera, Quiosco, Vecina, Balcón, Portal, Escalera, Patio, Plaza, Fuente, Banco, Farola, Taberna, Mercería, Droguería, Panadería]
+  - id: bar
+    title: "El bar de la esquina"
+    intro: "El café con leche, la partida de dominó y las tapas que salían de la cocina mientras se comentaba el partido."
+    words: [Barra, Camarero, Dominó, Mus, Tapas, Vermú, Caña, Chato, Pincho, Servilleta, Tertulia, Café, Porrón, Partida, Aceitunas]
+  - id: juegos-mesa
+    title: "Juegos de mesa y cartas"
+    intro: "En las tardes de lluvia salía la baraja, el parchís o la oca, y las partidas duraban horas."
+    words: [Parchís, Oca, Baraja, Damas, Ajedrez, Tute, Brisca, Chinchón, Mus, Cinquillo, Dados, Cubilete, Ficha, Tablero, Escoba]
+  - id: futbol
+    title: "El fútbol de antes"
+    intro: "El transistor pegado a la oreja los domingos, la quiniela y los partidos de barrio con porterías de piedras."
+    words: [Balón, Portero, Delantero, Defensa, Árbitro, Penalti, Córner, Quiniela, Gol, Larguero, Estadio, Domingo, Afición, Bufanda, Carrusel]
+  - id: deportes
+    title: "Deportes de siempre"
+    intro: "La Vuelta seguida por la radio, el frontón del pueblo y las primeras medallas que nos llenaron de orgullo."
+    words: [Ciclismo, Pelota, Boxeo, Atletismo, Natación, Tenis, Baloncesto, Balonmano, Frontón, Esquí, Remo, Lucha, Carrera, Vuelta, Medalla]
+  - id: cuentos
+    title: "Cuentos para dormir"
+    intro: "Las historias que contaban los abuelos junto a la cama, con lobos, princesas y algún que otro susto."
+    words: [Lobo, Princesa, Bruja, Hada, Dragón, Castillo, Ogro, Gigante, Enanito, Varita, Caperucita, Abuelita, Bosque, Sapo, Príncipe]
+  - id: flores
+    title: "Flores del patio"
+    intro: "Geranios en los balcones, el jazmín junto a la puerta y las rosas que la abuela cuidaba con tanto mimo."
+    words: [Geranio, Clavel, Jazmín, Rosa, Margarita, Dalia, Hortensia, Azucena, Gitanilla, Lirio, Amapola, Violeta, Girasol, Nardo, Petunia]
+  - id: frutales
+    title: "Árboles frutales"
+    intro: "La higuera del corral, el almendro en flor y el naranjo cargado de fruta: cada árbol tenía su historia."
+    words: [Naranjo, Limonero, Olivo, Almendro, Higuera, Manzano, Peral, Cerezo, Nogal, Castaño, Granado, Ciruelo, Membrillo, Albaricoquero, Melocotonero]
+  - id: frutas
+    title: "Fruta de temporada"
+    intro: "Cada estación tenía su fruta y su sabor; la primera sandía del verano se esperaba con muchas ganas."
+    words: [Sandía, Melón, Uvas, Higos, Cerezas, Naranjas, Membrillo, Granada, Níspero, Castañas, Brevas, Manzana, Pera, Ciruela, Albaricoque]
+  - id: huerto
+    title: "El huerto"
+    intro: "Tomates que sabían a tomate, lechugas recién cortadas y el riego al caer la tarde."
+    words: [Tomate, Lechuga, Pimiento, Cebolla, Ajo, Patata, Calabaza, Pepino, Berenjena, Judías, Habas, Acelgas, Zanahoria, Alcachofa, Puerro]
+  - id: horno
+    title: "El horno del pueblo"
+    intro: "El olor a pan recién hecho que llegaba a la calle de madrugada, y la hogaza todavía caliente en la mesa."
+    words: [Hogaza, Barra, Horno, Levadura, Masa, Harina, Panadero, Rosquillas, Magdalenas, Bollo, Pestiños, Mantecados, Leña, Pala, Molete]
+  - id: dulces
+    title: "Dulces de la abuela"
+    intro: "Para cada fiesta había un dulce, hecho en casa con paciencia y con recetas que nunca se apuntaban."
+    words: [Natillas, Flan, Torrijas, Buñuelos, Bizcocho, Merengue, Churros, Hojaldre, Yemas, Almendrados, Cuajada, Barquillos, Rosquillas, Pestiños, Compota]
+  - id: merienda
+    title: "La merienda"
+    intro: "El bocadillo de chorizo, el pan con aceite y azúcar o el chocolate con picatostes al salir del colegio."
+    words: [Bocadillo, Chorizo, Chocolate, Picatostes, Pan, Aceite, Azúcar, Mantequilla, Membrillo, Leche, Galletas, Queso, Salchichón, Mortadela, Sobao]
+  - id: vendimia
+    title: "La vendimia"
+    intro: "Septiembre olía a mosto: cuadrillas entre las viñas, cestos llenos de racimos y la uva pisada en el lagar."
+    words: [Viña, Racimo, Uva, Cesto, Mosto, Lagar, Tinaja, Bodega, Barrica, Cuadrilla, Tijera, Sarmiento, Pámpano, Vendimiador, Tonel]
+  - id: pueblo-verano
+    title: "El pueblo en verano"
+    intro: "Volver al pueblo en vacaciones: los primos, el arroyo, la siesta y las noches tomando el fresco en la puerta."
+    words: [Primos, Arroyo, Siesta, Fresco, Puerta, Plaza, Iglesia, Campanario, Fuente, Ermita, Alameda, Romería, Bicicleta, Charca, Abuelos]
+  - id: domingo-misa
+    title: "Domingo de misa"
+    intro: "El traje de los domingos, el repique de campanas y la plaza llena de gente a la salida de misa."
+    words: [Misa, Monaguillo, Campanas, Altar, Sacristán, Rosario, Velas, Limosna, Coro, Órgano, Bautizo, Comunión, Párroco, Banco, Domingo]
+  - id: bodas
+    title: "Las bodas de antes"
+    intro: "El vestido de novia cosido en casa, el banquete en el patio y los novios abriendo el baile con un vals."
+    words: [Novia, Novio, Padrino, Madrina, Anillos, Arras, Ramo, Velo, Banquete, Tarta, Invitados, Vals, Iglesia, Peladillas, Ajuar]
+  - id: bebes
+    title: "Cuando nacían los niños"
+    intro: "La cuna junto a la cama, las nanas para dormir y la canastilla preparada con tanto cariño."
+    words: [Cuna, Pañales, Sonajero, Chupete, Biberón, Bautizo, Cochecito, Canastilla, Faldón, Papilla, Nana, Comadrona, Babero, Andador, Patucos]
+  - id: vendedores
+    title: "Vendedores ambulantes"
+    intro: "Se oían antes de verlos: el pregón del afilador, el carrito de los helados o la vendedora de castañas."
+    words: [Afilador, Castañera, Heladero, Barquillero, Churrero, Cacharrero, Melonero, Pregón, Carrito, Silbato, Burro, Cesto, Botijo, Lotero, Cerillera]
+  - id: feria
+    title: "La feria"
+    intro: "Las luces de los cacharritos, el algodón de azúcar y la caseta donde se bailaba hasta el amanecer."
+    words: [Caseta, Noria, Tiovivo, Algodón, Garrapiñadas, Tómbola, Farolillos, Sevillanas, Caballos, Volantes, Gitana, Feriante, Atracciones, Cohetes, Rebujito]
+  - id: carnaval
+    title: "Carnaval"
+    intro: "Disfraces hechos en casa, serpentinas por el suelo y comparsas que sacaban la sonrisa a todo el pueblo."
+    words: [Disfraz, Máscara, Antifaz, Comparsa, Chirigota, Murga, Serpentina, Confeti, Carroza, Desfile, Sardina, Arlequín, Pelucas, Charanga, Cuaresma]
+  - id: san-juan
+    title: "Noche de San Juan"
+    intro: "La hoguera más alta del año, los deseos al fuego y la noche más corta, que nadie quería que acabase."
+    words: [Hoguera, Fuego, Saltar, Deseos, Verbena, Playa, Sardinas, Petardos, Solsticio, Hierbas, Rocío, Medianoche, Música, Trastos, Llamas]
+  - id: vacaciones
+    title: "Las primeras vacaciones"
+    intro: "El coche cargado hasta arriba, las maletas en la baca y los niños preguntando cuánto faltaba."
+    words: [Baca, Maleta, Mapa, Carretera, Gasolinera, Pensión, Hostal, Postal, Mareo, Merendero, Caravana, Camping, Bañador, Sombrero, Fotos]
+  - id: fotos
+    title: "El álbum de fotos"
+    intro: "Fotos en blanco y negro con los bordes dentados: cada una guarda un día que no queremos olvidar."
+    words: [Álbum, Cámara, Carrete, Revelado, Retrato, Flash, Negativo, Fotógrafo, Estudio, Recuerdo, Comunión, Boda, Marco, Sepia, Diapositivas]
+  - id: cartas
+    title: "Cartas y telegramas"
+    intro: "Se esperaba al cartero con ilusión: una carta del novio, una postal de vacaciones o un telegrama urgente."
+    words: [Carta, Sobre, Secante, Buzón, Cartero, Telegrama, Postal, Remite, Destinatario, Matasellos, Pluma, Tinta, Papel, Correos, Giro]
+  - id: telefono
+    title: "El teléfono de antes"
+    intro: "La rueda para marcar, las conferencias que costaban un dineral y la cabina de la esquina con su ficha."
+    words: [Teléfono, Centralita, Operadora, Cabina, Ficha, Conferencia, Auricular, Rueda, Marcar, Llamada, Línea, Guía, Comunicando, Timbre, Contestar]
+  - id: invierno
+    title: "Inviernos en casa"
+    intro: "El brasero bajo la mesa camilla, la bolsa de agua caliente y las mantas apiladas en la cama."
+    words: [Brasero, Camilla, Manta, Bolsa, Chimenea, Leña, Estufa, Calcetines, Bufanda, Pijama, Edredón, Chocolate, Castañas, Escarcha, Abrigo]
+  - id: tiempo
+    title: "El tiempo y el cielo"
+    intro: "Antes de mirar el parte, los mayores miraban al cielo y sabían si iba a llover."
+    words: [Lluvia, Nieve, Granizo, Niebla, Escarcha, Rocío, Tormenta, Trueno, Relámpago, Arcoíris, Viento, Nubes, Sol, Helada, Calor]
+  - id: refranes-tiempo
+    title: "Refranes del tiempo"
+    intro: "Los abuelos tenían un refrán para cada mes. Estas palabras salen de algunos de ellos."
+    words: [Mayo, Sayo, Cuarenta, Abril, Aguas, Marzo, Ventoso, Febrerillo, Loco, Nubes, Arreboles, Santos, Nieve, Invierno, Agosto]
+  - id: mili
+    title: "La mili"
+    intro: "Para muchos fue la primera vez lejos de casa: el petate, la instrucción y las cartas a la novia."
+    words: [Recluta, Cuartel, Petate, Instrucción, Garita, Guardia, Sargento, Cabo, Teniente, Rancho, Permiso, Licencia, Diana, Uniforme, Quinto]
+  - id: coche
+    title: "El coche de la familia"
+    intro: "El primer coche de la familia se lavaba los domingos y se enseñaba a los vecinos con orgullo."
+    words: [Volante, Manivela, Embrague, Freno, Marchas, Claxon, Baca, Rueda, Faros, Gasolina, Matrícula, Capó, Maletero, Asiento, Parachoques]
+  - id: tebeos
+    title: "Tebeos y novelas"
+    intro: "Los tebeos del quiosco, las novelas de bolsillo y aquellas colecciones que se iban completando semana a semana."
+    words: [Tebeo, Novela, Fascículo, Viñeta, Aventuras, Quiosco, Cromos, Colección, Revista, Biblioteca, Folletín, Historieta, Lector, Detectives, Almanaque]
+  - id: golosinas
+    title: "Golosinas de un real"
+    intro: "Con unas monedas en el bolsillo, el puesto de golosinas era el lugar más emocionante del mundo."
+    words: [Regaliz, Caramelos, Chicle, Pipas, Altramuces, Barquillo, Piruleta, Garrapiñadas, Moras, Gominolas, Palotes, Peladillas, Chufas, Algarrobas, Torrado]
+  - id: pesetas
+    title: "Pesetas y reales"
+    intro: "La perra chica, el duro, el billete de cien: con muy poco se podían hacer muchas cosas."
+    words: [Peseta, Real, Duro, Perra, Céntimo, Billete, Cambio, Hucha, Monedero, Calderilla, Ahorro, Cartilla, Banco, Propina, Paga]
+  - id: medidas
+    title: "Pesos y medidas"
+    intro: "Arrobas, fanegas y cuartillos: así se medía todo antes de que llegaran los kilos y los litros a cada casa."
+    words: [Arroba, Fanega, Libra, Onza, Vara, Legua, Cuartillo, Celemín, Quintal, Palmo, Docena, Azumbre, Kilo, Litro, Metro]
+  - id: aseo
+    title: "El aseo de antes"
+    intro: "La palangana con agua fría por la mañana, el jabón de tocador y el baño del sábado en el barreño."
+    words: [Palangana, Jarra, Jabón, Toalla, Espejo, Bañera, Esponja, Peine, Colonia, Polvos, Talco, Cepillo, Lavabo, Barreño, Grifo]
+  - id: remedios
+    title: "Remedios de la abuela"
+    intro: "Para cada mal había un remedio casero: la manzanilla, los vahos de eucalipto o la leche con miel."
+    words: [Manzanilla, Tila, Poleo, Miel, Limón, Cataplasma, Ventosas, Eucalipto, Romero, Vahos, Linaza, Árnica, Ajo, Caldo, Jarabe]
+  - id: hierbas
+    title: "Hierbas aromáticas"
+    intro: "El romero del monte, la hierbabuena de la maceta y el laurel que no faltaba en ningún guiso."
+    words: [Romero, Tomillo, Orégano, Laurel, Albahaca, Hierbabuena, Perejil, Lavanda, Salvia, Manzanilla, Poleo, Menta, Hinojo, Cilantro, Azafrán]
+  - id: pajaros
+    title: "Pájaros del campo"
+    intro: "Las golondrinas que volvían cada primavera y las cigüeñas en el campanario anunciaban el buen tiempo."
+    words: [Golondrina, Gorrión, Jilguero, Cigüeña, Mirlo, Ruiseñor, Canario, Paloma, Perdiz, Codorniz, Abubilla, Lechuza, Búho, Urraca, Petirrojo]
+  - id: monte
+    title: "En el monte"
+    intro: "Paseos por el monte buscando huellas, oyendo los grillos y con la ilusión de ver algún animal salvaje."
+    words: [Zorro, Jabalí, Conejo, Liebre, Ciervo, Lobo, Ardilla, Erizo, Tejón, Lagartija, Culebra, Águila, Buitre, Rana, Grillo]
+  - id: puerto
+    title: "El puerto pesquero"
+    intro: "Las barcas volviendo al atardecer, las redes tendidas en el muelle y el bullicio de la lonja."
+    words: [Barca, Red, Anzuelo, Caña, Pescador, Faro, Lonja, Muelle, Gaviota, Ancla, Vela, Remo, Marinero, Sardinas, Boquerones]
+  - id: tapas
+    title: "Tapas de siempre"
+    intro: "Ir de tapas con la cuadrilla, de bar en bar, probando la especialidad de cada casa."
+    words: [Bravas, Ensaladilla, Calamares, Boquerones, Pulpo, Oreja, Callos, Mejillones, Gambas, Pimientos, Chopitos, Torreznos, Montadito, Banderilla, Tortilla]
+  - id: oficios-pueblo
+    title: "Gente del pueblo"
+    intro: "El médico que venía a casa, la maestra, el pastor con su rebaño: personas que todo el pueblo conocía."
+    words: [Alcalde, Médico, Boticario, Maestra, Cura, Guardia, Panadero, Pastor, Molinero, Carpintero, Albañil, Alguacil, Barbero, Partera, Practicante]
+  - id: taller
+    title: "El taller del abuelo"
+    intro: "Herramientas colgadas en la pared, olor a serrín y la paciencia de quien sabía arreglarlo todo."
+    words: [Martillo, Serrucho, Tenazas, Alicates, Clavos, Destornillador, Lima, Garlopa, Berbiquí, Escuadra, Formón, Banco, Gubia, Tornillos, Cepillo]
+  - id: nombres
+    title: "Nombres de antes"
+    intro: "Nombres que se repetían en cada familia y que hoy vuelven poco a poco a ponerse de moda."
+    words: [Dolores, Encarnación, Remedios, Concepción, Amparo, Pilar, Manolo, Paco, Pepe, Rafael, Fermín, Gumersindo, Asunción, Eusebio, Herminia]
+  - id: santos
+    title: "Santos y cumpleaños"
+    intro: "Antes se celebraba más el santo que el cumpleaños: tarta casera, velas y tirones de orejas."
+    words: [Santo, Tarta, Velas, Regalo, Orejas, Felicidades, Invitados, Merienda, Globos, Cumpleaños, Sorpresa, Familia, Canción, Soplar, Deseo]
+  - id: comunion
+    title: "La primera comunión"
+    intro: "El traje de marinero o el vestido blanco, el recordatorio para los familiares y el banquete del gran día."
+    words: [Comunión, Vestido, Marinero, Almirante, Misal, Rosario, Catequesis, Recordatorio, Guantes, Corona, Limosnera, Banquete, Fotos, Padrinos, Iglesia]
+  - id: discos
+    title: "Discos y tocadiscos"
+    intro: "Los discos se cuidaban como un tesoro y se escuchaban una y otra vez hasta aprenderse cada canción."
+    words: [Tocadiscos, Vinilo, Single, Elepé, Aguja, Gramola, Casete, Cinta, Altavoz, Bailar, Canción, Estribillo, Orquesta, Guateque, Funda]
+  - id: guateques
+    title: "Los guateques"
+    intro: "Fiestas en casa de algún amigo, con el tocadiscos, la luz bajita y la ilusión de sacar a bailar a alguien."
+    words: [Guateque, Tocadiscos, Baile, Lento, Twist, Amigos, Pandilla, Ponche, Sándwich, Flequillo, Minifalda, Tupé, Patillas, Música, Ligar]
+  - id: moda
+    title: "Moda de los sesenta y setenta"
+    intro: "Pantalones de campana, minifaldas y peinados cardados: cada foto de entonces cuenta qué estaba de moda."
+    words: [Minifalda, Campana, Tupé, Patillas, Chaqueta, Plataformas, Cardado, Laca, Pantalones, Hippie, Rebeca, Medias, Tacones, Corbata, Gafas]
+  - id: juegos-rurales
+    title: "Juegos y deportes rurales"
+    intro: "Los bolos en la plaza, la petanca a la sombra y la cucaña en las fiestas, con todo el pueblo animando."
+    words: [Bolos, Petanca, Rana, Soga, Barra, Calva, Chito, Herradura, Sacos, Cucaña, Pulso, Tirachinas, Comba, Honda, Piedras]
+  - id: olivar
+    title: "El olivar"
+    intro: "Mañanas frías de recolección, el vareo de los olivos y el primer aceite de la almazara sobre una tostada."
+    words: [Olivo, Aceituna, Almazara, Vareo, Aceite, Prensa, Orujo, Capacho, Recolección, Jornalero, Molino, Tinaja, Cuadrilla, Manta, Varas]
+  - id: leche-queso
+    title: "Leche y queso"
+    intro: "La leche recién ordeñada que había que hervir y el queso curado en la despensa de casa."
+    words: [Ordeño, Cántara, Lechero, Nata, Queso, Corral, Cuajada, Suero, Mantequilla, Vaca, Cabra, Oveja, Cubo, Establo, Hervir]
+  - id: asignaturas
+    title: "Asignaturas del colegio"
+    intro: "La caligrafía con buena letra, las cuentas en la pizarra y la geografía aprendida de memoria."
+    words: [Lectura, Escritura, Aritmética, Geografía, Historia, Caligrafía, Dibujo, Gramática, Ortografía, Ciencias, Cuentas, Labores, Música, Gimnasia, Religión]
+  - id: rios
+    title: "Ríos de España"
+    intro: "Ríos que aprendimos de memoria en la escuela, señalándolos con el dedo en el mapa colgado de la pared."
+    words: [Ebro, Tajo, Duero, Guadiana, Guadalquivir, Miño, Segura, Júcar, Turia, Genil, Sil, Jarama, Nalón, Bidasoa, Pisuerga]
+  - id: provincias
+    title: "Provincias de España"
+    intro: "¿Cuántas ha visitado? Cada una con su acento, su comida y sus fiestas."
+    words: [Lugo, Soria, Teruel, Cuenca, Zamora, Burgos, León, Jaén, Huesca, Cádiz, Murcia, Toledo, Ávila, Segovia, Badajoz]
+  - id: montanas
+    title: "Montañas y sierras"
+    intro: "De los Pirineos a Sierra Nevada, montañas que vimos en postales, excursiones y libros de texto."
+    words: [Pirineos, Picos, Moncayo, Teide, Mulhacén, Veleta, Gredos, Guadarrama, Cazorla, Montseny, Aneto, Sierra, Cumbre, Puerto, Monte]
+  - id: platos-regionales
+    title: "Platos de nuestra tierra"
+    intro: "Cada rincón de España tiene su plato estrella, y cada familia jura que su receta es la buena."
+    words: [Paella, Fabada, Pulpo, Gazpacho, Cocido, Migas, Pisto, Marmitako, Cochinillo, Escalivada, Lacón, Salmorejo, Pote, Ensaimada, Sobrasada]
+  - id: fiestas-espana
+    title: "Fiestas de España"
+    intro: "Fallas, encierros, romerías y hogueras: el calendario de España está lleno de fiestas con siglos de historia."
+    words: [Fallas, Sanfermines, Feria, Romería, Tamborrada, Rocío, Patios, Encierro, Ninot, Mascletá, Castellers, Hogueras, Ofrenda, Peñas, Pañuelo]
+  - id: bolso-abuela
+    title: "El bolso de la abuela"
+    intro: "Siempre llevaba de todo: un pañuelo bordado, caramelos de menta y alguna estampita."
+    words: [Pañuelo, Caramelos, Monedero, Estampita, Gafas, Rosario, Abanico, Peine, Llaves, Colonia, Tiritas, Imperdible, Espejito, Pastillas, Horquillas]
+  - id: tomar-fresco
+    title: "Tomar el fresco"
+    intro: "Las sillas en la puerta al caer la tarde, el abanico en la mano y la charla con los vecinos hasta tarde."
+    words: [Botijo, Abanico, Persiana, Siesta, Fresco, Silla, Puerta, Vecinos, Grillos, Estrellas, Sandía, Gazpacho, Toldo, Manguera, Horchata]
+  - id: caligrafia
+    title: "Plumas y caligrafía"
+    intro: "La plumilla mojada en el tintero, el papel secante y los renglones que había que llenar sin un solo borrón."
+    words: [Pluma, Plumilla, Tintero, Secante, Caligrafía, Renglones, Cuaderno, Lápiz, Goma, Sacapuntas, Bolígrafo, Letra, Firma, Rúbrica, Borrón]
+  - id: tareas-casa
+    title: "Tareas de la casa"
+    intro: "Barrer, fregar y sacudir las alfombras al sol: la casa siempre tenía que estar como los chorros del oro."
+    words: [Barrer, Fregar, Planchar, Coser, Tender, Escoba, Fregona, Trapo, Plumero, Recogedor, Cera, Bayeta, Cubo, Lejía, Sacudir]
+  - id: palabras-antiguas
+    title: "Palabras que ya casi no se oyen"
+    intro: "Palabras que usaban nuestros mayores y que hoy hacen sonreír al recordarlas."
+    words: [Alcoba, Gabán, Pelliza, Zagal, Mozo, Mocita, Fonda, Rebotica, Calzones, Barbián, Mequetrefe, Gañán, Pardillo, Pimpollo, Zascandil]
+  - id: botica
+    title: "La botica"
+    intro: "Frascos de cristal en las estanterías, el mortero del boticario y aquel olor tan especial al entrar."
+    words: [Boticario, Farmacia, Receta, Jarabe, Pastillas, Pomada, Vendas, Algodón, Termómetro, Mortero, Balanza, Frascos, Sobres, Ungüento, Practicante]
+  - id: paseo
+    title: "El paseo del domingo"
+    intro: "Ropa de domingo, la banda tocando en el quiosco y un barquillo para cada niño."
+    words: [Paseo, Alameda, Banda, Quiosco, Barquillo, Globo, Vermú, Traje, Domingo, Misa, Novios, Columpio, Estanque, Barca, Patos]
+  - id: familia
+    title: "La familia"
+    intro: "Para terminar, lo más importante: la familia, la de antes y la de ahora."
+    words: [Abuelo, Abuela, Nieto, Nieta, Padre, Madre, Hermano, Tío, Prima, Cuñado, Suegra, Yerno, Nuera, Padrino, Sobrino]
