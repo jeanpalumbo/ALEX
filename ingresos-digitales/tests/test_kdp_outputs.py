@@ -10,16 +10,14 @@ from plan_c_kdp.interior.builder import (BOTTOM_IN, INSIDE_IN, OUTSIDE_IN, TOP_I
 from plan_c_kdp.listing.builder import KEYWORDS, title_and_subtitle, write_listing
 from plan_c_kdp.themes import THEMES_DIR, load_book
 
-BOOK = load_book(THEMES_DIR / "vol1_recuerdos_de_espana.yaml")
-
-
-@pytest.fixture(scope="module")
-def built(tmp_path_factory):
-    out = tmp_path_factory.mktemp("vol1")
-    pages, puzzles = build_interior(BOOK, out / "interior.pdf")
-    build_cover(BOOK, pages, out / "cover.pdf")
-    write_listing(BOOK, pages, out / "listing.md")
-    return out, pages, puzzles
+@pytest.fixture(scope="module", params=sorted(THEMES_DIR.glob("*.yaml")), ids=lambda p: p.stem)
+def built(request, tmp_path_factory):
+    book = load_book(request.param)
+    out = tmp_path_factory.mktemp(book.id)
+    pages, puzzles = build_interior(book, out / "interior.pdf")
+    build_cover(book, pages, out / "cover.pdf")
+    write_listing(book, pages, out / "listing.md")
+    return out, pages, puzzles, book
 
 
 def _fonts_embedded(reader: PdfReader) -> set[str]:
@@ -38,7 +36,7 @@ def _fonts_embedded(reader: PdfReader) -> set[str]:
 
 
 def test_interior_page_size_count_and_fonts(built):
-    out, pages, puzzles = built
+    out, pages, puzzles, _ = built
     reader = PdfReader(out / "interior.pdf")
     assert len(reader.pages) == pages
     assert pages % 2 == 0 and 24 <= pages <= 590  # B&W 8.5x11 white paper range
@@ -50,7 +48,7 @@ def test_interior_page_size_count_and_fonts(built):
 
 
 def test_each_puzzle_page_shows_its_title_and_words(built):
-    out, _, puzzles = built
+    out, _, puzzles, _ = built
     reader = PdfReader(out / "interior.pdf")
     for bp in puzzles[:5] + puzzles[-5:]:
         text = reader.pages[bp.page - 1].extract_text()
@@ -60,7 +58,7 @@ def test_each_puzzle_page_shows_its_title_and_words(built):
 
 
 def test_cover_size_matches_kdp_formula_and_is_cmyk_only(built):
-    out, pages, _ = built
+    out, pages, _, _ = built
     reader = PdfReader(out / "cover.pdf")
     assert len(reader.pages) == 1
     w_in, h_in = kdp.cover_size_in(pages)
@@ -73,10 +71,11 @@ def test_cover_size_matches_kdp_formula_and_is_cmyk_only(built):
 
 
 def test_listing_fits_kdp_limits(built):
-    out, _, _ = built
-    title, subtitle = title_and_subtitle(BOOK)
+    out, _, _, book = built
+    title, subtitle = title_and_subtitle(book)
     assert len(title) + len(subtitle) <= 200
-    assert len(KEYWORDS) == 7 and all(len(k) <= 50 for k in KEYWORDS)
+    kw = book.keywords or KEYWORDS
+    assert len(kw) == 7 and all(len(k) <= 50 for k in kw)
     text = (out / "listing.md").read_text(encoding="utf-8")
     assert "Declaración de IA" in text and title in text
 

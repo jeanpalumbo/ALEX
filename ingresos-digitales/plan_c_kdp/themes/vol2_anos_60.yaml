@@ -1,0 +1,425 @@
+# Vol. 2 "Recuerdos de los años 60" — themes for review by Piero.
+# Same rules as Vol. 1: single words, no lyrics, no brands. Distinct themes from Vol. 1
+# so KDP does not see the two books as near-duplicates.
+book:
+  id: vol2
+  title: "Sopa de letras para mayores"
+  subtitle: "Recuerdos de los años 60"
+  volume: 2
+  author: "Piero Palumbo"
+  year: 2026
+  cover_word: "SESENTA"
+  palette: "teal"
+  blurb: >-
+    {n} sopas de letras en letra muy grande para volver a los años sesenta: la llegada
+    del turismo, los que se fueron a trabajar a Europa, el piso nuevo, la música ye-yé,
+    el hombre en la Luna, la tele en blanco y negro y mucho más.
+  keywords:
+    - "sopa de letras años 60 letra grande"
+    - "pasatiempos para mayores letra grande"
+    - "regalo para abuelos nostalgia"
+    - "libro de actividades para ancianos"
+    - "recuerdos de los años sesenta en España"
+    - "sopas de letras para adultos mayores"
+    - "entretenimiento para la tercera edad"
+themes:
+  - id: turismo
+    title: "Llega el turismo"
+    intro: "De pronto las playas se llenaron de visitantes de toda Europa y el verano ya nunca volvió a ser igual."
+    words: [Turista, Hotel, Playa, Bikini, Crema, Bronceado, Divisas, Pasaporte, Folleto, Excursión, Guía, Autocar, Postales, Verano, Idiomas]
+  - id: hotel-costa
+    title: "El hotel de la costa"
+    intro: "Ascensores, piscinas y terrazas con vistas al mar: los primeros hoteles parecían sacados de una película."
+    words: [Recepción, Botones, Piscina, Terraza, Llave, Ascensor, Huésped, Conserje, Habitación, Balcón, Toallas, Propina, Reserva, Hamaca, Comedor]
+  - id: souvenirs
+    title: "Recuerdos para turistas"
+    intro: "Los turistas volvían a casa cargados de recuerdos de España, cada uno más típico que el anterior."
+    words: [Abanico, Castañuelas, Sombrero, Muñeca, Toro, Llavero, Bota, Porrón, Pandereta, Mantilla, Peineta, Cerámica, Postal, Botijo, Cartel]
+  - id: costas
+    title: "Las costas de España"
+    intro: "Brava, Dorada, Blanca, del Sol: los nombres de nuestras costas se hicieron famosos en media Europa."
+    words: [Brava, Dorada, Blanca, Azahar, Cálida, Tropical, Luz, Sol, Verde, Maresme, Garraf, Rías, Vasca, Cantábrica, Baleares]
+  - id: visitantes
+    title: "Visitantes de toda Europa"
+    intro: "En la playa se oían idiomas que nunca habíamos escuchado, y los niños aprendían a decir hola en todos ellos."
+    words: [Inglés, Francés, Alemán, Sueco, Holandés, Danés, Noruego, Italiano, Belga, Finlandés, Suizo, Irlandés, Escocés, Austriaco, Portugués]
+  - id: emigrar
+    title: "Emigrar a Europa"
+    intro: "Muchos hicieron la maleta para trabajar fuera, con la familia en el corazón y la ilusión de volver."
+    words: [Maleta, Cartón, Pasaporte, Contrato, Fábrica, Andén, Despedida, Carta, Giro, Ahorros, Añoranza, Fotografía, Idioma, Regreso, Frontera]
+  - id: ciudades-emigracion
+    title: "Ciudades lejanas"
+    intro: "Nombres que sonaban lejísimos y que, para muchas familias, se convirtieron en una segunda casa."
+    words: [Fráncfort, Múnich, Ginebra, Zúrich, París, Bruselas, Colonia, Hamburgo, Stuttgart, Lyon, Lausana, Berna, Düsseldorf, Ámsterdam, Londres]
+  - id: pueblo-ciudad
+    title: "Del pueblo a la ciudad"
+    intro: "Los pueblos se vaciaban y las ciudades crecían: llegaba gente nueva cada día buscando trabajo y futuro."
+    words: [Éxodo, Capital, Barrio, Pensión, Realquilado, Trabajo, Autobús, Metro, Tranvía, Fábrica, Oficina, Pluriempleo, Andamio, Portería, Ciudad]
+  - id: piso-nuevo
+    title: "El piso nuevo"
+    intro: "Estrenar piso era un acontecimiento: azulejos relucientes, ascensor y una terraza para tender la ropa."
+    words: [Piso, Entrada, Letras, Ascensor, Terraza, Cocina, Azulejos, Baldosas, Muebles, Tresillo, Lámpara, Cortinas, Mudanza, Vecinos, Llaves]
+  - id: salon
+    title: "El salón de casa"
+    intro: "El salón se reservaba para las visitas, con el tresillo bien cuidado y las figuritas en la vitrina."
+    words: [Tresillo, Aparador, Vitrina, Sofá, Butaca, Tapete, Figuritas, Mantelería, Enciclopedia, Lámpara, Alfombra, Cuadro, Jarrón, Bargueño, Televisor]
+  - id: obra
+    title: "La obra"
+    intro: "Grúas por todas partes: se levantaban barrios enteros en muy poco tiempo, ladrillo a ladrillo."
+    words: [Grúa, Andamio, Ladrillo, Cemento, Hormigón, Albañil, Peón, Capataz, Paleta, Carretilla, Plomada, Nivel, Yeso, Arena, Tabique]
+  - id: fabrica
+    title: "La fábrica"
+    intro: "La sirena marcaba los turnos y el mono azul se convirtió en el uniforme de miles de trabajadores."
+    words: [Obrero, Turno, Sirena, Mono, Capataz, Cadena, Montaje, Tornero, Soldador, Nómina, Taquilla, Comedor, Fichar, Taller, Horas]
+  - id: oficina
+    title: "En la oficina"
+    intro: "Carpetas, sellos de goma y el repiqueteo de las máquinas de escribir llenaban las oficinas de entonces."
+    words: [Mecanógrafa, Taquígrafa, Carpeta, Archivo, Grapadora, Sello, Tampón, Papel, Calco, Secretaria, Jefe, Despacho, Teléfono, Expediente, Firma]
+  - id: mecanografia
+    title: "Clases de mecanografía"
+    intro: "En la academia se aprendía a escribir a máquina sin mirar las teclas, contando pulsaciones por minuto."
+    words: [Teclas, Carro, Cinta, Rodillo, Margen, Tabulador, Mayúsculas, Folio, Copia, Borrón, Academia, Dactilografía, Velocidad, Pulsaciones, Timbre]
+  - id: bachillerato
+    title: "El bachillerato"
+    intro: "Latín, reválidas y boletines de notas: estudiar el bachillerato era un orgullo para toda la familia."
+    words: [Reválida, Bachiller, Examen, Notas, Matrícula, Latín, Griego, Química, Física, Instituto, Interno, Boletín, Suspenso, Aprobado, Septiembre]
+  - id: heroes
+    title: "Héroes de aventuras"
+    intro: "Piratas, mosqueteros y exploradores llenaban los tebeos, las novelas y los juegos de cada tarde."
+    words: [Pirata, Mosquetero, Caballero, Explorador, Corsario, Vaquero, Detective, Aviador, Astronauta, Capitán, Espadachín, Arquero, Jinete, Marinero, Guerrero]
+  - id: cromos
+    title: "Álbumes de cromos"
+    intro: "¿Lo tienes? ¿Lo tienes? Las colecciones de cromos se completaban a base de cambios en el recreo."
+    words: [Álbum, Sobre, Repetidos, Cambio, Pegamento, Colección, Futbolistas, Animales, Banderas, Coches, Quiosco, Página, Completo, Premio, Estampa]
+  - id: carrera-espacial
+    title: "La carrera espacial"
+    intro: "Satélites, cohetes y cosmonautas: el espacio dejó de ser cosa de cuentos y apareció en los periódicos."
+    words: [Satélite, Sputnik, Laika, Gagarin, Cápsula, Cosmonauta, Lanzamiento, Antena, Galaxia, Planeta, Telescopio, Marte, Venus, Cometa, Órbita]
+  - id: luna
+    title: "El hombre en la Luna"
+    intro: "En julio de 1969, millones de personas se quedaron despiertas frente al televisor para ver pisar la Luna."
+    words: [Apolo, Cohete, Astronauta, Módulo, Huella, Cráter, Despegue, Alunizaje, Armstrong, Aldrin, Collins, Bandera, Casco, Escafandra, Retransmisión]
+  - id: espias
+    title: "Agentes secretos"
+    intro: "Las películas de espías estaban de moda: gabardinas, maletines y mensajes en clave."
+    words: [Espía, Agente, Gabardina, Microfilm, Contraseña, Maletín, Prismáticos, Código, Misión, Sospechoso, Frontera, Secreto, Mensaje, Sombrero, Persecución]
+  - id: bailes-60
+    title: "Bailes de los sesenta"
+    intro: "Del twist al madison, cada verano traía un baile nuevo que había que aprender en la verbena."
+    words: [Twist, Madison, Yenka, Shake, Surf, Bossanova, Chachachá, Mambo, Rock, Bolero, Calipso, Bamba, Ska, Pasodoble, Rumba]
+  - id: conjunto
+    title: "El conjunto musical"
+    intro: "Guitarras eléctricas, batería y un órgano: en cada barrio había un conjunto ensayando en algún garaje."
+    words: [Batería, Bajo, Guitarra, Órgano, Teclado, Micrófono, Amplificador, Altavoz, Platillos, Baquetas, Púa, Cuerdas, Saxofón, Maracas, Ensayo]
+  - id: yeye
+    title: "La música ye-yé"
+    intro: "Flequillos, minifaldas y canciones alegres: la juventud de los sesenta tenía su propia música."
+    words: [Yeyé, Flequillo, Minifalda, Botas, Melena, Conjunto, Festival, Tocadiscos, Single, Guateque, Fans, Autógrafo, Éxito, Gira, Juventud]
+  - id: festivales
+    title: "Festivales de la canción"
+    intro: "Toda la familia frente al televisor, votando en casa a su canción favorita del festival."
+    words: [Festival, Jurado, Votos, Puntos, Escenario, Orquesta, Director, Canción, Intérprete, Ganadora, Eurovisión, Benidorm, Trofeo, Micrófono, Aplausos]
+  - id: concursos
+    title: "Concursos de la tele"
+    intro: "Preguntas, pruebas y premios: los concursos reunían a toda la familia delante de la pantalla."
+    words: [Concursante, Presentador, Premio, Pregunta, Respuesta, Pulsador, Público, Plató, Cámara, Azafata, Sorteo, Finalista, Ganador, Regalo, Prueba]
+  - id: tele-byn
+    title: "La tele en blanco y negro"
+    intro: "Una antena en el tejado, la carta de ajuste y los vecinos que venían a casa a ver la tele."
+    words: [Antena, Ajuste, Telediario, Locutora, Cortinilla, Interferencias, Canal, Programación, Teleclub, Episodio, Serial, Dibujos, Vecinos, Pantalla, Mando]
+  - id: futbol-60
+    title: "El fútbol de los sesenta"
+    intro: "Extremos rápidos, botas de cuero y la quiniela de los domingos: el fútbol se vivía por la radio."
+    words: [Copa, Europa, Liga, Estadio, Delantero, Extremo, Interior, Medio, Defensa, Portero, Balón, Botas, Quiniela, Gol, Campeón]
+  - id: eurocopa-64
+    title: "La Eurocopa del 64"
+    intro: "En 1964 la selección española ganó su primera Eurocopa y medio país salió a celebrarlo a la calle."
+    words: [Eurocopa, Final, Marcelino, Cabezazo, Selección, Campeones, Trofeo, Afición, Bufanda, Banderas, Himno, Radio, Celebración, Rival, Junio]
+  - id: ciclismo
+    title: "Etapas de montaña"
+    intro: "Los grandes puertos de montaña y las escapadas legendarias se seguían con el oído pegado al transistor."
+    words: [Ciclista, Etapa, Puerto, Montaña, Pelotón, Maillot, Escapada, Meta, Sprint, Gregario, Bicicleta, Dorsal, Cronómetro, Llegada, Caravana]
+  - id: baloncesto
+    title: "Baloncesto"
+    intro: "Las canchas al aire libre se llenaban de chavales que soñaban con encestar como los mayores."
+    words: [Canasta, Aro, Tablero, Rebote, Pívot, Base, Alero, Tapón, Falta, Tiempo, Cancha, Árbitro, Pase, Marcador, Partido]
+  - id: motos
+    title: "Motos y motocarros"
+    intro: "La moto era la libertad: con ella se iba al trabajo entre semana y de excursión los domingos."
+    words: [Gasolina, Casco, Gafas, Sidecar, Manillar, Pedal, Bujía, Carburador, Escape, Sillín, Rueda, Faro, Bocina, Tubo, Motorista]
+  - id: gasolinera
+    title: "La gasolinera de carretera"
+    intro: "Una parada para llenar el depósito, revisar el aceite y tomar un bocadillo antes de seguir viaje."
+    words: [Surtidor, Gasolinero, Depósito, Aceite, Agua, Ruedas, Presión, Mapa, Carretera, Kilómetro, Parada, Camionero, Venta, Merendero, Curvas]
+  - id: carne
+    title: "El carné de conducir"
+    intro: "Sacarse el carné era todo un logro: la autoescuela, el examen teórico y los nervios del práctico."
+    words: [Autoescuela, Examen, Teórico, Práctico, Profesor, Señal, Semáforo, Glorieta, Marcha, Embrague, Freno, Volante, Aparcar, Retrovisor, Carné]
+  - id: autocar
+    title: "De excursión en autocar"
+    intro: "Canciones durante todo el viaje, la merienda en la cesta y alguno que siempre se mareaba."
+    words: [Autocar, Excursión, Chófer, Asiento, Ventanilla, Parada, Merienda, Canciones, Mareo, Cesta, Bocadillo, Guía, Equipaje, Destino, Regreso]
+  - id: moda-ella
+    title: "Moda de ellas"
+    intro: "La minifalda causó sensación, y no había chica que no soñara con unas botas altas."
+    words: [Minifalda, Botas, Medias, Tacones, Bolso, Gafas, Pañuelo, Diadema, Laca, Moño, Rímel, Carmín, Collar, Vestido, Abrigo]
+  - id: moda-el
+    title: "Moda de ellos"
+    intro: "Traje para los domingos, corbata estrecha y el pelo bien peinado con brillantina."
+    words: [Traje, Corbata, Chaqueta, Pantalón, Camisa, Gemelos, Brillantina, Sombrero, Gabardina, Tirantes, Chaleco, Mocasines, Patillas, Tupé, Pañuelo]
+  - id: peluqueria
+    title: "La peluquería de señoras"
+    intro: "Rulos, secadores de casco y revistas: la peluquería era el mejor lugar para enterarse de todo."
+    words: [Rulos, Secador, Laca, Cardado, Moño, Permanente, Tinte, Horquillas, Redecilla, Peine, Cepillo, Peluquera, Revista, Champú, Mechas]
+  - id: cocina-moderna
+    title: "La cocina moderna"
+    intro: "Llegaron la formica, la bombona de butano y la olla exprés: cocinar ya no era lo mismo."
+    words: [Formica, Nevera, Butano, Bombona, Fogones, Olla, Exprés, Batidora, Tostadora, Azulejos, Fregadero, Grifo, Armario, Extractor, Termo]
+  - id: almacenes
+    title: "Los grandes almacenes"
+    intro: "Escaleras mecánicas, escaparates iluminados y las rebajas: ir a los almacenes era una excursión."
+    words: [Almacenes, Escaparate, Rebajas, Dependienta, Probador, Escalera, Caja, Paquete, Envoltorio, Ofertas, Planta, Sección, Juguetería, Perfumería, Cafetería]
+  - id: plazos
+    title: "Comprar a plazos"
+    intro: "La tele, la nevera o el coche se pagaban poco a poco, con letras que se apuntaban en la libreta."
+    words: [Letras, Plazos, Cuotas, Entrada, Recibo, Firma, Cobrador, Banco, Ahorro, Libreta, Interés, Factura, Vencimiento, Pagaré, Cartilla]
+  - id: generos-cine
+    title: "Cine para todos los gustos"
+    intro: "Musicales, comedias, aventuras y películas de romanos: cada semana había estreno en el cine del barrio."
+    words: [Musical, Comedia, Drama, Péplum, Espionaje, Western, Romance, Aventuras, Suspense, Terror, Bélica, Histórica, Policíaca, Fantasía, Animación]
+  - id: rodaje
+    title: "Detrás de la cámara"
+    intro: "Galanes, actrices y extras: cuando llegaba un rodaje al pueblo, todo el mundo quería salir en la película."
+    words: [Galán, Actriz, Estrella, Doble, Extra, Director, Guion, Rodaje, Plató, Claqueta, Decorado, Maquillaje, Vestuario, Productor, Estreno]
+  - id: fotonovelas
+    title: "Revistas y fotonovelas"
+    intro: "Las fotonovelas pasaban de mano en mano, y el consultorio sentimental se leía con mucha atención."
+    words: [Fotonovela, Revista, Portada, Consultorio, Horóscopo, Crucigrama, Receta, Patrón, Corazón, Romance, Galán, Suscripción, Quiosco, Ejemplar, Lectora]
+  - id: pasatiempos
+    title: "Pasatiempos de siempre"
+    intro: "Crucigramas, jeroglíficos y acertijos: los pasatiempos del periódico eran el reto de cada día."
+    words: [Crucigrama, Jeroglífico, Damero, Acertijo, Adivinanza, Laberinto, Diferencias, Charada, Autodefinido, Dominó, Solitario, Rompecabezas, Puzle, Enigma, Lápiz]
+  - id: juegos-chicas
+    title: "Juegos en el patio"
+    intro: "Comba, goma y canciones de corro: el patio del colegio era una fiesta a la hora del recreo."
+    words: [Comba, Goma, Rayuela, Corro, Tejo, Prendas, Cuerda, Muñecas, Cocinitas, Pañuelo, Diábolo, Palmas, Canciones, Escondite, Pelota]
+  - id: juegos-chicos
+    title: "Juegos en el descampado"
+    intro: "Partidos con porterías de piedras, carreras de chapas y tardes enteras sin mirar el reloj."
+    words: [Chapas, Canicas, Peonza, Tirachinas, Fútbol, Churro, Pídola, Policías, Ladrones, Carrera, Aro, Trompo, Balón, Bicicleta, Cometa]
+  - id: campamento
+    title: "Campamentos de verano"
+    intro: "Tiendas de campaña, canciones junto al fuego y amistades que duraban todo el año."
+    words: [Colonias, Campamento, Tienda, Mochila, Linterna, Hoguera, Excursión, Montaña, Río, Bañador, Cantimplora, Brújula, Monitor, Marcha, Fuego]
+  - id: campo-cambia
+    title: "El campo cambia"
+    intro: "Llegaron los tractores y las cosechadoras, y el trabajo que antes llevaba semanas se hacía en días."
+    words: [Tractor, Cosechadora, Remolque, Abono, Regadío, Pantano, Canal, Acequia, Silo, Granja, Cooperativa, Pienso, Riego, Semillas, Maquinaria]
+  - id: pantanos
+    title: "Pantanos y presas"
+    intro: "Se inauguraban pantanos por toda España, y algunos pueblos quedaron para siempre bajo el agua."
+    words: [Pantano, Presa, Embalse, Compuerta, Central, Turbina, Electricidad, Agua, Inauguración, Hidráulica, Caudal, Orilla, Muro, Cauce, Pueblo]
+  - id: trenes
+    title: "Trenes de los sesenta"
+    intro: "Trenes de vapor que todavía echaban humo y los primeros diésel: viajar en tren seguía siendo una aventura."
+    words: [Ferrobús, Expreso, Correo, Rápido, Vapor, Diésel, Factor, Guardagujas, Locomotora, Billete, Estación, Litera, Silbato, Maquinista, Carbonilla]
+  - id: aeropuerto
+    title: "El primer vuelo"
+    intro: "Subir a un avión era un lujo: la gente se vestía de domingo para viajar y aplaudía al aterrizar."
+    words: [Avión, Azafata, Piloto, Pista, Despegue, Aterrizaje, Pasaje, Embarque, Aduana, Maleta, Ventanilla, Hélice, Reactor, Torre, Cinturón]
+  - id: cine-barrio
+    title: "El cine de barrio"
+    intro: "Sesión continua, dos películas por una entrada y el acomodador con su linterna."
+    words: [Sesión, Continua, Programa, Doble, Gallinero, Acomodador, Taquilla, Butaca, Descanso, Noticiario, Linterna, Pipas, Pantalla, Película, Cola]
+  - id: cafeteria
+    title: "La cafetería moderna"
+    intro: "Taburetes altos, barra de formica y batidos de colores: las cafeterías eran lo más moderno de la ciudad."
+    words: [Cafetería, Barra, Taburete, Máquina, Cortado, Batido, Granizado, Sifón, Gaseosa, Tónica, Camarero, Bandeja, Servilleta, Terraza, Infusión]
+  - id: bebidas
+    title: "Refrescos de entonces"
+    intro: "La gaseosa con vino, la horchata en verano y la zarzaparrilla que solo se tomaba en las fiestas."
+    words: [Gaseosa, Sifón, Horchata, Zarzaparrilla, Limonada, Naranjada, Granizado, Mosto, Cacao, Batido, Tónica, Bitter, Agua, Zumo, Leche]
+  - id: bolleria
+    title: "La merienda de la pastelería"
+    intro: "Una palmera o una ensaimada de la pastelería eran el mejor premio después de una semana de colegio."
+    words: [Chocolate, Membrillo, Mantequilla, Galletas, Magdalenas, Sobao, Ensaimada, Suizo, Palmera, Caracola, Rosquilla, Napolitana, Bizcocho, Bollo, Merienda]
+  - id: comida-domingo
+    title: "La comida del domingo"
+    intro: "La paella o el pollo asado, el mantel bueno y una sobremesa que se alargaba hasta la merienda."
+    words: [Paella, Pollo, Asado, Ensaladilla, Flan, Natillas, Mantel, Sobremesa, Copa, Puro, Postre, Familia, Abuela, Domingo, Brindis]
+  - id: aprovechamiento
+    title: "Cocina de aprovechamiento"
+    intro: "En casa no se tiraba nada: con lo que sobraba se hacían las croquetas más ricas del mundo."
+    words: [Croquetas, Ropavieja, Migas, Torrijas, Sopa, Picadillo, Pisto, Rebozado, Empanadilla, Caldo, Puchero, Gachas, Tortilla, Albóndigas, Relleno]
+  - id: pescados
+    title: "Pescados de la lonja"
+    intro: "Los viernes tocaba pescado, y en la pescadería se pedía con nombre y apellido."
+    words: [Merluza, Sardina, Boquerón, Bacalao, Besugo, Lenguado, Rape, Bonito, Atún, Jurel, Caballa, Dorada, Lubina, Pescadilla, Gallo]
+  - id: carniceria
+    title: "La carnicería"
+    intro: "El carnicero conocía a cada clienta y sabía el filete que le gustaba a cada familia."
+    words: [Filete, Chuleta, Costilla, Solomillo, Lomo, Panceta, Morcilla, Chorizo, Hígado, Callos, Pollo, Cordero, Ternera, Picada, Carnicero]
+  - id: noviazgo
+    title: "El noviazgo"
+    intro: "Paseos con carabina, cartas escondidas y la pedida de mano: los noviazgos de antes iban despacio."
+    words: [Novios, Pretendiente, Serenata, Ronda, Paseo, Cine, Baile, Pedida, Anillo, Suegros, Cita, Piropo, Compromiso, Carabina, Rubor]
+  - id: viaje-novios
+    title: "El viaje de novios"
+    intro: "Para muchos fue el primer viaje de su vida: unos días en las islas o en la costa y un montón de fotos."
+    words: [Luna, Miel, Viaje, Hotel, Palma, Mallorca, Canarias, Postal, Fotos, Maleta, Recuerdo, Playa, Barco, Avión, Romántico]
+  - id: familia-numerosa
+    title: "Familias numerosas"
+    intro: "Casas llenas de hermanos, literas en cada cuarto y ropa que pasaba del mayor al pequeño."
+    words: [Hermanos, Mayor, Pequeño, Mellizos, Gemelos, Primos, Literas, Heredada, Cena, Mesa, Turnos, Carné, Jaleo, Cariño, Abuelos]
+  - id: medicina
+    title: "Medicina de entonces"
+    intro: "El practicante con su jeringuilla, las vacunas en el colegio y el sarampión que pasaba por toda la familia."
+    words: [Practicante, Inyección, Jeringuilla, Vacuna, Ambulatorio, Receta, Termómetro, Sarampión, Varicela, Paperas, Jarabe, Pastilla, Vendaje, Médico, Reposo]
+  - id: nombres-60
+    title: "Nombres de los sesenta"
+    intro: "En cada clase había varias Mercedes y varios Javieres: los nombres también tenían su época."
+    words: [Begoña, Montserrat, Inmaculada, Rosario, Mercedes, Josefina, Milagros, Ascensión, Jesús, Javier, Fernando, Ángel, Alberto, Miguel, Agustín]
+  - id: profesiones-nuevas
+    title: "Profesiones que llegaban"
+    intro: "Antenistas, delineantes, azafatas: con la modernidad llegaron oficios que antes nadie conocía."
+    words: [Electricista, Fontanero, Mecánico, Técnico, Antenista, Delineante, Perito, Aparejador, Azafata, Secretaria, Botones, Telefonista, Viajante, Representante, Contable]
+  - id: viajante
+    title: "El viajante de comercio"
+    intro: "Con su maletín de muestras recorría provincias enteras, de pensión en pensión y de cliente en cliente."
+    words: [Muestrario, Catálogo, Pedido, Comisión, Cliente, Maletín, Ruta, Pensión, Fonda, Factura, Tarjeta, Corbata, Provincia, Kilómetros, Encargo]
+  - id: inventos
+    title: "Aparatos modernos"
+    intro: "Cada pocos meses aparecía un invento nuevo que prometía hacer la vida más fácil."
+    words: [Transistor, Televisor, Satélite, Fotocopiadora, Casete, Calculadora, Ordenador, Lavavajillas, Tocadiscos, Magnetófono, Batidora, Secador, Afeitadora, Tostadora, Frigorífico]
+  - id: domingo
+    title: "Diversiones del domingo"
+    intro: "Misa, vermú, cine o fútbol: el domingo era el único día libre y había que aprovecharlo bien."
+    words: [Paseo, Misa, Vermú, Cine, Fútbol, Merendero, Romería, Tómbola, Baile, Visita, Pastelería, Columpios, Parque, Barca, Café]
+  - id: atracciones
+    title: "El parque de atracciones"
+    intro: "La noria, la montaña rusa y el tren de la bruja: una tarde en las atracciones era el mejor regalo."
+    words: [Noria, Montaña, Rusa, Choque, Tiovivo, Algodón, Barcas, Tren, Fantasma, Laberinto, Espejos, Tómbola, Taquilla, Entrada, Columpio]
+  - id: circo
+    title: "Llega el circo"
+    intro: "Cuando la carpa se levantaba en las afueras, los niños no hablaban de otra cosa en toda la semana."
+    words: [Payaso, Trapecio, Malabarista, Domador, Elefante, León, Carpa, Pista, Equilibrista, Mago, Acróbata, Funambulista, Redoble, Foca, Caravana]
+  - id: titeres
+    title: "Títeres y marionetas"
+    intro: "El teatrillo de títeres en la plaza: los niños avisaban a gritos cuando aparecía el malo."
+    words: [Títere, Marioneta, Guiñol, Teatrillo, Cachiporra, Hilos, Muñeco, Ventrílocuo, Telón, Función, Risas, Escenario, Bruja, Diablo, Princesa]
+  - id: revista
+    title: "Teatro de revista"
+    intro: "Plumas, lentejuelas y una gran escalera: las vedettes y los cómicos llenaban los teatros cada noche."
+    words: [Vedette, Revista, Plumas, Escalera, Corista, Telón, Butacas, Palco, Apuntador, Ensayo, Estreno, Compañía, Cómico, Zarzuela, Aplausos]
+  - id: castizo
+    title: "Madrid castizo"
+    intro: "Chulapos, mantones y organillos: las fiestas de barrio de Madrid mantenían vivas las tradiciones de siempre."
+    words: [Chulapo, Chulapa, Mantón, Organillo, Gorra, Clavel, Chotis, Barquillero, Pradera, Rosquillas, Isidro, Verbena, Parpusa, Corrala, Castizo]
+  - id: trajes-regionales
+    title: "Trajes regionales"
+    intro: "En cada fiesta salían del armario los trajes típicos, guardados con mimo de un año para otro."
+    words: [Mantón, Peineta, Faralaes, Cordobés, Boina, Pañuelo, Refajo, Alpargata, Fajín, Chaleco, Montera, Zaragüelles, Mantilla, Sombrero, Delantal]
+  - id: tocador
+    title: "El tocador"
+    intro: "El frasco de colonia, la polvera y el peine en su sitio: el tocador era un pequeño rincón de lujo."
+    words: [Colonia, Jabón, Talco, Crema, Brillantina, Desodorante, Polvos, Espejo, Peine, Cepillo, Champú, Laca, Perfume, Esponja, Toalla]
+  - id: cartera-colegio
+    title: "La cartera del colegio"
+    intro: "La cartera de cuero, el pizarrín y el compás nuevo: el primer día de clase olía a material estrenado."
+    words: [Cartera, Plumier, Pizarrín, Pluma, Tintero, Lápiz, Goma, Regla, Compás, Transportador, Escuadra, Cartabón, Cuaderno, Libro, Babi]
+  - id: europa
+    title: "Países de Europa"
+    intro: "Muchos los conocimos por las cartas de familiares emigrantes y por las postales de los turistas."
+    words: [Francia, Italia, Alemania, Suiza, Bélgica, Holanda, Austria, Suecia, Noruega, Dinamarca, Portugal, Grecia, Irlanda, Finlandia, Inglaterra]
+  - id: capitales
+    title: "Capitales del mundo"
+    intro: "Ciudades que aprendimos en el mapa de la escuela y que algunos llegaron a visitar con los años."
+    words: [Roma, París, Londres, Lisboa, Atenas, Berlín, Viena, Moscú, Tokio, Cairo, Lima, Bogotá, Caracas, México, Habana]
+  - id: hispanoamerica
+    title: "Al otro lado del mar"
+    intro: "Muchas familias españolas tienen parientes en América, que se marcharon con una maleta y mucho valor."
+    words: [Argentina, Venezuela, Cuba, México, Uruguay, Chile, Perú, Colombia, Ecuador, Bolivia, Paraguay, Panamá, Honduras, Guatemala, Nicaragua]
+  - id: mares
+    title: "Mares y océanos"
+    intro: "Mares que aparecían en los mapas azules de la escuela y en las historias de marineros."
+    words: [Atlántico, Pacífico, Índico, Mediterráneo, Cantábrico, Báltico, Caribe, Adriático, Egeo, Negro, Rojo, Muerto, Ártico, Jónico, Norte]
+  - id: islas
+    title: "Islas de España"
+    intro: "Mallorca y Canarias se llenaron de turistas, pero cada isla guarda su propio encanto."
+    words: [Mallorca, Menorca, Ibiza, Formentera, Tenerife, Lanzarote, Fuerteventura, Gomera, Hierro, Palma, Cabrera, Tabarca, Arosa, Ons, Graciosa]
+  - id: ciudades
+    title: "Ciudades de España"
+    intro: "Ciudades que crecieron muchísimo en aquellos años, con barrios nuevos donde antes había huertas."
+    words: [Sevilla, Granada, Córdoba, Málaga, Valencia, Bilbao, Oviedo, Santander, Salamanca, Pamplona, Logroño, Valladolid, Albacete, Tarragona, Alicante]
+  - id: zoo
+    title: "Una visita al zoo"
+    intro: "Ver un elefante o una jirafa de verdad era un acontecimiento que se recordaba durante años."
+    words: [León, Tigre, Jirafa, Cebra, Elefante, Hipopótamo, Rinoceronte, Mono, Gorila, Camello, Pingüino, Foca, Loro, Cocodrilo, Avestruz]
+  - id: perros-gatos
+    title: "Perros y gatos"
+    intro: "En casi todas las casas había un perro guardián o un gato que se paseaba por los tejados."
+    words: [Pastor, Galgo, Mastín, Podenco, Caniche, Chucho, Bóxer, Dálmata, Collar, Correa, Ladrido, Cachorro, Siamés, Persa, Bigotes]
+  - id: pajaros-jaula
+    title: "El canario de casa"
+    intro: "La jaula colgada en el balcón y el canario cantando por las mañanas: un sonido que muchos echamos de menos."
+    words: [Canario, Jilguero, Periquito, Loro, Cotorra, Alpiste, Jaula, Comedero, Bebedero, Percha, Trino, Plumas, Nido, Huevo, Pajarero]
+  - id: jubilados
+    title: "En el banco de la plaza"
+    intro: "Los mayores de entonces pasaban la tarde en la plaza, con la boina, el bastón y mucha conversación."
+    words: [Petanca, Dominó, Cartas, Hogar, Tertulia, Paseo, Banco, Periódico, Gafas, Bastón, Boina, Sombra, Plaza, Recuerdos, Nietos]
+  - id: prensa
+    title: "El periódico"
+    intro: "El periódico se compraba cada mañana en el quiosco y se leía de la primera a la última página."
+    words: [Periódico, Titular, Portada, Columna, Editorial, Esquela, Crucigrama, Anuncio, Redactor, Corresponsal, Linotipia, Imprenta, Quiosco, Suplemento, Noticia]
+  - id: peliculas-caseras
+    title: "Fotos y películas caseras"
+    intro: "Las diapositivas proyectadas en la pared del salón eran la mejor forma de enseñar las vacaciones."
+    words: [Cámara, Carrete, Flash, Revelado, Diapositiva, Proyector, Álbum, Retrato, Encuadre, Objetivo, Trípode, Negativo, Copias, Tomavistas, Sábana]
+  - id: piscina
+    title: "La piscina municipal"
+    intro: "El primer chapuzón del verano, el bocadillo envuelto en la toalla y la espera de la digestión."
+    words: [Piscina, Trampolín, Socorrista, Bañador, Gorro, Toalla, Césped, Ducha, Vestuario, Chancletas, Flotador, Cloro, Bocadillo, Tumbona, Zambullida]
+  - id: helados
+    title: "Helados de verano"
+    intro: "El carrito del heladero por la calle y la duda de siempre: ¿cucurucho, polo o corte?"
+    words: [Cucurucho, Polo, Corte, Barquillo, Tarrina, Granizado, Merengada, Turrón, Fresa, Vainilla, Chocolate, Limón, Nata, Carrito, Heladería]
+  - id: navidad-60
+    title: "Navidad y lotería"
+    intro: "Toda España pendiente de la radio el 22 de diciembre, esperando oír su número en el sorteo."
+    words: [Lotería, Gordo, Bombo, Décimo, Participación, Aguinaldo, Cesta, Sidra, Turrón, Uvas, Campanadas, Reloj, Felicitación, Nochevieja, Christmas]
+  - id: juguetes-reyes
+    title: "Juguetes de Reyes"
+    intro: "La carta a los Reyes se escribía con mucho cuidado, pidiendo el juguete que salía en el escaparate."
+    words: [Muñeca, Cocinita, Tren, Bicicleta, Patines, Balón, Disfraz, Futbolín, Puzle, Peluche, Pizarra, Plastilina, Tambor, Caballito, Cuentos]
+  - id: oficios-mar
+    title: "Oficios del mar"
+    intro: "En los pueblos de costa casi todas las familias vivían del mar, en tierra o a bordo."
+    words: [Pescador, Marinero, Patrón, Redero, Armador, Estibador, Farero, Buzo, Calafate, Subastador, Mariscador, Grumete, Contramaestre, Capitán, Timonel]
+  - id: cereales
+    title: "Cereales y legumbres"
+    intro: "Los sacos de la despensa: lo que no faltaba nunca en casa para alimentar a toda la familia."
+    words: [Trigo, Cebada, Avena, Centeno, Maíz, Arroz, Garbanzo, Lenteja, Alubia, Haba, Guisante, Altramuz, Algarroba, Mijo, Soja]
+  - id: tiendas
+    title: "Las tiendas del barrio"
+    intro: "Para cada cosa había una tienda, y en todas te conocían por tu nombre."
+    words: [Mercería, Droguería, Ferretería, Lechería, Carbonería, Panadería, Pescadería, Relojería, Zapatería, Sombrerería, Estanco, Farmacia, Peluquería, Papelería, Ultramarinos]
+  - id: ferreteria
+    title: "La ferretería"
+    intro: "Cajones llenos de tornillos de todos los tamaños y un ferretero que siempre sabía lo que hacía falta."
+    words: [Tornillo, Tuerca, Clavo, Alcayata, Bisagra, Cerradura, Candado, Martillo, Brocha, Pintura, Cuerda, Bombilla, Enchufe, Cable, Escalera]
+  - id: colores
+    title: "Colores"
+    intro: "Los sesenta llenaron de color la ropa, los coches y las casas, después de años de tonos grises."
+    words: [Rojo, Azul, Verde, Amarillo, Naranja, Morado, Rosa, Gris, Marrón, Granate, Turquesa, Beige, Celeste, Ocre, Violeta]
+  - id: cuentas
+    title: "Las cuentas de la escuela"
+    intro: "Sumar, restar y la tabla de multiplicar cantada en voz alta: las cuentas se aprendían para siempre."
+    words: [Sumar, Restar, Multiplicar, Dividir, Ábaco, Docena, Millar, Cero, Mitad, Cuarto, Tercio, Doble, Triple, Cuenta, Resultado]
+  - id: calendario
+    title: "Días y meses"
+    intro: "El calendario de la cocina, con sus santos y sus fiestas, marcaba el ritmo de toda la casa."
+    words: [Lunes, Martes, Miércoles, Jueves, Viernes, Sábado, Domingo, Enero, Febrero, Marzo, Abril, Junio, Julio, Octubre, Diciembre]
+  - id: recuerdos
+    title: "Recuerdos que no se olvidan"
+    intro: "Para terminar, las palabras más bonitas de aquellos años, las que nos acompañan toda la vida."
+    words: [Infancia, Juventud, Amistad, Amor, Familia, Hogar, Barrio, Escuela, Verano, Canción, Abrazo, Sonrisa, Nostalgia, Recuerdo, Ilusión]

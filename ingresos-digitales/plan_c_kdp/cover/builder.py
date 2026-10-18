@@ -22,13 +22,19 @@ from plan_c_kdp.themes import Book
 INCH = kdp.INCH
 
 CREAM = CMYKColor(0.02, 0.06, 0.18, 0.0)
-TERRACOTTA = CMYKColor(0.10, 0.78, 0.85, 0.12)
-MUSTARD = CMYKColor(0.05, 0.28, 0.90, 0.0)
 INK = CMYKColor(0.0, 0.0, 0.0, 1.0)
 DARK = CMYKColor(0.30, 0.70, 0.75, 0.55)   # warm dark brown for body text
 WHITE = CMYKColor(0, 0, 0, 0)
 
-BACK_BLURB = (
+# (main band colour, accent colour) per volume.
+PALETTES = {
+    "terracotta": (CMYKColor(0.10, 0.78, 0.85, 0.12), CMYKColor(0.05, 0.28, 0.90, 0.0)),
+    "teal": (CMYKColor(0.88, 0.25, 0.45, 0.12), CMYKColor(0.0, 0.62, 0.62, 0.0)),
+    "mustard": (CMYKColor(0.05, 0.38, 0.95, 0.05), CMYKColor(0.70, 0.30, 0.10, 0.05)),
+    "plum": (CMYKColor(0.55, 0.85, 0.35, 0.25), CMYKColor(0.05, 0.28, 0.90, 0.0)),
+}
+
+DEFAULT_BLURB = (
     "{n} sopas de letras pensadas para personas mayores, con temas que traen a la "
     "memoria la España de nuestra juventud: los juegos de la calle, la cocina de la "
     "abuela, las verbenas del pueblo, las tardes de radio, la mili, las bodas de antes "
@@ -56,6 +62,7 @@ class Cover:
                         initialFontName=BODY)
         self.c.setTitle(f"{book.title} — {book.subtitle} (cover)")
         self.c.setAuthor(book.author)
+        self.main, self.accent = PALETTES[book.palette]
         # x positions (inches) of the panels, measured from the left bleed edge.
         self.back_x0 = kdp.BLEED_IN
         self.back_x1 = self.back_x0 + kdp.TRIM_W_IN
@@ -85,13 +92,13 @@ class Cover:
         band_h = 3.0
         # Terracotta band across the top of the front panel and the whole spine.
         self.rect_in(self.front_x0, self.height_in - band_h, self.width_in, self.height_in,
-                     TERRACOTTA)
-        self.rect_in(self.back_x1, 0, self.spine_x1, self.height_in, TERRACOTTA)
+                     self.main)
+        self.rect_in(self.back_x1, 0, self.spine_x1, self.height_in, self.main)
         # Thin mustard rule under the band, and on the back panel top.
         self.rect_in(self.front_x0, self.height_in - band_h - 0.12, self.width_in,
-                     self.height_in - band_h, MUSTARD)
-        self.rect_in(0, self.height_in - 0.9, self.back_x1, self.height_in, TERRACOTTA)
-        self.rect_in(0, self.height_in - 1.02, self.back_x1, self.height_in - 0.9, MUSTARD)
+                     self.height_in - band_h, self.accent)
+        self.rect_in(0, self.height_in - 0.9, self.back_x1, self.height_in, self.main)
+        self.rect_in(0, self.height_in - 1.02, self.back_x1, self.height_in - 0.9, self.accent)
 
     def front(self, image: Path | None) -> None:
         cx = (self.front_x0 + self.front_x1) / 2
@@ -103,7 +110,7 @@ class Cover:
 
         subtitle = self.book.subtitle
         sub_size = self.fit_size(subtitle, DISPLAY, 54, usable)
-        self.text_center(subtitle, cx, top - 3.95, DISPLAY, sub_size, TERRACOTTA)
+        self.text_center(subtitle, cx, top - 3.95, DISPLAY, sub_size, self.main)
 
         if image:
             self._front_image(image, cx, top - 4.4, 4.6)
@@ -117,10 +124,10 @@ class Cover:
         self._volume_badge(self.front_x1 - 1.05, self.trim_y0 + 1.3)
 
     def _front_grid(self, cx: float, top: float) -> None:
-        word = "RECUERDOS"
+        word = self.book.cover_word
         cols, rows, cell = len(word), 6, 0.68
         x0 = cx - cols * cell / 2
-        rng = random.Random("cover-grid")
+        rng = random.Random(f"cover-grid:{self.book.id}")
         filler = "AEIOULNRSTCDMPBG"
         letters = [[rng.choice(filler) for _ in range(cols)] for _ in range(rows)]
         word_row = 2
@@ -136,7 +143,7 @@ class Cover:
                 c.roundRect(x + 2, y + 2, cell * INCH - 4, cell * INCH - 4, 5, stroke=1, fill=1)
         # Highlight capsule around the hidden word.
         y_mid = top - (word_row + 0.5) * cell
-        c.setFillColor(MUSTARD)
+        c.setFillColor(self.accent)
         c.roundRect((x0 + 0.06) * INCH, (y_mid - 0.3) * INCH, (cols * cell - 0.12) * INCH,
                     0.6 * INCH, 0.3 * INCH, stroke=0, fill=1)
         for r in range(rows):
@@ -167,7 +174,7 @@ class Cover:
 
     def _volume_badge(self, cx: float, cy: float) -> None:
         c = self.c
-        c.setFillColor(MUSTARD)
+        c.setFillColor(self.accent)
         c.circle(cx * INCH, cy * INCH, 0.62 * INCH, stroke=0, fill=1)
         self.text_center("VOL.", cx, cy + 0.12, BODY_BOLD, 16, INK)
         self.text_center(str(self.book.volume), cx, cy - 0.33, BODY_BOLD, 34, INK)
@@ -197,11 +204,11 @@ class Cover:
         self.text_center("Un regalo lleno de recuerdos", cx, self.trim_y1 - 0.62, BODY_BOLD,
                          26, WHITE)
         y = self.trim_y1 - 1.75
-        y = self._wrapped(BACK_BLURB.format(n=len(self.book.themes)), left, y, width,
+        y = self._wrapped((self.book.blurb or DEFAULT_BLURB).format(n=len(self.book.themes)), left, y, width,
                           BODY, 17, 0.33, DARK)
         y -= 0.3
         for bullet in BACK_BULLETS:
-            self.c.setFillColor(TERRACOTTA)
+            self.c.setFillColor(self.main)
             self.c.circle((left + 0.1) * INCH, (y + 0.08) * INCH, 4.5, stroke=0, fill=1)
             y = self._wrapped(bullet, left + 0.35, y, width - 0.35, BODY_BOLD, 16, 0.31, INK)
             y -= 0.12
@@ -212,7 +219,7 @@ class Cover:
 
     def _theme_sample(self, left: float, top: float, width: float) -> None:
         self.c.setFont(BODY_BOLD, 17)
-        self.c.setFillColor(TERRACOTTA)
+        self.c.setFillColor(self.main)
         self.c.drawString(left * INCH, top * INCH, "Algunos de los temas:")
         titles = [t.title for t in self.book.themes]
         picks = [titles[i] for i in range(0, len(titles), max(1, len(titles) // 12))][:12]

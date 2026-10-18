@@ -50,11 +50,12 @@ def description_html(book: Book) -> str:
 def write_listing(book: Book, pages: int, out_path: Path, paper: str = "white") -> None:
     title, subtitle = title_and_subtitle(book)
     assert len(title) + len(subtitle) <= 200, "KDP limit: title + subtitle <= 200 chars"
-    assert len(KEYWORDS) == 7 and all(len(k) <= 50 for k in KEYWORDS)
+    kw = book.keywords or tuple(KEYWORDS)
+    assert len(kw) == 7 and all(len(k) <= 50 for k in kw), "KDP: 7 keywords, max 50 chars"
     width, height = kdp.cover_size_in(pages, paper)
     cost_eur, cost_usd = kdp.printing_cost(pages, "EUR"), kdp.printing_cost(pages, "USD")
     themes_list = "\n".join(f"{i}. {t.title}" for i, t in enumerate(book.themes, 1))
-    keywords = "\n".join(f"{i}. {k}" for i, k in enumerate(KEYWORDS, 1))
+    keywords = "\n".join(f"{i}. {k}" for i, k in enumerate(kw, 1))
     categories = "\n".join(f"- {c}" for c in CATEGORIES)
     out_path.write_text(f"""# Ficha KDP — {title} (Vol. {book.volume})
 

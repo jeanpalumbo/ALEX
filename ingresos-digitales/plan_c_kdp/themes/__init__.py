@@ -30,6 +30,11 @@ class Book:
     author: str
     year: int
     themes: tuple[Theme, ...]
+    # Optional per-volume settings so each book in the series looks and reads differently.
+    cover_word: str = "RECUERDOS"
+    palette: str = "terracotta"
+    blurb: str = ""
+    keywords: tuple[str, ...] = ()
 
 
 def load_book(path: Path | str) -> Book:
@@ -42,7 +47,9 @@ def load_book(path: Path | str) -> Book:
     )
     book = Book(id=meta["id"], title=meta["title"], subtitle=meta["subtitle"],
                 volume=int(meta["volume"]), author=meta["author"], year=int(meta["year"]),
-                themes=themes)
+                themes=themes, cover_word=meta.get("cover_word", "RECUERDOS"),
+                palette=meta.get("palette", "terracotta"), blurb=meta.get("blurb", "").strip(),
+                keywords=tuple(meta.get("keywords", ())))
     problems = validate(book)
     if problems:
         raise ValueError("invalid theme file:\n  " + "\n  ".join(problems))
