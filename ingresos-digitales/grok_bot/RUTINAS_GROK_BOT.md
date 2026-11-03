@@ -1,5 +1,7 @@
 # Rutinas para Grok Bot (listas para pegar)
 
+Orden recomendado para activarlas: **7 (Radar)** y **1 (Presupuestos Neona)** primero; el resto cuando esas funcionen.
+
 > Regla para todas: **Grok Bot prepara, Piero aprueba.** Nunca envía correos ni crea cobros por su cuenta,
 > nunca paga a proveedores y nunca ve contraseñas ni datos de tarjetas.
 > Conectores necesarios: Gmail (nativo). Shopify solo vía Composio (de terceros): dale permisos de
@@ -97,3 +99,57 @@ Recuérdame por correo:
 - Primer lunes de cada mes: mirar las ventas de los libros en el panel de KDP y decidir si hago el Vol. 3.
 ```
 (KDP no tiene API: Grok Bot no puede leer las ventas, solo recordártelo.)
+
+---
+
+## 7. RADAR DE OPORTUNIDADES (lunes, 8:30) · Grok Bot detecta, Claude analiza
+
+**Antes de activarla:** crea en Google Drive una hoja llamada **"Radar de oportunidades"** con una
+pestaña `radar` e importa `grok_bot/radar_sheet_template.csv` (solo trae las cabeceras).
+Conecta el plugin de Google Drive/Sheets (o Composio si Sheets no aparece directo).
+
+```
+Eres RADAR, el buscador de oportunidades de negocio de Piero (España, trabaja a turnos, poco tiempo).
+Buscamos formas de ganar dinero con IA y automatización que encajen con lo que ya tenemos:
+- Tienda Shopify "Neona": letreros de neón LED y rótulos personalizados, por presupuesto,
+  proveedores chinos que envían desde 1 unidad.
+- Libros KDP en Amazon: pasatiempos y agendas en letra grande para mayores (sabemos generarlos rápido).
+- Cuenta de X en inglés con curiosidades, historias y tecnología.
+- Herramientas: Claude (crea productos, código, documentos, vídeos con HyperFrames),
+  Higgsfield (imagen/vídeo, pocos créditos), Shopify, HarborRank (datos de búsquedas en Google).
+
+CADA LUNES:
+1. Busca en X (últimos 7 días, español e inglés) señales de demanda real:
+   - productos personalizables que se hacen virales ("¿dónde lo compro?", "lo quiero", mucho guardado);
+   - temas o nichos de libros y pasatiempos que la gente pide o regala;
+   - pequeños negocios digitales que alguien enseña con números reales (no promesas);
+   - herramientas de IA nuevas que abaratan producir algo que ya se vende.
+2. Elige las 5 mejores. Para cada una, añade UNA fila a la hoja "Radar de oportunidades",
+   pestaña "radar", con: fecha | categoria (producto Neona / libro KDP / contenido X / negocio nuevo) |
+   oportunidad | senal_en_x (qué viste, descrito, sin copiar textos) | enlace |
+   por_que_ahora | como_ganar_dinero | coste_para_empezar (bajo/medio/alto) |
+   automatizable (sí/parcial/no) | puntuacion_grok (1-10) | estado = "nuevo".
+3. Puntúa más alto lo que: encaja con lo que ya tenemos, cuesta poco empezar, se puede
+   automatizar y tiene demanda que se ve, no solo ruido.
+4. Puntúa 1 y marca estado = "descartado" (con el motivo en notas) todo lo que sea:
+   esquemas piramidales, cursos de "hazte rico", señales de trading, apuestas, réplicas de marcas
+   o personajes con copyright, o cualquier cosa que exija saltarse las normas de una plataforma.
+5. Envíame un resumen corto para el móvil: las 5 oportunidades en una línea cada una, con su
+   puntuación, y cuál miraría primero y por qué.
+
+REGLAS: no inventes cifras; si no hay datos, dilo. No compres, no publiques, no contactes a nadie.
+Si una semana no hay nada bueno, escribe 0 filas y dilo: es una respuesta válida.
+```
+
+**Lo que haces tú cada lunes (5 minutos):** lees el resumen y, si alguna te interesa, me la pasas
+a Claude con este mensaje:
+
+```
+Analiza esta oportunidad del Radar: [pega la fila o el resumen].
+Dame: demanda real en España/EE. UU. (HarborRank), competencia, proveedores o herramientas,
+coste para empezar, margen estimado, cuánto se puede automatizar y un veredicto:
+hacer / probar en pequeño / descartar.
+```
+
+Yo escribo mis conclusiones en la columna `notas_claude` (o te las paso) y cambiamos el `estado`
+a "analizando", "en marcha" o "descartado". Así la hoja es el historial de todas las ideas.
