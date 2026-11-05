@@ -11,3 +11,6 @@ node_modules/
 dist/
 .env.local
 *.key
+
+# memecoin-radar data is shared with Grok Bot and must be tracked
+!memecoin-radar/data/
