@@ -1,0 +1,11 @@
+handle,tipo,followers_aprox_2026-11-05,posts_7d_aprox,freq_dia_aprox,automatico_evidencia,med_min_desde_creacion_muestra,media_ret_1h_muestra,pct_ret1h_le05_muestra,ejemplo_url,notas
+bitecong,bot_scanner_AI,38517,2162,~290-360,DEMOSTRADO_plantilla_AI_Signal_alta_frecuencia,3.0,0.472,0.694,https://x.com/bitecong/status/2118473019765219821,Bio: Ad DM TG + Gem Channel; mediana ret1h 0.225 (upstream n=36)
+SolanaMemesScan,bot_scanner,4322,1055,~130-170,DEMOSTRADO_plantillas_CTO_MIGRATION_BREAKOUT,9.3,0.655,0.475,https://x.com/SolanaMemesScan/status/2118473599879086344,Enlaces a GMGN en posts; med_min 9.3
+AutorunAlert,bot_alert,8121,1063,~120-200,DEMOSTRADO_plantilla_New_token_ANALYSIS_screenshot,6.0,0.815,0.488,https://x.com/AutorunAlert/status/2118473506417414318,Promo Pumpfun deposit $50 get $50 en cada post
+PumpWatch1,bot_filtro_calidad,2376,125,~9-32,DEMOSTRADO_plantilla_PUMP_WATCH_Age_Top10,5.8,1.132,0.462,https://x.com/PumpWatch1/status/2118472906694930678,Menos volumen; reporta Top10 holders y Dex Paid; media sesgada por outliers
+solhousesignals,bot_AI_signals,3099,1561,~200-250,INDICIO_alta_frecuencia_plantilla_MC_Liq,UNKNOWN,UNKNOWN,UNKNOWN,https://x.com/solhousesignals/status/2117683432964702679,Sin backtest propio en call-hunter pasada3 (solo 4 bots)
+SolTokenScan,bot_scanner,3263,1043,~130-170,DEMOSTRADO_plantillas_PAID_DEX_CTO_MIGRATED,UNKNOWN,UNKNOWN,UNKNOWN,https://x.com/SolTokenScan/status/2118473072588017669,Reporta Bundlers/Smart/Age/Holders
+AiSolanaKols,bot_whale_kol,1820,1096,~140-180,DEMOSTRADO_plantilla_PAID_DEXSCREENER_SIGNAL,UNKNOWN,UNKNOWN,UNKNOWN,https://x.com/AiSolanaKols/status/2118470343971254780,Bio: whale-buy alerts; reporta Bundlers
+dex_kolwatcher,bot_dex_paid,8962,UNKNOWN,UNKNOWN,INDICIO_Detect_PAID_DEXScreener,UNKNOWN,UNKNOWN,UNKNOWN,https://x.com/dex_kolwatcher/status/2118360724296908960,Aparece en primeros minutos de WEALTH
+Larpcheckbot,bot_narrativa_check,8722,UNKNOWN,UNKNOWN,INDICIO_respuestas_a_menciones,UNKNOWN,UNKNOWN,UNKNOWN,https://x.com/Larpcheckbot/status/2118349351332331653,No es discovery de CA nuevas; verifica lore
+SenatorLTD,caller_radar_bajo,107,UNKNOWN,UNKNOWN,INDICIO_plantilla_NEW_MEMECOIN_FOUND,UNKNOWN,UNKNOWN,UNKNOWN,https://x.com/SenatorLTD/status/2118468857111171516,Pocos followers; enlaces FASOL/AXIOM en bio

@@ -7,7 +7,7 @@ Estados: PENDIENTE · EN CURSO · HECHO · BLOQUEADO (con motivo).
 ## Grok Bot
 | # | Tarea | Estado | Resultado |
 |---|---|---|---|
-| G1 | Investigación inicial en X (ver `investigacion/ENCARGO_G1.md`) | PENDIENTE | |
+| G1 | Investigación inicial en X (ver `investigacion/ENCARGO_G1.md`) | HECHO (5 nov 2026) | Informe `investigacion/G1_informe.md` + 5 CSV; origen=bots/proyecto; callers llegan tarde; j7tracker=firma deploy; TG-before-X UNKNOWN |
 | G2 | Rutina "Vigía de origen" cada 15 min escribiendo en `data/senales.csv` | PENDIENTE | |
 | G3 | Rutina de resultados cada 6 h (precio a 1 h y 24 h en `data/senales.csv`) | PENDIENTE | |
 | G4 | Ranking semanal de fuentes en `data/callers.csv` (incluidos fracasos) | PENDIENTE | |
