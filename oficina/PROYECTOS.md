@@ -3,7 +3,9 @@
 | Proyecto | Objetivo | Quién | Dónde está el detalle |
 |---|---|---|---|
 | **Memecoin radar** | Encontrar una regla de entrada en tokens de pump.fun que gane dinero tras comisiones, probada con datos antes de invertir | Claude (código y análisis), Grok (recolector 24/7 e investigación en X) | `memecoin-radar/` y su `TAREAS.md` |
-| **Clips para YouTube Shorts** | Recuperar y subir las views del canal; que el canal sea monetizable y cumpla las normas de YouTube | Grok (produce y sube), Claude (analiza métricas y decide cambios) | `oficina/shorts/` (se crea con la tarea S1) |
+| **Clips para YouTube Shorts** | Recuperar y subir las views del canal; que el canal sea monetizable y cumpla las normas de YouTube | Grok (produce y sube), Claude (analiza métricas y decide cambios) | `oficina/shorts/` |
+| **Price Hunter** | Alertas de errores de precio (Amazon, Chollometro, Pepper) para reventa; no compra nada | Grok (bot Hunter) | Repo privado `socio-backup`; informe `grok/informes/2026-11-06_price-hunter.md` |
+| **Producto ecommerce Europa** | Fase 1: elegir producto (propuesto: mapa estelar personalizado, print-on-demand UE) | Grok (bot Scout) | `grok/informes/2026-11-06_producto-europa.md` (pendiente de revisión de Claude) |
 
 ## Pendientes de Piero
 - Pasar a Grok Bot el mensaje inicial (ver `oficina/MENSAJE_INICIAL_GROK.md`). Solo una vez.
