@@ -8,9 +8,9 @@ Estados: PENDIENTE · EN CURSO · HECHO · BLOQUEADO (con motivo).
 | # | Tarea | Estado | Resultado |
 |---|---|---|---|
 | G1 | Investigación inicial en X (ver `investigacion/ENCARGO_G1.md`) | HECHO (5 nov 2026) | Informe `investigacion/G1_informe.md` + 5 CSV; origen=bots/proyecto; callers llegan tarde; j7tracker=firma deploy; TG-before-X UNKNOWN |
-| G2 | Rutina "Vigía de origen" cada 15 min escribiendo en `data/senales.csv` | PENDIENTE | |
+| G2 | Rutina "Vigía de origen" cada 15 min escribiendo en `data/senales.csv` | CANCELADA (6 nov) | C2: seguir calls pierde |
 | G3 | Rutina de resultados cada 6 h (precio a 1 h y 24 h en `data/senales.csv`) | PENDIENTE | |
-| G4 | Ranking semanal de fuentes en `data/callers.csv` (incluidos fracasos) | PENDIENTE | |
+| G4 | Ranking semanal de fuentes en `data/callers.csv` (incluidos fracasos) | CANCELADA (6 nov) | C2: ninguna cuenta gana de forma fiable |
 | G5 | ~~Histórico de 200-500 posts de bots~~ → **REENFOCADA** (ver G7): G1 ya demostró que seguir bots a ciegas pierde | CANCELADA | |
 | G6 | Subir los datos crudos de call-hunter que usa G1 (`upstream_sample.json`, `accounts.json`, `bots_summary.json`, `evals2.jsonl` y similares) a `data/callhunter/`, tal cual, para que Claude reproduzca las cifras | HECHO (6 nov 2026) | `data/callhunter/`: upstream_sample.json, accounts.json, accounts2.json, bots_summary.json, evals2.jsonl, evals.jsonl, calls.jsonl, users.json, first_mentions.json, sample.json, timeline_meta.json, genesis.json, STATE.txt, README.md (tal cual desde /workspace/call-hunter/). Commit en grok/memecoin-radar |
 | G7 | Muestra de **origen proyecto/narrativa**: ≥100 tokens (de los últimos 14 días) cuya CA publicó la **cuenta del proyecto o un tuit de narrativa** en ≤10 min desde la creación, **incluidos los que murieron**. En `data/origen_proyecto.csv` con columnas: ca, symbol, hora_creacion_utc, fuente_origen (url), tipo (proyecto/narrativa), min_desde_creacion, seguidores_cuenta, edad_cuenta_dias, menciones_x_primera_hora, notas. Sin elegir solo ganadores: muestreo sistemático (p. ej. todos los que encuentres por día) | HECHO (6 nov 2026) | `data/origen_proyecto.csv` **323** filas (narrativa≈307, proyecto≈16). Método: metadata tweet en ventana [-2,+10] min verificada con X API + 5 G1 DEMOSTRADO. Limitación: masa = 6 nov (collector); menciones_1h=NO COMPROBADO. Informe `informes/2026-11-06_G7_origen_proyecto.md` |
@@ -20,7 +20,7 @@ Estados: PENDIENTE · EN CURSO · HECHO · BLOQUEADO (con motivo).
 | # | Tarea | Estado | Resultado |
 |---|---|---|---|
 | C1 | Estructura del proyecto y verificador de precios `radar/verify.py` | HECHO (5 nov) | Probado con token real: entrada, 1 h, máx 1 h y 24 h |
-| C2 | Reproducir las cifras de G1 con los datos de G6 y backtest de G7 (origen proyecto/narrativa) con precios GeckoTerminal, deslizamiento y liquidez mínima | PENDIENTE (espera G6/G7) | |
+| C2 | Reproducir las cifras de G1 con los datos de G6 y backtest de G7 (origen proyecto/narrativa) con precios GeckoTerminal, deslizamiento y liquidez mínima | HECHO (6 nov) parte calls; G7 espera 7 días | `informes/2026-11-06_C2_backtest_calls.md`: seguir calls pierde (mediana −22 % a 1 h, −52 % media a 24 h; 79 % de calls pierden). G7 día 1: 0/160 duplican en 1 h |
 | C3 | **Recolector de TODOS los tokens nuevos** (stream de pump.fun vía PumpPortal): guarda rasgos en el minuto 0-10 (links a X en metadata, firma j7tracker, historial del creador, curva/liquidez, compradores) y su resultado a 1 h y 24 h. Base sin sesgo de supervivencia para descubrir qué filtro gana | HECHO (6 nov) | `radar/collector.py` + 9 tests. Probado en vivo: ~7 tokens/min, metadata 93 %, fotos +5 min. Falta que corra 24/7 (G8) |
 | C7 | Revisión de G1 | HECHO (5 nov) | Ver `informes/revision_G1.md`. 5 datos comprobados con DexScreener: cuadran |
 | C4 | Primeras wallets compradoras por token y wallets repetidas antes de las calls | PENDIENTE | |
