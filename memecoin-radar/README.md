@@ -26,6 +26,7 @@ Lo desarrollan dos agentes sobre este mismo directorio:
 | `TAREAS.md` | ambos | Tablero de tareas: quién hace qué, estado, fecha |
 | `data/senales.csv` | Grok Bot | Una fila por token detectado (ver cabecera) |
 | `data/callers.csv` | Grok Bot | Ranking semanal de fuentes y callers |
+| `data/collector/tokens_AAAA-MM-DD.csv.gz` | Grok Bot (ejecuta) / Claude (código) | Todos los tokens nuevos de pump.fun con rasgos y foto a +5 min, +15 min, +1 h y +24 h |
 | `data/verificacion.csv` | Claude | Comprobación independiente de precios de cada señal |
 | `investigacion/` | Grok Bot | Informes de investigación en X, con fuentes |
 | `informes/` | Claude | Análisis semanal y decisiones |
@@ -41,6 +42,26 @@ cd memecoin-radar
 python -m radar.verify      # verifica las señales nuevas de data/senales.csv
 python -m pytest -q         # tests
 ```
+
+### Recolector (C3): todos los tokens nuevos, sin sesgo de supervivencia
+Escucha cada token que nace en pump.fun (unos 7-8 por minuto) y guarda:
+- **Segundo 0** (PumpPortal, gratis): creador, compra inicial, market cap.
+- **Metadata** (IPFS, vía gateway de Pinata porque ipfs.io da 429): link de X y su tipo
+  (`tweet` = narrativa, `account`, `community`), Telegram, web, firma `j7tracker`.
+- **Historial del creador**: cuántos tokens lanzó antes esa wallet (los vistos por el recolector).
+- **Fotos a +5 min, +15 min, +1 h y +24 h** (DexScreener, 30 tokens por llamada): market cap,
+  liquidez, compras/ventas, volumen, cambio de precio y DEX (`pumpfun` = sigue en la curva;
+  `pumpswap`/`raydium` = graduado).
+
+```bash
+pip install websockets
+python -m radar.collector              # 24/7 (Ctrl+C para parar; se puede relanzar, no duplica)
+python -m radar.collector --export     # vuelca data/collector/tokens_AAAA-MM-DD.csv.gz
+```
+La base `data/collector/collector.db` no se sube al repo; solo el CSV comprimido de cada día.
+Prueba real (5-6 nov 2026): 79 tokens en 11 min, metadata 28/30 con Pinata, fotos de +5 min OK.
+Límite: sin datos de cada compra (quién compró, bundles). PumpPortal los da con una clave API
+cargada con ≥ 0,02 SOL; se añadirá si los rasgos gratuitos no bastan.
 
 ## Criterios para pasar a dinero real (fijados antes de empezar)
 Con ≥ 100 señales verificadas por `radar.verify`:
