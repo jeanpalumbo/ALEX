@@ -256,7 +256,7 @@ class Collector:
 def export(conn: sqlite3.Connection, out_dir: Path = DIR) -> Path:
     """One row per token with all checkpoints side by side, gzip CSV per collection day."""
     cps = list(CHECKPOINTS)
-    snap_cols = ["indexed", "dex", "mcap_usd", "liq_usd", "buys_m5", "sells_m5", "buys_h1",
+    snap_cols = ["ts", "indexed", "dex", "mcap_usd", "liq_usd", "buys_m5", "sells_m5", "buys_h1",
                  "sells_h1", "vol_h1", "chg_h1"]
     tok_cols = ["mint", "created_utc", "symbol", "name", "creator", "initial_buy_sol",
                 "mcap_sol_create", "creator_prev_tokens", "meta_ok", "twitter_kind", "twitter",

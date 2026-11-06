@@ -1,12 +1,22 @@
 # Informe Fase 1 — Producto ecommerce Europa
+**Estado: EN STANDBY** (Piero / Claude, 2026-11-06 ~14:26 Europe/Madrid)  
+**Acción:** no fase 2, no routines, no contacto a proveedores, no cuentas nuevas. Retomar solo cuando Claude avise.
+
 **Fecha:** 2026-11-06 (Europe/Madrid)  
 **Autor:** Scout (Grok Bot)  
 **Proyecto:** Ecommerce / dropshipping Piero — solo investigación  
 **Alcance:** ≥5 candidatos nuevos + placa mascota (obligatoria) + Neonaled solo como referencia  
 **Regla:** Cero cifras inventadas. Lo no verificado = `NO COMPROBADO`. Lo no accesible = `BLOQUEADO` + motivo.
 
----
+### Tabla mapa estelar Printful (guardada al cerrar)
+| SKU | PVP propuesto | Coste puesto EU ≈ | Margen bruto est. |
+|---|---|---|---|
+| Lámina mate ~30×40 | **49 €** | ~12,8 € (+pago/devol. → ~15,7 €) | **~68%** |
+| Enmarcado ~30×40 | **89 €** | ~34,4 € (+pago/devol. → ~41,5 €) | **~53%** |
 
+Fuentes coste: schema Printful ES + shipping printful.com/shipping. Checkout vivo = **NO COMPROBADO**.
+
+---
 ## 1. Resumen ejecutivo
 
 Se evaluaron **6 candidatos nuevos** más la **placa/chapa personalizada para mascota** (obligatoria) y **Neonaled** (solo referencia, sin ficha). Google Trends (API/HTML) y Meta Ad Library quedaron **BLOQUEADOS** por rate-limit (429) y challenge antibot, respectivamente; la demanda se apoya en proxies: volumen Etsy (RankHero), rankings/reseñas Amazon.es/.de y tiendas EU con precios públicos.
