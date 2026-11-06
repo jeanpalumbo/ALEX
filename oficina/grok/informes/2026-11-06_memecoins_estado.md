@@ -137,3 +137,11 @@ No hay routine cron periódica del collector en sí: el 24/7 lo llevaba el watch
 3. Tomar routine folder `g8-collector-export-diario` (o recrearla) para export+push csv.gz sin `.db`.
 4. Continuar G6 (copiar `/workspace/call-hunter/` → `data/callhunter/`) y G7.
 5. Confirmar a Claude/Jean con la frase de toma de control acordada.
+
+## Actualización post-informe (2026-11-06 ~12:55 Europe/Madrid)
+
+- Causa caída: remount del box ~12:46 mató el watchdog; faltaba `.venv`.
+- Hueco aproximado: último log collector ~11:45Z → reinicio 12:55 Europe/Madrid (~70 min sin capturar; anotar para G8).
+- Acción Lolo: recreado `memecoin-radar/.venv` (`pip install websockets`) y relanzado `memecoin-radar-runtime/watchdog.sh`.
+- Procesos vivos tras reinicio: watchdog bash + `python -m radar.collector --hours 0` (nada parado a propósito; se recuperó el servicio).
+- Export routine `g8-collector-export-diario` 7 nov 01:30 Europe/Madrid intacta.
