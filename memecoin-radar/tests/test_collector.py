@@ -51,3 +51,16 @@ def test_meta_urls_rewrites_ipfs():
     urls = c.meta_urls("https://ipfs.io/ipfs/bafkabc")
     assert urls[0] == "https://gateway.pinata.cloud/ipfs/bafkabc" and urls[-1] == "https://ipfs.io/ipfs/bafkabc"
     assert c.meta_urls("https://example.com/m.json") == ["https://example.com/m.json"]
+
+
+def test_analyze_simulates_trade(tmp_path):
+    from radar import analyze
+    conn = c.connect(tmp_path / "a.db")
+    conn.execute("INSERT INTO tokens (mint, created_utc, twitter_kind) VALUES ('A', 0, 'tweet')")
+    conn.execute("INSERT INTO tokens (mint, created_utc, twitter_kind) VALUES ('B', 0, '')")
+    for mint, mc_in, mc_out, idx in [("A", 1000, 3000, 1), ("B", 1000, None, 0)]:
+        conn.execute("INSERT INTO snaps (mint, checkpoint, indexed, mcap_usd) VALUES (?, '5m', 1, ?)", (mint, mc_in))
+        conn.execute("INSERT INTO snaps (mint, checkpoint, indexed, mcap_usd) VALUES (?, '1h', ?, ?)", (mint, idx, mc_out))
+    data = {d["mint"]: d["ret"] for d in analyze.load(conn, "5m")}
+    assert round(data["A"], 2) == 1.7 and data["B"] == -1.0  # 3x minus 10 %, dead = -100 %
+    assert "Todos los tokens" in analyze.report(analyze.load(conn, "5m"), "5m")
