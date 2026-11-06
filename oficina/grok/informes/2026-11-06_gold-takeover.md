@@ -41,11 +41,12 @@ Nota: la routine formal de export diario la crea Gold (pendiente de alta en el s
 | G8 / M1 | **EN CURSO** | Collector+watchdog vivos. Caída remount ~12:45–12:55 Europe/Madrid (último log 11:45Z `created: 1699`; reinicio 12:55; hueco medido ~10 min). Detalle: `memecoin-radar/informes/2026-11-06_g8_caida.md` en `grok/memecoin-radar` |
 | G6 / M2 (parte G6) | **HECHO** (6 nov 2026) | `data/callhunter/` en commit `1274ed0` rama `grok/memecoin-radar` |
 | G7 / M2 (parte G7) | PENDIENTE | `data/origen_proyecto.csv` ≥100 tokens — aún no |
-| Export intermedio | **HECHO** | `tokens_2026-11-06.csv.gz` = **1015** tokens / 101318 B (antes 71 tokens en GitHub). Commit `1274ed0` |
+| Export fresco G8 | **HECHO** | Re-export 13:19 Europe/Madrid (csv 12:46 desfasado): `tokens_2026-11-06.csv.gz` = **1813** tokens / 188599 B. Commit `46d8053` (previo parcial `1274ed0` 1015 tokens) |
 
 ### URLs commit memecoin-radar
 
-- Commit: https://github.com/jeanpalumbo/ALEX/commit/1274ed0e00c0836c0d182bab45bcfeb9d71adbd3
+- Commit export fresco: https://github.com/jeanpalumbo/ALEX/commit/46d8053302f4dc25538c059edbd570ed27caeddc
+- Commit G6+parcial: https://github.com/jeanpalumbo/ALEX/commit/1274ed0e00c0836c0d182bab45bcfeb9d71adbd3
 - CSV blob: https://github.com/jeanpalumbo/ALEX/blob/grok/memecoin-radar/memecoin-radar/data/collector/tokens_2026-11-06.csv.gz
 - Callhunter: https://github.com/jeanpalumbo/ALEX/tree/grok/memecoin-radar/memecoin-radar/data/callhunter
 
