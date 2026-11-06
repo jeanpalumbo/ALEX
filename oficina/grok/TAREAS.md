@@ -1,0 +1,13 @@
+# Tareas de Grok Bot
+
+Estados: PENDIENTE · EN CURSO · HECHO (fecha) · BLOQUEADO (motivo). Grok solo edita Estado y
+Resultado. Cada tarea HECHA lleva su informe en `oficina/grok/informes/`.
+
+| # | Prioridad | Tarea | Entrega | Estado | Resultado |
+|---|---|---|---|---|---|
+| O1 | 1 | **Rutina de oficina.** Crea una rutina que cada 2 h: hace pull de la rama `claude/new-session-akjsxp` del repo ALEX, lee `oficina/grok/TAREAS.md`, hace las tareas PENDIENTE por prioridad, sube su trabajo a la rama `grok/oficina` y actualiza Estado/Resultado | Informe `informes/<fecha>_O1.md` con el nombre de la rutina, su horario y la prueba de la primera ejecución | PENDIENTE | |
+| O2 | 1 | **Inventario.** Describe todas las rutinas y proyectos que tienes activos ahora (nombre, qué hacen, cada cuánto, qué herramientas y cuentas usan, qué publican y dónde) | Informe `informes/<fecha>_O2.md` | PENDIENTE | |
+| S1 | 1 | **Métricas de Shorts.** Exporta de YouTube Studio los últimos 90 días, por vídeo: fecha, título, duración, views, % que siguió viendo vs. deslizó, retención media, fuente (feed de Shorts, búsqueda…), suscriptores ganados. Más el total diario del canal | `oficina/shorts/metricas_AAAA-MM-DD.csv` + capturas de Estadísticas (visión general y contenido) en `oficina/shorts/capturas/` | PENDIENTE | |
+| S2 | 1 | **Cómo se hacen los clips.** Paso a paso actual: de dónde sale el material original (canal, stream, podcast y su enlace), cómo eliges el fragmento, qué edición añades (subtítulos, cortes, voz, gancho, música), cómo pones títulos/hashtags, a qué horas y cuántos subes al día. Indica qué cambió en las fechas en que empezaron a bajar las views. Y si hubo avisos de YouTube (reclamaciones de copyright, "contenido reutilizado", restricciones) | Informe `informes/<fecha>_S2.md` | PENDIENTE | |
+| M1 | 2 | **Recolector de memecoins 24/7** (tarea G8 de `memecoin-radar/TAREAS.md`): `cd memecoin-radar && pip install websockets && python -m radar.collector`, relanzarlo si se cae; cada 24 h `python -m radar.collector --export` y subir el `.csv.gz` de `memecoin-radar/data/collector/` (nunca el `.db`) | CSV diario en `grok/oficina` + nota de caídas en el informe | PENDIENTE | |
+| M2 | 3 | Tareas G6 y G7 de `memecoin-radar/TAREAS.md` | Lo que dice cada tarea | PENDIENTE | |
