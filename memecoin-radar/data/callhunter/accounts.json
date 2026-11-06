@@ -1,0 +1,522 @@
+[
+ {
+  "author": "APE_ORACLE1",
+  "followers": 3210,
+  "cuenta_creada": "2026-02-02",
+  "posts_con_CA": 48,
+  "ventana_utc": [
+   "2026-11-05T06:49:17.000Z",
+   "2026-11-05T19:02:15.000Z"
+  ],
+  "cas_unicas": 32,
+  "cas_compartidas": 18,
+  "primero_entre_observados": 12,
+  "rank_medio": 1.56,
+  "evaluables_1h": 13,
+  "hits_2x_1h": 1,
+  "perdidas_50_1h": 8,
+  "mediana_ret_1h": 0.406,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "Solprofit1",
+  "followers": 1972,
+  "cuenta_creada": "2012-03-24",
+  "posts_con_CA": 50,
+  "ventana_utc": [
+   "2026-11-04T15:04:49.000Z",
+   "2026-11-05T16:17:33.000Z"
+  ],
+  "cas_unicas": 27,
+  "cas_compartidas": 20,
+  "primero_entre_observados": 8,
+  "rank_medio": 2.05,
+  "evaluables_1h": 20,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 3,
+  "mediana_ret_1h": 0.912,
+  "evaluables_24h": 1,
+  "mediana_ret_24h": 0.774
+ },
+ {
+  "author": "DegenFlow_",
+  "followers": 6710,
+  "cuenta_creada": "2012-01-27",
+  "posts_con_CA": 50,
+  "ventana_utc": [
+   "2026-11-05T08:17:48.000Z",
+   "2026-11-05T18:57:27.000Z"
+  ],
+  "cas_unicas": 21,
+  "cas_compartidas": 18,
+  "primero_entre_observados": 8,
+  "rank_medio": 2.39,
+  "evaluables_1h": 15,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 4,
+  "mediana_ret_1h": 0.89,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "0xSeerr",
+  "followers": 2688,
+  "cuenta_creada": "2026-07-30",
+  "posts_con_CA": 46,
+  "ventana_utc": [
+   "2026-11-05T06:58:01.000Z",
+   "2026-11-05T18:11:40.000Z"
+  ],
+  "cas_unicas": 22,
+  "cas_compartidas": 14,
+  "primero_entre_observados": 7,
+  "rank_medio": 1.5,
+  "evaluables_1h": 12,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 10,
+  "mediana_ret_1h": 0.178,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "sol_lord111",
+  "followers": 3447,
+  "cuenta_creada": "2025-04-04",
+  "posts_con_CA": 50,
+  "ventana_utc": [
+   "2026-11-04T21:21:18.000Z",
+   "2026-11-05T18:47:18.000Z"
+  ],
+  "cas_unicas": 21,
+  "cas_compartidas": 15,
+  "primero_entre_observados": 7,
+  "rank_medio": 1.73,
+  "evaluables_1h": 10,
+  "hits_2x_1h": 1,
+  "perdidas_50_1h": 6,
+  "mediana_ret_1h": 0.169,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "_Shonsol",
+  "followers": 1906,
+  "cuenta_creada": "2011-08-26",
+  "posts_con_CA": 50,
+  "ventana_utc": [
+   "2026-11-04T20:51:52.000Z",
+   "2026-11-05T18:07:31.000Z"
+  ],
+  "cas_unicas": 14,
+  "cas_compartidas": 9,
+  "primero_entre_observados": 6,
+  "rank_medio": 1.56,
+  "evaluables_1h": 6,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 6,
+  "mediana_ret_1h": 0.021,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "Klope_1",
+  "followers": 3118,
+  "cuenta_creada": "2012-12-08",
+  "posts_con_CA": 50,
+  "ventana_utc": [
+   "2026-11-04T22:00:07.000Z",
+   "2026-11-05T19:03:54.000Z"
+  ],
+  "cas_unicas": 20,
+  "cas_compartidas": 17,
+  "primero_entre_observados": 5,
+  "rank_medio": 2.88,
+  "evaluables_1h": 14,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 1.022,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "SOLANACHAD009",
+  "followers": 4742,
+  "cuenta_creada": "2025-12-27",
+  "posts_con_CA": 26,
+  "ventana_utc": [
+   "2026-11-05T07:50:27.000Z",
+   "2026-11-05T16:37:34.000Z"
+  ],
+  "cas_unicas": 11,
+  "cas_compartidas": 8,
+  "primero_entre_observados": 4,
+  "rank_medio": 2.62,
+  "evaluables_1h": 7,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 5,
+  "mediana_ret_1h": 0.21,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "_hillscaller",
+  "followers": 1657,
+  "cuenta_creada": "2009-11-15",
+  "posts_con_CA": 27,
+  "ventana_utc": [
+   "2026-11-05T07:52:40.000Z",
+   "2026-11-05T18:02:07.000Z"
+  ],
+  "cas_unicas": 8,
+  "cas_compartidas": 8,
+  "primero_entre_observados": 3,
+  "rank_medio": 3.25,
+  "evaluables_1h": 7,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 2,
+  "mediana_ret_1h": 0.646,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "Crypt_bencall1x",
+  "followers": 2999,
+  "cuenta_creada": "2024-09-05",
+  "posts_con_CA": 46,
+  "ventana_utc": [
+   "2026-11-04T19:58:55.000Z",
+   "2026-11-05T17:40:38.000Z"
+  ],
+  "cas_unicas": 14,
+  "cas_compartidas": 7,
+  "primero_entre_observados": 2,
+  "rank_medio": 3.14,
+  "evaluables_1h": 5,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 2,
+  "mediana_ret_1h": 0.521,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "EarlyChad_",
+  "followers": 5899,
+  "cuenta_creada": "2014-03-08",
+  "posts_con_CA": 25,
+  "ventana_utc": [
+   "2026-11-05T16:57:47.000Z",
+   "2026-11-05T18:50:35.000Z"
+  ],
+  "cas_unicas": 11,
+  "cas_compartidas": 10,
+  "primero_entre_observados": 2,
+  "rank_medio": 3.6,
+  "evaluables_1h": 7,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.834,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "_coinchic",
+  "followers": 2336,
+  "cuenta_creada": "2026-04-30",
+  "posts_con_CA": 24,
+  "ventana_utc": [
+   "2026-11-04T10:11:57.000Z",
+   "2026-11-05T19:07:58.000Z"
+  ],
+  "cas_unicas": 12,
+  "cas_compartidas": 8,
+  "primero_entre_observados": 1,
+  "rank_medio": 2.75,
+  "evaluables_1h": 9,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 4,
+  "mediana_ret_1h": 0.782,
+  "evaluables_24h": 1,
+  "mediana_ret_24h": 0.644
+ },
+ {
+  "author": "0x_AuraLux1",
+  "followers": 6398,
+  "cuenta_creada": "2026-06-14",
+  "posts_con_CA": 24,
+  "ventana_utc": [
+   "2026-11-05T07:50:41.000Z",
+   "2026-11-05T19:03:16.000Z"
+  ],
+  "cas_unicas": 14,
+  "cas_compartidas": 8,
+  "primero_entre_observados": 1,
+  "rank_medio": 3.25,
+  "evaluables_1h": 6,
+  "hits_2x_1h": 1,
+  "perdidas_50_1h": 3,
+  "mediana_ret_1h": 0.556,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "callerfiona11",
+  "followers": 1470,
+  "cuenta_creada": "2009-12-07",
+  "posts_con_CA": 25,
+  "ventana_utc": [
+   "2026-11-05T07:49:45.000Z",
+   "2026-11-05T18:07:29.000Z"
+  ],
+  "cas_unicas": 7,
+  "cas_compartidas": 7,
+  "primero_entre_observados": 1,
+  "rank_medio": 3.29,
+  "evaluables_1h": 5,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 4,
+  "mediana_ret_1h": 0.084,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "solanabesttrade",
+  "followers": 969,
+  "cuenta_creada": "2012-12-12",
+  "posts_con_CA": 25,
+  "ventana_utc": [
+   "2026-11-04T21:08:37.000Z",
+   "2026-11-05T16:24:15.000Z"
+  ],
+  "cas_unicas": 14,
+  "cas_compartidas": 14,
+  "primero_entre_observados": 1,
+  "rank_medio": 3.43,
+  "evaluables_1h": 12,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.971,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "_callerhex",
+  "followers": 1828,
+  "cuenta_creada": "2011-09-20",
+  "posts_con_CA": 25,
+  "ventana_utc": [
+   "2026-11-05T07:55:09.000Z",
+   "2026-11-05T19:10:37.000Z"
+  ],
+  "cas_unicas": 9,
+  "cas_compartidas": 8,
+  "primero_entre_observados": 1,
+  "rank_medio": 4.5,
+  "evaluables_1h": 6,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 4,
+  "mediana_ret_1h": 0.253,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "Massivepumpmast",
+  "followers": 2454,
+  "cuenta_creada": "2020-06-22",
+  "posts_con_CA": 17,
+  "ventana_utc": [
+   "2026-11-05T12:31:49.000Z",
+   "2026-11-05T18:50:45.000Z"
+  ],
+  "cas_unicas": 10,
+  "cas_compartidas": 5,
+  "primero_entre_observados": 1,
+  "rank_medio": 4.6,
+  "evaluables_1h": 3,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.808,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "WeHave1DFacts",
+  "followers": 1682,
+  "cuenta_creada": "2011-04-08",
+  "posts_con_CA": 20,
+  "ventana_utc": [
+   "2026-11-05T05:22:48.000Z",
+   "2026-11-05T18:59:07.000Z"
+  ],
+  "cas_unicas": 11,
+  "cas_compartidas": 8,
+  "primero_entre_observados": 1,
+  "rank_medio": 4.75,
+  "evaluables_1h": 2,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 0,
+  "mediana_ret_1h": 1.066,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "solblender99",
+  "followers": 1248,
+  "cuenta_creada": "2013-07-30",
+  "posts_con_CA": 23,
+  "ventana_utc": [
+   "2026-11-05T14:30:54.000Z",
+   "2026-11-05T18:09:01.000Z"
+  ],
+  "cas_unicas": 14,
+  "cas_compartidas": 12,
+  "primero_entre_observados": 0,
+  "rank_medio": 3.67,
+  "evaluables_1h": 11,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.882,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "BadManLeek",
+  "followers": 3137,
+  "cuenta_creada": "2010-07-04",
+  "posts_con_CA": 25,
+  "ventana_utc": [
+   "2026-11-05T17:16:43.000Z",
+   "2026-11-05T18:55:06.000Z"
+  ],
+  "cas_unicas": 12,
+  "cas_compartidas": 11,
+  "primero_entre_observados": 0,
+  "rank_medio": 3.91,
+  "evaluables_1h": 6,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.808,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "2932516088",
+  "followers": null,
+  "cuenta_creada": "",
+  "posts_con_CA": 1,
+  "ventana_utc": [
+   "2026-11-05T07:49:39.000Z",
+   "2026-11-05T07:49:39.000Z"
+  ],
+  "cas_unicas": 1,
+  "cas_compartidas": 1,
+  "primero_entre_observados": 0,
+  "rank_medio": 4,
+  "evaluables_1h": 0,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 0,
+  "mediana_ret_1h": null,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "rankzmoney",
+  "followers": 522,
+  "cuenta_creada": "2013-10-26",
+  "posts_con_CA": 20,
+  "ventana_utc": [
+   "2026-11-03T16:02:28.000Z",
+   "2026-11-05T15:31:05.000Z"
+  ],
+  "cas_unicas": 9,
+  "cas_compartidas": 5,
+  "primero_entre_observados": 0,
+  "rank_medio": 4.6,
+  "evaluables_1h": 9,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 2,
+  "mediana_ret_1h": 0.746,
+  "evaluables_24h": 3,
+  "mediana_ret_24h": 0.335
+ },
+ {
+  "author": "itsmeflow18",
+  "followers": 3781,
+  "cuenta_creada": "2024-03-03",
+  "posts_con_CA": 24,
+  "ventana_utc": [
+   "2026-11-05T07:50:49.000Z",
+   "2026-11-05T19:10:13.000Z"
+  ],
+  "cas_unicas": 12,
+  "cas_compartidas": 12,
+  "primero_entre_observados": 0,
+  "rank_medio": 4.75,
+  "evaluables_1h": 8,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.879,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "Sol_Ficra",
+  "followers": 5621,
+  "cuenta_creada": "2020-10-07",
+  "posts_con_CA": 28,
+  "ventana_utc": [
+   "2026-11-05T07:51:00.000Z",
+   "2026-11-05T17:30:28.000Z"
+  ],
+  "cas_unicas": 13,
+  "cas_compartidas": 9,
+  "primero_entre_observados": 0,
+  "rank_medio": 4.89,
+  "evaluables_1h": 8,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 2,
+  "mediana_ret_1h": 0.902,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "1578480072436207617",
+  "followers": null,
+  "cuenta_creada": "",
+  "posts_con_CA": 1,
+  "ventana_utc": [
+   "2026-11-05T07:59:59.000Z",
+   "2026-11-05T07:59:59.000Z"
+  ],
+  "cas_unicas": 1,
+  "cas_compartidas": 1,
+  "primero_entre_observados": 0,
+  "rank_medio": 14,
+  "evaluables_1h": 1,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 1,
+  "mediana_ret_1h": 0.2,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ },
+ {
+  "author": "Legend_Britney",
+  "followers": 2460,
+  "cuenta_creada": "2011-02-06",
+  "posts_con_CA": 1,
+  "ventana_utc": [
+   "2026-11-05T13:57:41.000Z",
+   "2026-11-05T13:57:41.000Z"
+  ],
+  "cas_unicas": 1,
+  "cas_compartidas": 0,
+  "primero_entre_observados": 0,
+  "rank_medio": null,
+  "evaluables_1h": 0,
+  "hits_2x_1h": 0,
+  "perdidas_50_1h": 0,
+  "mediana_ret_1h": null,
+  "evaluables_24h": 0,
+  "mediana_ret_24h": null
+ }
+]

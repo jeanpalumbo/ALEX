@@ -1,0 +1,2 @@
+cutoff_utc=2026-11-05T20:15Z; pasada2 x_reads≈36 (total≈81); ohlcv_cas=279; procesos: ninguno
+cutoff_utc=2026-11-05T20:45Z; pasada3 x_reads=17; procesos: ninguno
