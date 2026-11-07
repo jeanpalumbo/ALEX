@@ -2,7 +2,7 @@
 
 App web instalable (PWA) para aprender jugando con Rabbitz, el conejo de RabbitzFeed.
 
-- **Aprender**: lecciones de 5 preguntas por temas (ciencia, espacio, historia, economía, internet), con racha diaria, XP, niveles y energía.
+- **Aprender**: lecciones de 6 ejercicios (elegir, verdad o bulo, emparejar y ordenar) por temas (ciencia, espacio, historia, economía, internet), con racha diaria, XP, niveles y energía.
 - **Duelos**: 1 contra 1 contra un bot IA cuya dificultad sube con tus victorias (Fácil, Normal, Difícil, Experto).
 - **Zanahorias**: la moneda del juego. Se ganan en lecciones y duelos.
 - **Rabbitz**: todos empiezan igual (sudadera negra) y compran sudaderas, gorras, gafas y más con zanahorias.
