@@ -6,6 +6,9 @@ App web instalable (PWA) para aprender jugando con Rabbitz, el conejo de Rabbitz
 - **Duelos**: 1 contra 1 contra un bot IA cuya dificultad sube con tus victorias (Fácil, Normal, Difícil, Experto).
 - **Zanahorias**: la moneda del juego. Se ganan en lecciones y duelos.
 - **Rabbitz**: todos empiezan igual (sudadera negra) y compran sudaderas, gorras, gafas y más con zanahorias.
+- **Reto del día**: 5 preguntas iguales para todos cada día; resultado compartible en X como cuadrícula.
+- **Reta a un amigo**: enlace `#duelo-semilla-aciertos-segundos` con las mismas preguntas (WhatsApp, X o copiar).
+- **Racha**: cofre de regalo diario y premios a los 3, 7, 14 y 30 días (medalla y aureola exclusivas).
 
 ## Archivos
 - `src.html`: código de la app. `units.js`: preguntas. `hero.js`: imagen de portada.
