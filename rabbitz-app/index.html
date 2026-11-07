@@ -260,7 +260,7 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
 .linkbox{display:grid;grid-template-columns:1fr auto;gap:8px;width:100%;align-items:center}
 .linkbox input{min-width:0;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:500 13px var(--body)}
 .linkbox .btn{margin:0;width:auto;padding:12px 14px;font-size:14px}
-.share.wa{background:#1fa855;color:#fff}
+.share.follow{margin-top:28px;font-size:14px;text-align:center}
 
 /* Racha y regalo */
 .streak .srow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
@@ -370,7 +370,6 @@ var ICON={
   lock:'<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="currentColor" opacity=".55"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".55"/></svg>',
   play:'<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" fill="#fff"/></svg>',
   close:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
-  wa:'<svg viewBox="0 0 24 24"><path d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.6 21.5l4.9-1.3A9.4 9.4 0 1 0 12 2.5z" fill="#fff"/><path d="M9 7.5c.3 0 .6 0 .8.6l.8 1.9c.1.3 0 .6-.2.8l-.6.7c.6 1.2 1.6 2.2 2.8 2.8l.7-.6c.2-.2.5-.3.8-.2l1.9.8c.5.2.6.5.6.8 0 1.1-1 2.1-2.3 2.1-3.4-.3-6.6-3.5-6.9-6.9C7.3 8.5 8.1 7.5 9 7.5z" fill="#1fa855"/></svg>',
   x:'<svg viewBox="0 0 24 24"><path d="M17.7 3h3.1l-6.8 7.7L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L2 3h6.4l4.4 5.8zm-1.1 16.2h1.7L7.5 4.7H5.7z" fill="currentColor"/></svg>',
   learn:'<svg viewBox="0 0 24 24"><path d="M3 6.5 12 3l9 3.5-9 3.5z" fill="currentColor"/><path d="M6.5 9v5c0 1.8 2.5 3.2 5.5 3.2s5.5-1.4 5.5-3.2V9L12 11.2z" fill="currentColor" opacity=".7"/><path d="M20 7v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
   swords:'<svg viewBox="0 0 24 24"><path d="M4 4h4l9 9-2 2-9-9zM20 4h-4l-9 9 2 2 9-9z" fill="currentColor" opacity=".85"/><path d="M5 17l2 2M19 17l-2 2M3.5 20.5l3-3M20.5 20.5l-3-3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
@@ -643,7 +642,7 @@ function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.i
 function dailyQs(){return seededQs(dailyNum()*7919+13);}
 function seededQs(seed){var r=rng(seed),a=ALLQ.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a.slice(0,5);}
 function grid(res){return res.map(function(x){return x?"🟩":"🟥";}).join("");}
-function dailyShare(d){return "Reto Rabbitz #"+dailyNum()+" 🐰 "+d.ok+"/5\n"+grid(d.res)+"\n⏱ "+d.sec+" s\n¿Me superas?";}
+function dailyShare(d){return "Reto Rabbitz #"+dailyNum()+" 🐰 "+d.ok+"/5\n"+grid(d.res)+"\n⏱ "+d.sec+" s\n¿Me superas? @RabbitzFeed";}
 function untilTomorrow(){var n=new Date(),m=new Date(n);m.setHours(24,0,0,0);var mins=Math.ceil((m-n)/60000);return Math.floor(mins/60)+" h "+(mins%60)+" min";}
 function streakCard(){
   var nm=nextMilestone(), st=liveStreak(), it=nm&&nm.item?SHOP.find(function(x){return x.id===nm.item;}):null, gift=S.gift!==today();
@@ -689,19 +688,19 @@ function friendEnd(){
   var first=!S.played[L.seed]; S.played[L.seed]=1;
   if(!f){
     save();
-    var t="Te reto en Rabbitz 🐰⚔️ Acerté "+L.ok+"/5 en "+sec+" s. ¿Me ganas? "+link;
+    var t="Te reto en Rabbitz de @RabbitzFeed 🐰⚔️ Acerté "+L.ok+"/5 en "+sec+" s. ¿Me ganas? "+link;
     resultScreen({mood:"wow",win:L.ok>=3,title:"¡Reto listo!",sub:"Has hecho "+L.ok+"/5 en "+sec+" s. Manda el enlace y tu amigo jugará las mismas preguntas.",
-      grid:grid(L.res),tiles:[[L.ok,"Aciertos","","/5"],[sec,"Segundos"],[REWARD.win,"Si gana él","+"]],share:t,shareLabel:"Retar por X",link:link,wa:t});
+      grid:grid(L.res),tiles:[[L.ok,"Aciertos","","/5"],[sec,"Segundos"],[REWARD.win,"Si gana él","+"]],share:t,shareLabel:"Retar en X",link:link});
     return;
   }
   var res=L.ok>f.ok||(L.ok===f.ok&&sec<f.sec)?"w":(L.ok===f.ok&&sec===f.sec)?"d":"l";
   var coins=first?(res==="w"?REWARD.win:res==="d"?REWARD.draw:REWARD.lose):0;
   S.coins+=coins;addXp(10+L.ok*2);save();
   var back=baseUrl()+"#duelo-"+L.seed+"-"+L.ok+"-"+sec;
-  var t2=(res==="w"?"Te he ganado en Rabbitz 🐰⚔️ ":"Revancha en Rabbitz 🐰⚔️ ")+L.ok+"/5 en "+sec+" s contra tu "+f.ok+"/5 en "+f.sec+" s. "+back;
+  var t2=(res==="w"?"Te he ganado en Rabbitz de @RabbitzFeed 🐰⚔️ ":"Revancha en Rabbitz de @RabbitzFeed 🐰⚔️ ")+L.ok+"/5 en "+sec+" s contra tu "+f.ok+"/5 en "+f.sec+" s. "+back;
   resultScreen({mood:res==="w"?"wow":res==="l"?"sad":"",win:res==="w",title:res==="w"?"¡Le has ganado!":res==="l"?"Tu amigo gana esta vez":"¡Empate exacto!",
     sub:"Tú: "+L.ok+"/5 en "+sec+" s · Tu amigo: "+f.ok+"/5 en "+f.sec+" s"+(first?"":" · Este reto ya te dio zanahorias"),grid:grid(L.res),
-    tiles:[[coins,"Zanahorias","+"],[L.ok,"Aciertos","","/5"],[sec,"Segundos"]],coins:coins,share:t2,shareLabel:"Contestar en X",link:back,wa:t2});
+    tiles:[[coins,"Zanahorias","+"],[L.ok,"Aciertos","","/5"],[sec,"Segundos"]],coins:coins,share:t2,shareLabel:"Contestar en X",link:back});
 }
 function dailyEnd(){
   var sec=Math.round((Date.now()-L.t0)/1000), coins=REWARD.daily+L.ok*REWARD.perHit, xp=10+L.ok*2;
@@ -733,6 +732,7 @@ function home(){
     h+='<div class="step" style="transform:translateX('+off+'px)"><button class="chest '+ch+'" data-u="'+u.id+'" aria-label="Cofre del tema '+esc(u.name)+(ch==="locked"?" (termina el tema para abrirlo)":ch==="open"?" (abierto)":" (listo para abrir)")+'">'+chestSvg(ch)+'</button><div class="node-label">'+(ch==="open"?"Abierto":ch==="ready"?"¡Ábrelo!":"Cofre +"+REWARD.chest)+'</div></div>';
     h+='</div></section>';
   });
+  h+='<a class="share follow" href="https://x.com/RabbitzFeed" target="_blank" rel="noopener">'+ICON.x+'Sigue a @RabbitzFeed: los datos nuevos salen primero en X</a>';
   h+='<p class="foot">Hecho por RabbitzFeed. Cada semana, lecciones nuevas con lo último que publicamos en X.<br><button id="reset">Borrar mi progreso</button></p>';
   shell(h);
   var db=document.getElementById("daily");if(db)db.onclick=function(){SND("tap");startDaily();};
@@ -873,7 +873,7 @@ function lessonEnd(){
   if(passed)S.done[L.k]=true;
   save();
   var up=level()>before;
-  var txt="He acertado "+L.ok+"/"+n+" en «"+L.les.name+"» ("+L.u.name+") con Rabbitz 🐰🥕 Racha: "+liveStreak()+" "+(liveStreak()===1?"día":"días")+". ¿Me superas?";
+  var txt="He acertado "+L.ok+"/"+n+" en «"+L.les.name+"» ("+L.u.name+") con @RabbitzFeed 🐰🥕 Racha: "+liveStreak()+" "+(liveStreak()===1?"día":"días")+". ¿Me superas?";
   resultScreen({mood:passed?"wow":"sad",win:passed,title:perfect?"¡Perfecto!":passed?"¡Lección completada!":"Hay que repasar",
     sub:passed?(up?"¡Has subido al nivel "+level()+"!":(L.best>=3?"Mejor combo: "+L.best+" seguidas.":"Sigue así y desbloquea la siguiente.")):"Necesitas "+need+" aciertos para desbloquear la siguiente.",
     tiles:[[coins,"Zanahorias","+"],[xp,"XP","+"],[Math.round(L.ok/n*100),"Precisión","","%"]],coins:coins,share:txt,
@@ -885,8 +885,8 @@ function resultScreen(r){
   app.innerHTML='<div class="wrap result">'+'<span class="mascot '+(r.win?"dance":"shake")+' big">'+rabbitz(S.outfit,r.mood)+'</span>'+
     '<h1 class="pop">'+esc(r.title)+'</h1><p>'+esc(r.sub)+'</p>'+(r.grid?'<div class="grid big pop">'+r.grid+'</div>':'')+
     '<div class="tiles">'+r.tiles.map(function(t,i){return '<div class="tile t'+i+'"><b data-count="'+t[0]+'" data-pre="'+(t[2]||"")+'" data-suf="'+(t[3]||"")+'">'+(t[2]||"")+'0'+(t[3]||"")+'</b><span>'+esc(t[1])+'</span></div>';}).join("")+'</div>'+
-    (r.link?'<div class="linkbox"><input id="lnk" readonly value="'+esc(r.link)+'" aria-label="Enlace del reto"><button class="btn ghost" id="copy">Copiar enlace</button></div><a class="share wa" href="https://wa.me/?text='+encodeURIComponent(r.wa)+'" target="_blank" rel="noopener">'+ICON.wa+'Enviar por WhatsApp</a>':'')+
     '<a class="share" href="'+share+'" target="_blank" rel="noopener">'+ICON.x+(r.shareLabel||'Compartir en X')+'</a>'+
+    (r.link?'<div class="linkbox"><input id="lnk" readonly value="'+esc(r.link)+'" aria-label="Enlace del reto"><button class="btn ghost" id="copy">Copiar enlace</button></div>':'')+
     '<div class="actions"><span class="stat" id="coinStat" style="margin:0 auto 12px;width:max-content">'+ICON.carrot+'<span id="coins">'+(S.coins-(r.coins||0))+'</span></span><button class="btn" id="cont">Continuar</button>'+(r.retry?'<button class="btn ghost" id="retry">'+(r.retry==="duel"?"Otro duelo":"Repetir lección")+'</button>':'')+'</div></div>';
   countUp(app);
   var cp=document.getElementById("copy");if(cp)cp.onclick=function(){var i=document.getElementById("lnk");function ok(){cp.textContent="¡Copiado!";SND("match");}
@@ -909,7 +909,7 @@ function duelHome(){
     '<p class="note" style="margin-top:6px">'+(nextTier()?'Te faltan '+(nextTier().min-S.duels.w)+' victorias para el nivel '+nextTier().name+'.':'Estás en el nivel máximo.')+'</p></section>'+
     '<div class="record"><div class="tile"><b>'+d.w+'</b><span>Victorias</span></div><div class="tile"><b>'+d.d+'</b><span>Empates</span></div><div class="tile"><b>'+d.l+'</b><span>Derrotas</span></div></div>'+
     '<div style="margin-top:18px"><button class="btn" id="find">Buscar rival</button></div>'+
-    '<section class="card friend"><div class="daily-top"><div><div class="kind">Reta a un amigo</div><h2>Juega 5 preguntas y mándale el enlace</h2></div><span class="badge">'+ICON.carrot+'+'+REWARD.win+'</span></div>'+
+    '<section class="card friend"><div class="daily-top"><div><div class="kind">Reta a un amigo</div><h2>Juega 5 preguntas y rétalo en X</h2></div><span class="badge">'+ICON.carrot+'+'+REWARD.win+'</span></div>'+
     '<p class="note">Tu amigo juega las mismas preguntas desde el enlace. Gana quien más acierte y, si empatáis, el más rápido.</p><button class="btn ghost" id="friend">Crear reto</button></section>';
   shell(h);
   document.getElementById("find").onclick=function(){SND("tap");startDuel();};
@@ -976,7 +976,7 @@ function duelEnd(){
   var coins=res==="w"?REWARD.win:res==="d"?REWARD.draw:REWARD.lose;
   var tb=tier().name;S.coins+=coins;S.duels[res]++;addXp(res==="w"?15:5);save();
   var tierUp=tier().name!==tb?" ¡El bot sube a nivel "+tier().name+"!":"";
-  var txt=res==="w"?"He ganado un duelo "+D.me+"–"+D.them+" en Rabbitz 🐰⚔️ ¿Te atreves a retarme?":"Duelo de datos curiosos en Rabbitz 🐰⚔️ "+D.me+"–"+D.them+". La próxima gano yo.";
+  var txt=res==="w"?"He ganado un duelo "+D.me+"–"+D.them+" en Rabbitz de @RabbitzFeed 🐰⚔️ ¿Te atreves a retarme?":"Duelo de datos curiosos en Rabbitz de @RabbitzFeed 🐰⚔️ "+D.me+"–"+D.them+". La próxima gano yo.";
   resultScreen({mood:res==="w"?"wow":res==="l"?"sad":"",title:res==="w"?"¡Has ganado!":res==="l"?"Ha ganado "+D.bot.name:"¡Empate!",
     sub:(D.me===D.them&&D.me>0?"Mismo número de aciertos; decide la velocidad. ":"")+"Marcador final "+D.me+"–"+D.them+"."+tierUp,
     win:res==="w",coins:coins,tiles:[[coins,"Zanahorias","+"],[D.me,"Aciertos","","/5"],[S.duels.w,"Victorias"]],share:txt,retry:"duel"});
