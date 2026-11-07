@@ -100,9 +100,9 @@ def row(name: str, s: dict) -> str:
             f" {s['pierde_50']:.0%} |")
 
 
-def report(data: list[dict], entry: str) -> str:
+def report(data: list[dict], entry: str, exit_: str = "1h") -> str:
     head = "| Grupo | n | Retorno medio | Mediana | ≥ 2× | Pierde ≥ 50 % |\n|---|---|---|---|---|---|"
-    out = [f"# Análisis del recolector (entrada +{entry}, salida +1 h)",
+    out = [f"# Análisis del recolector (entrada +{entry}, salida +{exit_})",
            f"Generado {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC. Retornos tras restar "
            f"{HAIRCUT:.0%} de comisiones y deslizamiento. Token desaparecido = −100 %.", ""]
     if not data:
@@ -132,14 +132,16 @@ def report(data: list[dict], entry: str) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--entry", default="5m", choices=["5m", "15m"])
+    ap.add_argument("--exit", dest="exit_", default="1h", choices=["1h", "24h"])
     ap.add_argument("--db", default=str(DB))
     ap.add_argument("--csv", help="exported tokens_*.csv.gz instead of the database")
     args = ap.parse_args()
     conn = db_from_csv(args.csv) if args.csv else sqlite3.connect(args.db)
-    data = load(conn, args.entry)
+    data = load(conn, args.entry, args.exit_)
     path = ROOT / "informes" / "analisis_recolector.md"
-    path.write_text(report(data, args.entry))
-    print(report(data, args.entry))
+    text = report(data, args.entry, args.exit_)
+    path.write_text(text)
+    print(text)
 
 
 if __name__ == "__main__":
