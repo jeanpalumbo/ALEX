@@ -1,0 +1,134 @@
+[
+ {
+  "author": "APE_ORACLE1",
+  "cas": 81,
+  "ventana": [
+   "2026-11-03T20:37:47.000Z",
+   "2026-11-05T19:02:15.000Z"
+  ],
+  "evaluables_1h": 72,
+  "no_evaluables": {
+   "NO EVALUABLE: sin velas antes del post": 3,
+   "NO EVALUABLE: horizonte 1h no cubierto": 6
+  },
+  "med_ret_1h": 0.389,
+  "pct_ret1h_ge2": 0.056,
+  "pct_max1h_ge2": 0.167,
+  "pct_ret1h_le05": 0.514,
+  "evaluables_24h": 33,
+  "med_ret_24h": 0.061,
+  "med_min_desde_creacion": 36.1,
+  "primero_obs": 23,
+  "compartidas": 37
+ },
+ {
+  "author": "Solprofit1",
+  "cas": 65,
+  "ventana": [
+   "2026-11-02T15:40:51.000Z",
+   "2026-11-05T16:16:35.000Z"
+  ],
+  "evaluables_1h": 56,
+  "no_evaluables": {
+   "NO EVALUABLE: hueco de velas": 3,
+   "NO EVALUABLE: sin velas antes del post": 5,
+   "NO EVALUABLE: horizonte 1h no cubierto": 1
+  },
+  "med_ret_1h": 0.996,
+  "pct_ret1h_ge2": 0.018,
+  "pct_max1h_ge2": 0.019,
+  "pct_ret1h_le05": 0.054,
+  "evaluables_24h": 36,
+  "med_ret_24h": 0.643,
+  "med_min_desde_creacion": 276.6,
+  "primero_obs": 5,
+  "compartidas": 27
+ },
+ {
+  "author": "DegenFlow_",
+  "cas": 57,
+  "ventana": [
+   "2026-11-04T09:50:13.000Z",
+   "2026-11-05T18:57:10.000Z"
+  ],
+  "evaluables_1h": 51,
+  "no_evaluables": {
+   "NO EVALUABLE: sin velas antes del post": 2,
+   "NO EVALUABLE: hueco de velas": 2,
+   "NO EVALUABLE: horizonte 1h no cubierto": 2
+  },
+  "med_ret_1h": 0.894,
+  "pct_ret1h_ge2": 0.0,
+  "pct_max1h_ge2": 0.098,
+  "pct_ret1h_le05": 0.235,
+  "evaluables_24h": 15,
+  "med_ret_24h": 0.092,
+  "med_min_desde_creacion": 120.8,
+  "primero_obs": 20,
+  "compartidas": 42
+ },
+ {
+  "author": "sol_lord111",
+  "cas": 42,
+  "ventana": [
+   "2026-11-03T21:58:54.000Z",
+   "2026-11-05T18:45:39.000Z"
+  ],
+  "evaluables_1h": 37,
+  "no_evaluables": {
+   "NO EVALUABLE: sin velas antes del post": 3,
+   "NO EVALUABLE: horizonte 1h no cubierto": 2
+  },
+  "med_ret_1h": 0.195,
+  "pct_ret1h_ge2": 0.027,
+  "pct_max1h_ge2": 0.242,
+  "pct_ret1h_le05": 0.649,
+  "evaluables_24h": 10,
+  "med_ret_24h": 0.087,
+  "med_min_desde_creacion": 27.3,
+  "primero_obs": 11,
+  "compartidas": 28
+ },
+ {
+  "author": "0xSeerr",
+  "cas": 69,
+  "ventana": [
+   "2026-11-04T02:21:14.000Z",
+   "2026-11-05T18:10:18.000Z"
+  ],
+  "evaluables_1h": 63,
+  "no_evaluables": {
+   "NO EVALUABLE: sin velas antes del post": 6
+  },
+  "med_ret_1h": 0.273,
+  "pct_ret1h_ge2": 0.016,
+  "pct_max1h_ge2": 0.29,
+  "pct_ret1h_le05": 0.635,
+  "evaluables_24h": 37,
+  "med_ret_24h": 0.081,
+  "med_min_desde_creacion": 17.0,
+  "primero_obs": 17,
+  "compartidas": 31
+ },
+ {
+  "author": "Crypt_bencall1x",
+  "cas": 36,
+  "ventana": [
+   "2026-11-03T21:43:54.000Z",
+   "2026-11-05T07:54:34.000Z"
+  ],
+  "evaluables_1h": 32,
+  "no_evaluables": {
+   "NO EVALUABLE: sin velas antes del post": 4
+  },
+  "med_ret_1h": 0.457,
+  "pct_ret1h_ge2": 0.094,
+  "pct_max1h_ge2": 0.194,
+  "pct_ret1h_le05": 0.5,
+  "evaluables_24h": 16,
+  "med_ret_24h": 0.076,
+  "med_min_desde_creacion": 37.0,
+  "primero_obs": 7,
+  "compartidas": 19
+ }
+]
