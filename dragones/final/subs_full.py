@@ -28,9 +28,9 @@ for i, g in enumerate(G):
         parts = []
         for j, x in enumerate(g):
             col = r"\c&H00D6FF&" if CLAVE.search(x["w"]) else r"\c&HFFFFFF&"
-            if j < k: parts.append("{" + col + r"\alpha&H00&\fscx100\fscy100}" + esc(x["w"]))
-            elif j == k: parts.append("{" + col + r"\alpha&H00&\fscx118\fscy118\t(0,120,\fscx100\fscy100)}" + esc(x["w"]))
-            else: parts.append(r"{\alpha&HFF&\fscx100\fscy100}" + esc(x["w"]))
+            if j < k: parts.append("{" + col + r"\alpha&H00&}" + esc(x["w"]))
+            elif j == k: parts.append("{" + col + r"\alpha&H00&\fscy125\t(0,120,\fscy100)}" + esc(x["w"]))
+            else: parts.append(r"{\alpha&HFF&}" + esc(x["w"]))
         out.append(f"Dialogue: 0,{ts(a)},{ts(b)},S,,0,0,0,," + " ".join(parts))
 open("full/subs.ass", "w", encoding="utf-8").write("\n".join(out) + "\n")
 print("ok full/subs.ass", len(G), "grupos")
