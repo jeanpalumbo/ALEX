@@ -1,0 +1,379 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+<script>window.__err=[];window.onerror=(m,s,l,c)=>{window.__err.push(m+" @"+l+":"+c)};window.addEventListener("unhandledrejection",e=>window.__err.push(String(e.reason)))</script>
+<script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from "three";
+// ============================== utilidades
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, x) => a + (b - a) * x;
+const sm = x => { x = cl(x); return x * x * (3 - 2 * x); };
+const eout = x => 1 - Math.pow(1 - cl(x), 3);
+const ein = x => Math.pow(cl(x), 3);
+const back = (x, s = 2) => { x = cl(x) - 1; return 1 + (s + 1) * x * x * x + s * x * x; };
+const seg = (t, a, b, e = sm) => e(cl((t - a) / (b - a)));
+const muelle = (t, t0, A, f = 14, d = 6) => t < t0 ? 0 : A * Math.sin((t - t0) * f) * Math.exp(-(t - t0) * d);
+const D = Math.PI / 180;
+function rnd(i) { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function shade(hex, f) { const c = new THREE.Color(hex); c.multiplyScalar(f); return "#" + c.getHexString(); }
+
+// ============================== texturas pixel (dibujadas a mano por código, 8x8 / 16x16)
+function tex(w, h, fn, seed = 1) {
+  const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d");
+  const px = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
+  fn(px, w, h, (x, y) => rnd(seed * 997 + x * 31 + y * 17));
+  const t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.colorSpace = THREE.SRGBColorSpace; t.generateMipmaps = false; return t;
+}
+const fill = (px, w, h, col, r, v = 0.08) => { for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) px(x, y, shade(col, 1 - v + 2 * v * r(x, y))); };
+const M = t => new THREE.MeshLambertMaterial({ map: t });
+
+// bloques del mundo
+const T = {
+  hierbaTop: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#5f9e3a", r, 0.14); for (let k = 0; k < 18; k++) px(Math.floor(r(k, 1) * 16), Math.floor(r(1, k) * 16), "#7fbf4a"); }, 2),
+  hierbaLado: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#7a5532", r, 0.14); for (let x = 0; x < 16; x++) { const d = 3 + Math.floor(r(x, 9) * 3); for (let y = 0; y < d; y++) px(x, y, shade("#5f9e3a", 0.9 + 0.2 * r(x, y))); } for (let k = 0; k < 10; k++) px(Math.floor(r(k, 4) * 16), 6 + Math.floor(r(4, k) * 10), "#5e4026"); }, 3),
+  tierra: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#7a5532", r, 0.16); }, 4),
+  marmol: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#e8e2d4", r, 0.05); for (let k = 0; k < 16; k++) { px(k, Math.floor(8 + 4 * Math.sin(k * 0.7)), "#c9c0ad"); } px(3, 3, "#d6cfbf"); px(11, 12, "#d6cfbf"); }, 5),
+  columna: tex(16, 16, (px, w, h, r) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, shade(x % 4 === 0 ? "#cfc7b4" : "#ece6d8", 1 - 0.04 + 0.08 * r(x, y))); }, 6),
+  oro: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#d9a630", r, 0.1); for (let x = 0; x < 16; x++) { px(x, 0, "#f3d26a"); px(x, 15, "#9a7020"); } }, 7),
+  madera: tex(16, 16, (px, w, h, r) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, shade(y % 4 === 0 ? "#6b4424" : "#9a6a3c", 1 - 0.07 + 0.14 * r(x, y))); }, 8),
+  piedra: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#8a8780", r, 0.15); for (let k = 0; k < 8; k++) px(Math.floor(r(k, 2) * 16), Math.floor(r(2, k) * 16), "#6d6a64"); }, 9),
+  muroNoche: tex(16, 16, (px, w, h, r) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const m = y % 8 === 0 || (x + (Math.floor(y / 8) % 2) * 8) % 16 === 0; px(x, y, m ? "#4a4038" : shade("#8a7560", 1 - 0.08 + 0.16 * r(x, y))); } }, 10),
+  tela: tex(16, 16, (px, w, h, r) => { fill(px, w, h, "#e9dcc0", r, 0.05); for (let x = 0; x < 16; x += 4) for (let y = 0; y < 16; y++) px(x, y, "#d4c4a2"); }, 11),
+  nube: tex(8, 8, (px, w, h, r) => fill(px, w, h, "#ffffff", r, 0.03), 12),
+};
+const MAT = {
+  hierba: [M(T.hierbaLado), M(T.hierbaLado), M(T.hierbaTop), M(T.tierra), M(T.hierbaLado), M(T.hierbaLado)],
+  marmol: M(T.marmol), columna: M(T.columna), oro: M(T.oro), madera: M(T.madera), piedra: M(T.piedra), muro: M(T.muroNoche), tela: M(T.tela),
+  nube: new THREE.MeshLambertMaterial({ map: T.nube, transparent: true, opacity: 0.95 }),
+};
+
+// ============================== pieles propias (skins) — se pintan cara a cara
+// orden de BoxGeometry: +x (izquierda del personaje vista desde delante = su derecha), -x, +y, -y, +z (delante), -z
+function skin(sp) {
+  const R = (x, y, s) => rnd(s * 101 + x * 7 + y * 13);
+  const caraTex = (expr) => tex(8, 8, (px, w, h, r) => {
+    fill(px, 8, 8, sp.piel, r, 0.05);
+    if (sp.melena) { for (let x = 0; x < 8; x++) { px(x, 0, sp.pelo); px(x, 1, sp.pelo); } px(0, 2, sp.pelo); px(7, 2, sp.pelo); px(0, 3, sp.pelo); px(7, 3, sp.pelo); px(0, 4, sp.pelo); px(7, 4, sp.pelo); }
+    else for (let x = 0; x < 8; x++) { px(x, 0, sp.pelo); if (x < 2 || x > 5 || sp.flequillo) px(x, 1, sp.pelo); }
+    if (sp.leon) { for (let x = 0; x < 8; x++) { px(x, 0, "#c48a2c"); px(x, 1, x % 3 ? "#d9a03c" : "#a66f22"); } px(1, 1, "#2a1a0a"); px(6, 1, "#2a1a0a"); px(0, 2, "#c48a2c"); px(7, 2, "#c48a2c"); }
+    if (sp.corona) { px(1, 0, "#f2c84a"); px(3, 0, "#f2c84a"); px(4, 0, "#f2c84a"); px(6, 0, "#f2c84a"); }
+    // ojos y cejas según expresión
+    const ojoW = "#ffffff", pupila = sp.ojos || "#3a2a1a";
+    if (expr === "cerrados" || expr === "risa") { px(1, 4, shade(sp.piel, 0.6)); px(2, 4, shade(sp.piel, 0.6)); px(5, 4, shade(sp.piel, 0.6)); px(6, 4, shade(sp.piel, 0.6)); }
+    else { px(1, 4, ojoW); px(2, 4, pupila); px(5, 4, pupila); px(6, 4, ojoW); px(1, 3, shade(sp.piel, 0.82)); px(6, 3, shade(sp.piel, 0.82)); }
+    if (expr === "enfado") { px(1, 3, "#2a1a0a"); px(2, 3, shade(sp.piel, 0.7)); px(6, 3, "#2a1a0a"); px(5, 3, shade(sp.piel, 0.7)); px(2, 2, "#2a1a0a"); px(5, 2, "#2a1a0a"); }
+    else if (expr === "susto") { px(1, 3, shade(sp.pelo, 1)); px(6, 3, shade(sp.pelo, 1)); }
+    // nariz
+    px(3, 5, shade(sp.piel, 0.85)); px(4, 5, shade(sp.piel, 0.85));
+    if (sp.barba) { for (let x = 1; x < 7; x++) { px(x, 6, sp.barba); px(x, 7, sp.barba); } px(0, 5, sp.barba); px(7, 5, sp.barba); px(0, 6, sp.barba); px(7, 6, sp.barba); }
+    // boca
+    const mc = "#6b2a22";
+    if (expr === "risa") { px(2, 6, mc); px(3, 7, mc); px(4, 7, mc); px(5, 6, mc); px(3, 6, "#ffffff"); px(4, 6, "#ffffff"); }
+    else if (expr === "grito") { px(3, 6, mc); px(4, 6, mc); px(3, 7, mc); px(4, 7, mc); }
+    else if (expr === "enfado") { px(2, 7, mc); px(3, 6, mc); px(4, 6, mc); px(5, 7, mc); }
+    else if (!sp.barba) { px(3, 6, mc); px(4, 6, mc); }
+    else { px(3, 6, mc); px(4, 6, mc); }
+  }, sp.seed);
+  const pelo = tex(8, 8, (px, w, h, r) => { fill(px, 8, 8, sp.leon ? "#c48a2c" : sp.pelo, r, 0.12); if (sp.leon) for (let k = 0; k < 10; k++) px(Math.floor(r(k, 3) * 8), Math.floor(r(3, k) * 8), "#a66f22"); }, sp.seed + 1);
+  const lado = tex(8, 8, (px, w, h, r) => { fill(px, 8, 8, sp.piel, r, 0.05); for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) { if (y < 2 || (x > 4 && y < (sp.melena ? 8 : 5)) || (sp.leon && (y < 3 || x > 3))) px(x, y, shade(sp.leon ? "#c48a2c" : sp.pelo, 0.9 + 0.2 * r(x, y))); } if (sp.barba) for (let y = 5; y < 8; y++) for (let x = 0; x < 3; x++) px(x, y, sp.barba); px(2, 4, shade(sp.piel, 0.8)); }, sp.seed + 2);
+  const ladoR = tex(8, 8, (px, w, h, r) => { fill(px, 8, 8, sp.piel, r, 0.05); for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) { if (y < 2 || (x < 3 && y < (sp.melena ? 8 : 5)) || (sp.leon && (y < 3 || x < 4))) px(x, y, shade(sp.leon ? "#c48a2c" : sp.pelo, 0.9 + 0.2 * r(x, y))); } if (sp.barba) for (let y = 5; y < 8; y++) for (let x = 5; x < 8; x++) px(x, y, sp.barba); px(5, 4, shade(sp.piel, 0.8)); }, sp.seed + 3);
+  const ropa = (w, h, fn, s) => tex(w, h, (px, W, H, r) => { fill(px, W, H, sp.ropa, r, 0.07); fn && fn(px, W, H, r); }, s);
+  const torsoF = ropa(8, 12, (px, w, h, r) => {
+    if (sp.cinto) for (let x = 0; x < 8; x++) px(x, 7, sp.cinto);
+    if (sp.escote) { px(3, 0, sp.piel); px(4, 0, sp.piel); px(3, 1, sp.piel); px(4, 1, sp.piel); }
+    if (sp.leon) { for (let x = 0; x < 8; x++) { px(x, 0, "#c48a2c"); px(x, 1, x % 2 ? "#d9a03c" : "#b07a26"); } px(0, 2, "#c48a2c"); px(7, 2, "#c48a2c"); px(3, 2, "#d9a03c"); px(4, 2, "#d9a03c"); px(3, 3, "#8a5a1a"); px(4, 3, "#8a5a1a"); }
+    if (sp.desnudo) for (let y = 0; y < 7; y++) for (let x = 0; x < 8; x++) px(x, y, shade(sp.piel, 0.95 + 0.1 * r(x, y)));
+    if (sp.ribete) for (let x = 0; x < 8; x++) px(x, 11, sp.ribete);
+  }, sp.seed + 4);
+  const torsoB = ropa(8, 12, (px, w, h, r) => { if (sp.leon) for (let y = 0; y < 9; y++) for (let x = 1; x < 7; x++) px(x, y, shade("#c48a2c", 0.85 + 0.25 * r(x, y))); if (sp.melena) for (let y = 0; y < 5; y++) for (let x = 1; x < 7; x++) px(x, y, sp.pelo); if (sp.cinto) for (let x = 0; x < 8; x++) px(x, 7, sp.cinto); }, sp.seed + 5);
+  const torsoL = ropa(4, 12, (px, w, h, r) => { if (sp.cinto) for (let x = 0; x < 4; x++) px(x, 7, sp.cinto); }, sp.seed + 6);
+  const brazoU = tex(4, 6, (px, w, h, r) => { fill(px, 4, 6, sp.mangas ? sp.ropa : sp.piel, r, 0.06); if (sp.brazalete) for (let x = 0; x < 4; x++) px(x, 4, sp.brazalete); }, sp.seed + 7);
+  const brazoL = tex(4, 6, (px, w, h, r) => { fill(px, 4, 6, sp.piel, r, 0.06); if (sp.brazalete) for (let x = 0; x < 4; x++) px(x, 1, sp.brazalete); }, sp.seed + 8);
+  const mano = tex(4, 4, (px, w, h, r) => fill(px, 4, 4, shade(sp.piel, 0.92), r, 0.05), sp.seed + 9);
+  const piernaU = tex(4, 6, (px, w, h, r) => fill(px, 4, 6, sp.falda ? sp.ropa : (sp.pantalon || sp.piel), r, 0.07), sp.seed + 10);
+  const piernaL = tex(4, 6, (px, w, h, r) => { fill(px, 4, 6, sp.faldaLarga ? sp.ropa : sp.piel, r, 0.06); if (!sp.faldaLarga) { for (let x = 0; x < 4; x++) { px(x, 5, sp.sandalia || "#6b4424"); px(x, 3, sp.sandalia || "#6b4424"); } } }, sp.seed + 11);
+  const pie = tex(4, 4, (px, w, h, r) => fill(px, 4, 4, sp.faldaLarga ? sp.ropa : (sp.sandalia || "#6b4424"), r, 0.08), sp.seed + 12);
+  const caras = {}; for (const e of ["normal", "enfado", "risa", "cerrados", "grito", "susto"]) caras[e] = M(caraTex(e));
+  const mP = M(pelo), mL = M(lado), mR = M(ladoR);
+  return {
+    caras, cabeza: e => [mR, mL, mP, M(mano), caras[e] || caras.normal, mP],
+    torso: [M(torsoL), M(torsoL), M(torsoL), M(torsoL), M(torsoF), M(torsoB)],
+    brazoU: M(brazoU), brazoL: M(brazoL), mano: M(mano), piernaU: M(piernaU), piernaL: M(piernaL), pie: M(pie),
+  };
+}
+// ============================== rig (proporciones de bloque: cabeza 8, torso 8x12x4, brazos y piernas 4x12x4 en dos tramos)
+function caja(w, h, d, mat, x = 0, y = 0, z = 0) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; return m; }
+function personaje(sp, escala = 1) {
+  const S = skin(sp), root = new THREE.Group(), cad = new THREE.Group(); root.add(cad); cad.position.y = 12;
+  const torso = new THREE.Group(); cad.add(torso);
+  torso.add(caja(8, 12, 4, S.torso, 0, 6, 0));
+  if (sp.faldaLarga) torso.add(caja(9, 7, 5, S.torso, 0, -3, 0));
+  const cuello = new THREE.Group(); cuello.position.y = 12; torso.add(cuello);
+  const cabeza = caja(8, 8, 8, S.cabeza("normal"), 0, 4, 0); cuello.add(cabeza);
+  if (sp.leon) { const melena = caja(10, 4, 9.6, M(T.oro), 0, 8.4, -0.6); melena.material = M(tex(8, 8, (px, w, h, r) => fill(px, 8, 8, "#c48a2c", r, 0.18), 77)); cuello.add(melena);
+    const oreja1 = caja(2, 2, 2, melena.material, -3.6, 10.8, 1), oreja2 = caja(2, 2, 2, melena.material, 3.6, 10.8, 1); cuello.add(oreja1, oreja2); }
+  if (sp.corona) { for (const [x, z] of [[-3, 3], [0, 3.4], [3, 3], [-3.4, 0], [3.4, 0], [-3, -3], [0, -3.4], [3, -3]]) cuello.add(caja(1.6, 2.4, 1.6, MAT.oro, x, 9.2, z)); cuello.add(caja(8.6, 1, 8.6, MAT.oro, 0, 8.2, 0)); }
+  if (sp.melena) cuello.add(caja(8.6, 9, 2, M(tex(8, 8, (px, w, h, r) => fill(px, 8, 8, sp.pelo, r, 0.12), 78)), 0, 3, -4.4));
+  const mk = (lado) => {
+    const sh = new THREE.Group(); sh.position.set(lado * 6, 10, 0); torso.add(sh);
+    sh.add(caja(4, 6, 4, S.brazoU, 0, -3, 0));
+    const el = new THREE.Group(); el.position.y = -6; sh.add(el);
+    el.add(caja(3.9, 5, 3.9, S.brazoL, 0, -2.5, 0)); el.add(caja(4.1, 1.6, 4.1, S.mano, 0, -5.6, 0));
+    return { sh, el };
+  };
+  const mkL = (lado) => {
+    const hp = new THREE.Group(); hp.position.set(lado * 2, 0, 0); cad.add(hp);
+    hp.add(caja(4, 6, 4, S.piernaU, 0, -3, 0));
+    const kn = new THREE.Group(); kn.position.y = -6; hp.add(kn);
+    kn.add(caja(3.9, 5, 3.9, S.piernaL, 0, -2.5, 0)); kn.add(caja(4.1, 1.2, 5, S.pie, 0, -5.4, 0.5));
+    return { hp, kn };
+  };
+  const aR = mk(-1), aL = mk(1), lR = mkL(-1), lL = mkL(1);
+  root.scale.setScalar(escala);
+  return { root, cad, torso, cuello, cabeza, aR, aL, lR, lL, S, expr: "normal" };
+}
+function cara(ch, e) { if (ch.expr !== e) { ch.cabeza.material = ch.S.cabeza(e); ch.expr = e; } }
+// pose: p = {x,y,z,ry, lean, giro, cabX, cabY, cabZ, bR:[x,z], bL, cR, cL, pR, pL, kR, kL, andar(fase), amp, salto, sq}
+function pose(ch, p, t) {
+  const A = p.amp || 0, ph = p.andar || 0;
+  const sw = Math.sin(ph) * A, bob = Math.abs(Math.sin(ph)) * 1.2 * A;
+  const resp = Math.sin(t * 2.4 + (p.seed || 0)) * 0.012;
+  ch.root.position.set(p.x || 0, (p.y || 0) + (p.salto || 0) + bob, p.z || 0);
+  ch.root.rotation.y = (p.ry || 0) * D;
+  ch.cad.rotation.set(0, (p.giro || 0) * D, 0);
+  ch.torso.rotation.set(((p.lean || 0) + sw * 3) * D, Math.sin(ph) * 6 * A * D, (p.ladeo || 0) * D);
+  ch.torso.scale.set(1, 1 + resp + ((p.sq || 1) - 1), 1);
+  ch.cuello.rotation.set((p.cabX || 0) * D, (p.cabY || 0) * D, (p.cabZ || 0) * D);
+  const b = (arm, bx, bz, c, s) => { arm.sh.rotation.set((bx + s) * D, 0, bz * D); arm.el.rotation.set(-c * D, 0, 0); };
+  b(ch.aR, (p.bR ? p.bR[0] : 0), (p.bR ? p.bR[1] : 0) - 4, p.cR ?? 8 + 6 * A, sw * 38);
+  b(ch.aL, (p.bL ? p.bL[0] : 0), (p.bL ? p.bL[1] : 0) + 4, p.cL ?? 8 + 6 * A, -sw * 38);
+  const l = (leg, a, k) => { leg.hp.rotation.set(a * D, 0, 0); leg.kn.rotation.set(k * D, 0, 0); };
+  l(ch.lR, (p.pR || 0) - sw * 34, (p.kR || 0) + Math.max(0, Math.sin(ph + 1.4)) * 40 * A);
+  l(ch.lL, (p.pL || 0) + sw * 34, (p.kL || 0) + Math.max(0, Math.sin(ph + 1.4 + Math.PI)) * 40 * A);
+}
+// ============================== escena
+const W = 1920, H = 1080;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(40, W / H, 1, 3000);
+const hemi = new THREE.HemisphereLight("#cfe6ff", "#6b5a3a", 1.1); scene.add(hemi);
+const sol = new THREE.DirectionalLight("#fff1d8", 2.6); sol.castShadow = true; sol.shadow.mapSize.set(2048, 2048);
+Object.assign(sol.shadow.camera, { left: -160, right: 160, top: 160, bottom: -160, near: 1, far: 900 }); sol.shadow.bias = -0.0006; sol.shadow.normalBias = 0.6;
+scene.add(sol, sol.target);
+const vela = new THREE.PointLight("#ffb050", 0, 260, 1.6); vela.castShadow = true; vela.shadow.mapSize.set(1024, 1024); scene.add(vela);
+const cieloC = document.createElement("canvas"); cieloC.width = 2; cieloC.height = 256; const cieloT = new THREE.CanvasTexture(cieloC); cieloT.colorSpace = THREE.SRGBColorSpace;
+function cielo(a, b) { const g = cieloC.getContext("2d"), gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, a); gr.addColorStop(1, b); g.fillStyle = gr; g.fillRect(0, 0, 2, 256); cieloT.needsUpdate = true; scene.background = cieloT; }
+scene.fog = new THREE.Fog("#cfe6ff", 260, 1100);
+const BL = 16;
+function suelo(cx, cz, n, mat, y = 0) {
+  const g = new THREE.BoxGeometry(BL, BL, BL), im = new THREE.InstancedMesh(g, mat, n * n); const m = new THREE.Matrix4(); let k = 0;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { const h = Math.floor(rnd(i * 53 + j * 7 + cx) * 1.15); m.makeTranslation(cx + (i - n / 2) * BL, y - BL / 2 + (mat === MAT.hierba ? h * 0 : 0), cz + (j - n / 2) * BL); im.setMatrixAt(k++, m); }
+  im.receiveShadow = true; im.castShadow = true; scene.add(im); return im;
+}
+function bloque(x, y, z, mat, s = BL) { const b = caja(s, s, s, mat, x, y + s / 2, z); scene.add(b); return b; }
+// --- Olimpo (origen): suelo de mármol, columnas, nubes
+suelo(0, 0, 26, MAT.marmol);
+for (const x of [-88, -40, 40, 88]) for (const z of [-60]) { for (let k = 0; k < 6; k++) bloque(x, k * BL, z, MAT.columna); bloque(x, 6 * BL, z, MAT.marmol, 20); }
+for (let x = -100; x <= 100; x += 20) bloque(x, 6 * BL + 20, -60, MAT.marmol, 20);
+for (let k = 0; k < 30; k++) { const x = (rnd(k) - 0.5) * 900, z = -250 - rnd(k + 3) * 350, y = -40 + rnd(k + 6) * 120; for (let j = 0; j < 4; j++) bloque(x + j * 24 * (rnd(k + j) - 0.3), y + (j % 2) * 10, z + j * 10, MAT.nube, 24 + rnd(k * 9 + j) * 16); }
+for (const x of [-64, 64]) { const b = new THREE.Group(); b.add(caja(10, 4, 10, MAT.oro, 0, 18, 0)); b.add(caja(3, 16, 3, MAT.oro, 0, 8, 0)); const f = caja(7, 7, 7, new THREE.MeshBasicMaterial({ color: "#ffb347" }), 0, 23, 0); f.name = "fuego"; b.add(f); b.position.set(x, 0, -20); scene.add(b); }
+for (const x of [-88, 88]) scene.add(caja(14, 40, 1, M(tex(4, 10, (px, w, h, r) => { fill(px, 4, 10, "#7f5aa8", r, 0.1); for (let y = 0; y < 10; y++) { px(0, y, "#e0b040"); px(3, y, "#e0b040"); } px(1, 4, "#e0b040"); px(2, 4, "#e0b040"); px(1, 5, "#e0b040"); px(2, 5, "#e0b040"); }, 95)), x, 66, -51));
+const trono = new THREE.Group(); [[0, 0, MAT.oro, 20], [0, 20, MAT.oro, 20]].forEach(([x, y, m, s]) => trono.add(caja(s, s, s, m, x, y + s / 2, 0))); trono.add(caja(24, 34, 6, MAT.oro, 0, 40, -10)); trono.position.set(30, 0, -30); scene.add(trono);
+// --- habitación del bebé (x=600): suelo de madera, muros, cuna, ventana con luna
+const RX = 600;
+suelo(RX, 0, 14, MAT.madera);
+for (let i = -6; i <= 6; i++) for (let k = 0; k < 7; k++) { bloque(RX + i * BL, k * BL, -96, MAT.muro); }
+for (let j = -5; j <= 5; j++) for (let k = 0; k < 7; k++) { bloque(RX - 104, k * BL, j * BL, MAT.muro); bloque(RX + 104, k * BL, j * BL, MAT.muro); }
+const ventana = caja(34, 34, 2, new THREE.MeshBasicMaterial({ color: "#1b2a55" }), RX + 40, 70, -87.5); scene.add(ventana);
+const luna = caja(10, 10, 1, new THREE.MeshBasicMaterial({ color: "#f5f0d6" }), RX + 47, 77, -86.4); scene.add(luna);
+for (const [x, y, w, h] of [[RX + 40, 88, 38, 3], [RX + 40, 52, 38, 3], [RX + 22, 70, 3, 38], [RX + 58, 70, 3, 38], [RX + 40, 70, 2, 34], [RX + 40, 70, 34, 2]]) scene.add(caja(w, h, 3, MAT.madera, x, y, -85.5));
+const alfombra = caja(60, 0.6, 46, M(tex(16, 16, (px, w, h, r) => { fill(px, 16, 16, "#8a2f2f", r, 0.08); for (let i = 0; i < 16; i++) { px(i, 0, "#d9a630"); px(i, 15, "#d9a630"); px(0, i, "#d9a630"); px(15, i, "#d9a630"); px(i, i, "#a84040"); } }, 81)), RX, 0.3, 14); scene.add(alfombra);
+for (let k = 0; k < 3; k++) { scene.add(caja(30, 3, 10, MAT.madera, RX - 60, 36 + k * 18, -86)); for (let j = 0; j < 4; j++) scene.add(caja(5, 8, 5, M(tex(4, 4, (px, w, h, r) => fill(px, 4, 4, ["#b5452f", "#3f6fb5", "#d9a630", "#5f9e3a"][(k + j) % 4], r, 0.1), 90 + k * 4 + j)), RX - 72 + j * 8, 41.5 + k * 18, -86)); }
+const cuna = new THREE.Group(); cuna.position.set(RX, 0, 0); scene.add(cuna);
+for (const [x, z] of [[-14, -10], [14, -10], [-14, 10], [14, 10]]) cuna.add(caja(3, 22, 3, MAT.madera, x, 11, z));
+cuna.add(caja(30, 4, 22, MAT.madera, 0, 9, 0)); cuna.add(caja(28, 3, 20, MAT.tela, 0, 12, 0));
+for (let x = -12; x <= 12; x += 4) { cuna.add(caja(1.4, 10, 1.4, MAT.madera, x, 18, -10)); cuna.add(caja(1.4, 10, 1.4, MAT.madera, x, 18, 10)); }
+cuna.add(caja(31, 2, 2, MAT.madera, 0, 23, -10)); cuna.add(caja(31, 2, 2, MAT.madera, 0, 23, 10));
+const antorcha = new THREE.Group(); antorcha.add(caja(2, 10, 2, MAT.madera, 0, 5, 0)); const llama = caja(3, 4, 3, new THREE.MeshBasicMaterial({ color: "#ffb347" }), 0, 12, 0); antorcha.add(llama); antorcha.position.set(RX - 60, 40, -86); scene.add(antorcha);
+// --- prado de la lucha (x=-700): hierba, rocas, árboles de bloques, colinas
+const PX = -700;
+suelo(PX, 0, 40, MAT.hierba);
+const HOJA = M(tex(16, 16, (px, w, hh, r) => { fill(px, 16, 16, "#3f7f2e", r, 0.22); for (let k = 0; k < 20; k++) px(Math.floor(r(k, 7) * 16), Math.floor(r(7, k) * 16), "#2c5e20"); }, 33));
+const TRONCO = M(tex(16, 16, (px, w, hh, r) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, shade(x % 5 === 0 ? "#4a3220" : "#6b4a2c", 0.9 + 0.2 * r(x, y))); }, 34));
+function roble(x, z, k) {
+  const tr = new THREE.Group(), h = 4 + Math.floor(rnd(k) * 2);
+  for (let j = 0; j < h; j++) tr.add(caja(BL, BL, BL, TRONCO, 0, j * BL + 8, 0));
+  for (let dy = 0; dy < 2; dy++) for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) { if (Math.abs(i) === 2 && Math.abs(j) === 2 && rnd(k + i * 3 + j) < 0.6) continue; tr.add(caja(BL, BL, BL, HOJA, i * BL, (h - 2 + dy) * BL + 8, j * BL)); }
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) if (!(Math.abs(i) === 1 && Math.abs(j) === 1) || rnd(k + 9 + i + j) < 0.5) tr.add(caja(BL, BL, BL, HOJA, i * BL, h * BL + 8, j * BL));
+  tr.add(caja(BL, BL, BL, HOJA, 0, (h + 1) * BL + 8, 0));
+  tr.position.set(x, 0, z); scene.add(tr);
+}
+for (let k = 0; k < 14; k++) { const x = PX + (rnd(k * 3) - 0.5) * 900, z = -140 - rnd(k * 5) * 420; roble(x, z, k); }
+// colinas de bloques al fondo
+if (false) for (let k = 0; k < 40; k++) { const x = PX - 600 + k * 32, alt = Math.floor(2 + 3 * Math.sin(k * 0.4) + 2 * rnd(k + 60)); for (let j = 0; j < alt; j++) bloque(x, j * BL, -620 - (k % 3) * 16, j === alt - 1 ? MAT.hierba : MAT.tierra, BL * 2); }
+// hierba alta y flores (sprites cruzados)
+const hierbaT = tex(8, 8, (px, w, h, r) => { for (let x = 0; x < 8; x++) { const top = 2 + Math.floor(r(x, 1) * 5); for (let y = top; y < 8; y++) px(x, y, shade("#5f9e3a", 0.85 + 0.3 * r(x, y))); } }, 88);
+const florT = c => tex(8, 8, (px, w, h, r) => { for (let y = 3; y < 8; y++) px(4, y, "#3f7f2e"); px(3, 5, "#3f7f2e"); px(4, 1, c); px(3, 2, c); px(5, 2, c); px(4, 3, c); px(4, 2, "#ffe04a"); }, 89);
+function planta(t, x, z, s = 10) { const m = new THREE.MeshLambertMaterial({ map: t, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide }); for (const r of [0.78, -0.78]) { const p = new THREE.Mesh(new THREE.PlaneGeometry(s, s), m); p.position.set(x, s / 2, z); p.rotation.y = r; scene.add(p); } }
+for (let k = 0; k < 260; k++) { const x = PX + (rnd(k * 7 + 1) - 0.5) * 520, z = -100 + rnd(k * 11 + 2) * 220; if ((Math.abs(z - 22) < 14 && Math.abs(x - PX) < 120) || (z > 50 && Math.abs(x - PX) < 60)) continue; planta(rnd(k) < 0.15 ? florT(["#d33a2f", "#f2c84a", "#7f5aa8"][k % 3]) : hierbaT, x, z, 7 + rnd(k + 5) * 6); }
+for (let k = 0; k < 12; k++) bloque(PX - 200 + rnd(k + 40) * 400, 0, 80 + rnd(k + 50) * 120, MAT.piedra, 16);
+// --- personajes (skins propias)
+const HERA = personaje({ seed: 21, piel: "#f0c8a0", pelo: "#3b2414", ropa: "#7f5aa8", cinto: "#e0b040", escote: 1, faldaLarga: 1, melena: 1, corona: 1, ojos: "#4a2a6a", ribete: "#e0b040", brazalete: "#e0b040", mangas: 0 });
+const ZEUS = personaje({ seed: 31, piel: "#e8b88e", pelo: "#e8e8e8", barba: "#f2f2f2", ropa: "#f2efe6", cinto: "#3d6fb5", ribete: "#3d6fb5", faldaLarga: 1, corona: 0 });
+const BEBE = personaje({ seed: 41, piel: "#f2c49a", pelo: "#c27a3a", ropa: "#ffffff", cinto: "#f0e0c0", pantalon: "#ffffff", falda: 1, flequillo: 1 }, 0.55);
+BEBE.cabeza.scale.setScalar(1.45); BEBE.cabeza.position.y = 5.5;
+const HERC = personaje({ seed: 51, piel: "#d39a6a", pelo: "#3a2414", ropa: "#7a4a2a", leon: 1, cinto: "#c48a2c", desnudo: 1, falda: 1, brazalete: "#d9a630", sandalia: "#5a3a1a" });
+scene.add(HERA.root, ZEUS.root, BEBE.root, HERC.root);
+// --- serpientes (cadenas de bloques)
+function serpiente(c1, c2, seed) {
+  const g = new THREE.Group(), n = 16, segs = [];
+  const mt = M(tex(4, 4, (px, w, h, r) => { fill(px, 4, 4, c1, r, 0.12); px(1, 1, c2); px(2, 2, c2); }, seed));
+  for (let k = 0; k < n; k++) { const s = 3.2 - k * 0.12; const m = caja(s, s, s, mt); g.add(m); segs.push(m); }
+  const cab = segs[0]; cab.scale.set(1.5, 1.2, 1.7);
+  const ojoM = new THREE.MeshBasicMaterial({ color: "#ffe14a" }); for (const x of [-1.1, 1.1]) { const o = caja(0.8, 0.8, 0.4, ojoM, x, 0.7, 1.2); cab.add(o); }
+  const lengua = caja(0.5, 0.3, 3, new THREE.MeshBasicMaterial({ color: "#d0302a" }), 0, -0.3, 2.6); cab.add(lengua);
+  scene.add(g); return { g, segs, lengua };
+}
+const SERP = [serpiente("#3f8f3a", "#1f5a20", 61), serpiente("#5aa04a", "#2c6a2a", 62)];
+// --- león de bloques
+const LEON = (() => {
+  const g = new THREE.Group(), pel = M(tex(8, 8, (px, w, h, r) => fill(px, 8, 8, "#d4a14a", r, 0.12), 71)), mel = M(tex(8, 8, (px, w, h, r) => fill(px, 8, 8, "#8a5220", r, 0.2), 72));
+  const cuerpo = new THREE.Group(); cuerpo.position.y = 14; g.add(cuerpo); cuerpo.add(caja(12, 10, 22, pel, 0, 0, 0));
+  const cabG = new THREE.Group(); cabG.position.set(0, 4, 12); cuerpo.add(cabG);
+  cabG.add(caja(16, 16, 6, mel, 0, 0, 0));
+  const caraT = tex(8, 8, (px, w, h, r) => { fill(px, 8, 8, "#d4a14a", r, 0.08); px(1, 2, "#fff"); px(2, 2, "#222"); px(5, 2, "#222"); px(6, 2, "#fff"); px(1, 1, "#5a3010"); px(6, 1, "#5a3010"); px(3, 4, "#3a2010"); px(4, 4, "#3a2010"); px(2, 6, "#6b2a22"); px(3, 6, "#fff"); px(4, 6, "#fff"); px(5, 6, "#6b2a22"); }, 73);
+  cabG.add(caja(10, 10, 8, [pel, pel, pel, pel, M(caraT), pel], 0, 0, 5));
+  const patas = []; for (const [x, z] of [[-4, 8], [4, 8], [-4, -8], [4, -8]]) { const p = new THREE.Group(); p.position.set(x, -4, z); cuerpo.add(p); p.add(caja(4, 10, 4, pel, 0, -5, 0)); patas.push(p); }
+  const cola = []; let prev = cuerpo; for (let k = 0; k < 6; k++) { const c = new THREE.Group(); c.position.set(0, k ? 0 : 3, k ? -3 : -11); prev.add(c); c.add(caja(1.6, 1.6, 3, k === 5 ? mel : pel, 0, 0, -1.5)); cola.push(c); prev = c; }
+  scene.add(g); return { g, cuerpo, cabG, patas, cola };
+})();
+// --- partículas de bloques
+const PART = []; const pg = new THREE.BoxGeometry(1.6, 1.6, 1.6);
+for (let k = 0; k < 220; k++) { const m = new THREE.Mesh(pg, new THREE.MeshLambertMaterial({ color: "#ffffff" })); m.visible = false; m.castShadow = true; scene.add(m); PART.push(m); }
+const EXPLO = [];   // {t0, x,y,z, n, cols, v, ini}
+function explosion(t0, x, y, z, n, cols, v = 40, sz = 1) { EXPLO.push({ t0, x, y, z, n, cols, v, sz }); }
+function particulas(t) {
+  let k = 0;
+  for (const e of EXPLO) { const lt = t - e.t0; if (lt < 0 || lt > 1.6) { for (let i = 0; i < e.n && k < PART.length; i++, k++) PART[k].visible = false; continue; }
+    for (let i = 0; i < e.n && k < PART.length; i++, k++) { const m = PART[k], s = e.t0 * 13 + i;
+      const vx = (rnd(s) - 0.5) * 2 * e.v, vz = (rnd(s + 1) - 0.5) * 2 * e.v, vy = (0.4 + rnd(s + 2)) * e.v;
+      let y = e.y + vy * lt - 90 * lt * lt; const yb = Math.max(e.y0 ?? 0, y);
+      m.position.set(e.x + vx * lt * (y < 0 ? 0.6 : 1), Math.max(0.8, y), e.z + vz * lt); m.rotation.set(lt * 9 + i, lt * 7, 0);
+      m.material.color.set(e.cols[i % e.cols.length]); m.scale.setScalar(e.sz * (1 - cl((lt - 1.1) / 0.5)) + 0.001); m.visible = true; }
+  }
+  for (; k < PART.length; k++) PART[k].visible = false;
+}
+explosion(8.3, RX - 10, 26, 2, 40, ["#3f8f3a", "#2c6a2a", "#5aa04a", "#1f5a20"], 38);
+explosion(8.45, RX + 10, 26, 2, 40, ["#5aa04a", "#2c6a2a", "#3f8f3a", "#a0d070"], 38);
+explosion(12.95, PX + 6, 30, 22, 50, ["#d4a14a", "#8a5220", "#ffffff", "#e9c37a"], 46);
+explosion(3.85, -16, 62, 14, 40, ["#c9a0ff", "#ffffff", "#8a5ad8"], 34, 0.9);     // magia de Hera
+explosion(13.0, PX + 6, 2, 22, 30, ["#7a5532", "#5f9e3a", "#9a7a50"], 34);       // tierra del golpe
+
+// ============================== guion de planos (cortes) — tiempos de la voz
+// voz: Hera@0.10 odiaba… nació@2.09 | Así@3.33 … cuna@5.62 | Y@6.81 bebé@7.08 estranguló@7.83 | Riéndose@9.33 | Aquel@10.80 … monstruos@13.12 | Esta@14.60 … Hércules@15.73
+const SH = [
+  ["olimpo_general", 0.0, 1.55], ["hera_primer", 1.55, 3.3], ["hera_lanza", 3.3, 4.8], ["serp_suelo", 4.8, 6.7],
+  ["cuna_general", 6.7, 8.15], ["bebe_estrangula", 8.15, 9.25], ["bebe_risa", 9.25, 10.75],
+  ["prado_anda", 10.75, 12.35], ["golpe_contra", 12.35, 14.4], ["heroe_final", 14.4, 17.2]];
+function look(px, py, pz, tx, ty, tz, fov = 40) { cam.position.set(px, py, pz); cam.fov = fov; cam.updateProjectionMatrix(); cam.lookAt(tx, ty, tz); }
+function luzDia() { scene.traverse(o => { if (o.name === "fuego") o.scale.y = 1; }); hemi.intensity = 1.1; hemi.color.set("#cfe6ff"); sol.intensity = 2.6; sol.color.set("#fff1d8"); vela.intensity = 0; cielo("#5fa8e8", "#d8ecff"); scene.fog.color.set("#d8ecff"); scene.fog.near = 260; scene.fog.far = 1100; renderer.toneMappingExposure = 1.05; }
+function luzNoche(t) { hemi.intensity = 0.35; hemi.color.set("#6a7fb8"); sol.intensity = 0.55; sol.color.set("#8fa8ff"); vela.intensity = 6500 * (1 + 0.08 * Math.sin(t * 17) + 0.05 * Math.sin(t * 29)); vela.position.set(RX + 30, 55, 50); cielo("#0d1530", "#26365e"); scene.fog.color.set("#1a2240"); scene.fog.near = 150; scene.fog.far = 600; renderer.toneMappingExposure = 1.2; llama.scale.set(1, 1 + 0.25 * Math.sin(t * 19), 1); }
+function luzTarde() { hemi.intensity = 1.0; hemi.color.set("#ffd9b0"); sol.intensity = 2.8; sol.color.set("#ffc890"); vela.intensity = 0; cielo("#f08a4a", "#ffe0a8"); scene.fog.color.set("#ffd7a8"); scene.fog.near = 300; scene.fog.far = 1300; renderer.toneMappingExposure = 1.05; }
+function solEn(x, z, dx = 120, dy = 260, dz = 160) { sol.position.set(x + dx, dy, z + dz); sol.target.position.set(x, 0, z); }
+
+function pintar(t) {
+  const sh = SH.find(s => t >= s[1] && t < s[2]) || SH[SH.length - 1], lt = t - sh[1];
+  // --- poses globales (todo el mundo existe siempre; la cámara elige)
+  // Hera en el Olimpo: entra caminando, se gira a cámara, cruza los brazos enfadada; luego lanza las serpientes con magia
+  const heraAnda = cl((t - 0) / 1.3);
+  const hx = lerp(-70, -10, eout(heraAnda));
+  const hp = { x: hx, z: 10, ry: lerp(90, 20, seg(t, 1.0, 1.5)), andar: hx / 6, amp: t < 1.25 ? 1 : Math.max(0, 1 - (t - 1.25) / 0.2), seed: 1,
+    cabY: 10 * Math.sin(t * 1.3), cabX: -4, lean: 0 };
+  if (t > 1.4 && t < 3.3) { const q = seg(t, 1.45, 1.75, x => back(x, 2.5)); hp.bR = [-30 * q, 38 * q]; hp.bL = [-30 * q, -38 * q]; hp.cR = 95 * q; hp.cL = 95 * q; hp.cabX = -6 * q + muelle(t, 2.1, 5, 12, 5); hp.lean = -4 * q; hp.cabZ = 6 * Math.sin(t * 2) * q; }
+  if (t >= 3.3) { const q = seg(t, 3.4, 3.6, x => back(x, 3)); const q2 = seg(t, 3.75, 3.9, eout); hp.ry = 0; hp.bR = [-150 * q + 60 * q2, 20 * q]; hp.cR = 30 * q - 20 * q2; hp.bL = [-40 * q, -20 * q]; hp.cL = 50; hp.lean = -6 * q + 10 * q2; hp.cabX = -10 * q + 12 * q2; }
+  pose(HERA, hp, t); cara(HERA, t > 1.4 ? (t > 3.6 && t < 4.6 ? "risa" : "enfado") : "normal");
+  pose(ZEUS, { x: 30, z: -30, ry: 0, y: 40, giro: 0, cabY: lerp(0, -35, seg(t, 0.8, 1.2)) + 4 * Math.sin(t * 2), seed: 3, bR: [-10, 10], cR: 40, bL: [-10, -10], cL: 40, lean: 6 }, t);
+  cara(ZEUS, t > 1.6 && t < 3.3 ? "susto" : "normal");
+  ZEUS.root.position.y = 40 - 12;  // sentado en el trono
+  ZEUS.lR.hp.rotation.x = -80 * D; ZEUS.lL.hp.rotation.x = -80 * D; ZEUS.lR.kn.rotation.x = 80 * D; ZEUS.lL.kn.rotation.x = 80 * D;
+  // serpientes: caen del cielo (3.9-4.8) y reptan hacia la cuna; luego suben y el bebé las agarra
+  SERP.forEach((s, i) => {
+    const lado = i ? 1 : -1;
+    for (let k = 0; k < s.segs.length; k++) {
+      const m = s.segs[k]; let x, y, z;
+      if (t < 6.7) {   // reptando por el suelo de la habitación hacia la cuna
+        const prog = seg(t, 4.8, 6.7, x => x), d = k * 3.0, ang = t * 7 - k * 0.5 + i;
+        x = RX + lado * (44 - prog * 26 + d * 0.8); z = 34 + i * 6 + Math.sin(ang) * 4; y = 1.8;
+        if (t < 4.8) { y = 200; }   // aún no han llegado
+      } else if (t < 8.3) {  // suben por la cuna y se enroscan en las manos
+        const up = seg(t, 6.7, 7.6), d = k * 2.3, ang = t * 7 + k * 0.6 + i * 2;
+        const grab = seg(t, 7.75, 8.0);
+        x = RX + lado * (24 - 12 * up - 4 * grab) + Math.sin(ang) * (3 - 2 * grab) + lado * Math.max(0, k - 6) * 0.6;
+        z = 2 + Math.cos(ang) * 2 + Math.max(0, k - 4) * 1.2 * (1 - grab * 0.5);
+        y = lerp(4, 30 + Math.max(0, 6 - k) * 1.4, up) - Math.max(0, k - 6) * 1.6 * up;
+        if (grab > 0) { const sq = 1 + 0.25 * Math.sin((t - 7.8) * 40) * grab; m.scale.set(sq, 1 / sq, sq); }
+      } else { y = -500; x = 0; z = 0; }
+      m.position.set(x, y, z);
+      if (k === 0) { m.rotation.y = t < 6.7 ? (lado > 0 ? -Math.PI / 2 : Math.PI / 2) : (lado > 0 ? -1.2 : 1.2); s.lengua.scale.z = Math.max(0, Math.sin(t * 9 + i)) ; }
+    }
+  });
+  // bebé en la cuna: duerme, se despierta, agarra las serpientes y las aprieta; luego se ríe pataleando
+  const bb = { x: RX, z: 0, y: 12, ry: 0, seed: 5, lean: 0 };
+  const sentado = seg(t, 6.9, 7.3);
+  bb.lean = lerp(-80, -10, sentado); bb.y = lerp(12, 13, sentado); bb.z = lerp(-4, 0, sentado);
+  bb.pR = -80 * sentado; bb.pL = -80 * sentado; bb.kR = 20; bb.kL = 20;
+  const ag = seg(t, 7.7, 7.95, x => back(x, 2));
+  bb.bR = [-100 * ag, 40 * ag]; bb.bL = [-100 * ag, -40 * ag]; bb.cR = 30 * ag + 10 * Math.sin((t - 7.9) * 30) * cl((t - 7.9) * 3) * (t < 8.3 ? 1 : 0); bb.cL = bb.cR;
+  if (t > 8.3) { const r = seg(t, 8.3, 8.6); bb.bR = [lerp(-100, -150, r) + 25 * Math.sin(t * 16), lerp(40, 70, r)]; bb.bL = [lerp(-100, -150, r) + 25 * Math.sin(t * 16 + 1), lerp(-40, -70, r)]; bb.cR = 20; bb.cL = 20;
+    bb.pR = -80 + 25 * Math.sin(t * 18); bb.pL = -80 + 25 * Math.sin(t * 18 + 2); bb.salto = Math.abs(Math.sin(t * 9)) * 1.6; bb.cabZ = 8 * Math.sin(t * 9); bb.lean = -14 + 6 * Math.sin(t * 9); }
+  pose(BEBE, bb, t); BEBE.root.position.y = bb.y + (bb.salto || 0);
+  cara(BEBE, t < 6.95 ? "cerrados" : (t < 7.7 ? "normal" : (t < 8.3 ? "enfado" : "risa")));
+  // Hércules adulto en el prado: anda hacia el león, el león salta, puñetazo con impacto, el león sale volando
+  const ha = { x: PX - 70, z: 20, ry: 90, seed: 7 };
+  const avz = seg(t, 10.75, 12.4, x => x); ha.x = lerp(PX - 90, PX - 22, avz); ha.andar = ha.x / 5.5; ha.amp = t < 12.25 ? 1 : Math.max(0, 1 - (t - 12.25) / 0.15);
+  ha.cabY = 8 * Math.sin(t * 1.7);
+  // golpe: anticipación 12.55-12.85, impacto 12.95
+  const an = seg(t, 12.5, 12.85, x => x * x), hit = seg(t, 12.85, 12.97, x => x), rec = seg(t, 13.3, 13.9);
+  ha.bR = [lerp(lerp(0, 40, an), -95, hit) * (1 - rec), lerp(lerp(0, 25, an), -10, hit) * (1 - rec)]; ha.cR = lerp(lerp(10, 110, an), 0, hit) * (1 - rec) + 10;
+  ha.bL = [lerp(-30 * an, 20, hit), -20 * an]; ha.cL = 70 * an;
+  ha.giro = lerp(lerp(0, 35, an), -25, hit) * (1 - rec); ha.lean = lerp(lerp(0, -8, an), 14, hit) * (1 - rec); ha.pR = lerp(0, 25, an) * (1 - hit) - 20 * hit * (1 - rec); ha.pL = 20 * hit * (1 - rec); ha.kL = 15 * hit * (1 - rec);
+  ha.cabX = -6 * an;
+  if (t > 14.4) { const q = seg(t, 14.45, 14.9, x => back(x, 1.8)); ha.x = PX - 22; ha.ry = lerp(90, 0, seg(t, 14.4, 14.8)); ha.bR = [-170 * q, 20 * q]; ha.cR = 20; ha.bL = [0, -30 * q]; ha.cL = 90 * q; ha.giro = 0; ha.lean = -4 * q; ha.pR = -10 * q; ha.pL = 10 * q; ha.kL = 0; ha.cabX = -8 * q + 4 * Math.sin(t * 2); ha.cabY = 10 * Math.sin(t * 1.1); ha.amp = 0; ha.salto = 6 * Math.sin(seg(t, 14.45, 14.85) * Math.PI); }
+  pose(HERC, ha, t); cara(HERC, t > 12.5 && t < 13.4 ? "grito" : (t > 13.4 ? "risa" : "normal"));
+  // león: espera rugiendo, carga y salta (12.5-12.95), recibe el golpe y sale despedido dando vueltas
+  const L = LEON; let lx = PX + 40, ly = 0, lrot = 0, lroll = 0;
+  const carga = seg(t, 12.2, 12.9, x => x);
+  lx = lerp(PX + 80, PX + 4, carga); ly = Math.sin(seg(t, 12.55, 12.95) * Math.PI) * 14;
+  if (t > 12.95) { const f = t - 12.95; lx = PX + 4 + 120 * f; ly = 14 + 70 * f - 70 * f * f; lroll = -f * 9; if (ly < 0) ly = 0; }
+  L.g.position.set(lx, Math.max(0, ly), 22); L.g.rotation.set(0, -Math.PI / 2, 0); L.cuerpo.rotation.set(0, 0, 0); L.g.rotation.z = lroll * (t < 14.4 ? 1 : 0);
+  if (t > 14.4) L.g.position.set(PX + 400, -200, 0);
+  const lc = t < 12.2 ? 0 : 1, lf = t * (lc ? 16 : 3);
+  L.patas.forEach((p, i) => p.rotation.x = (lc ? 40 : 6) * D * Math.sin(lf + (i % 2 ? Math.PI : 0) + (i > 1 ? 0.6 : 0)));
+  L.cabG.rotation.x = (-10 + (t < 12.2 ? 8 * Math.sin(t * 5) : -10)) * D;
+  L.cola.forEach((c, i) => { c.rotation.y = 0.35 * Math.sin(t * 5 - i * 0.6); c.rotation.x = -0.15; });
+  particulas(t);
+  // --- cámara e iluminación por plano (CORTES, no zooms)
+  const dr = (a, f = 0.4) => a * Math.sin(t * f);
+  switch (sh[0]) {
+    case "olimpo_general": luzDia(); solEn(0, 0); look(-30 + lt * 8, 34, 170, -10, 30, 0, 38); break;
+    case "hera_primer": luzDia(); solEn(0, 0); look(hx + 22 + dr(2), 27, 62, hx, 33, 10, 30); break;                      // primer plano de Hera, contrapicado suave
+    case "hera_lanza": luzDia(); solEn(0, 0); look(hx - 58, 12, 58, hx + 2, 40, 6, 44); break;                             // contrapicado: alza el brazo
+    case "serp_suelo": luzNoche(t); solEn(RX, 0, -60, 260, 120); look(RX - 6 + lt * 4, 9, 88, RX, 5, 30, 50); break;   // a ras de suelo con las serpientes
+    case "cuna_general": luzNoche(t); solEn(RX, 0, -60, 260, 120); look(RX + 50, 46, 90, RX, 18, 0, 34); break;
+    case "bebe_estrangula": luzNoche(t); solEn(RX, 0, -60, 260, 120); look(RX + 3, 36, 48, RX, 26, 0, 40); break;
+    case "bebe_risa": luzNoche(t); solEn(RX, 0, -60, 260, 120); look(RX - 14 + lt * 5, 34, 36, RX, 27, 0, 34); break;
+    case "prado_anda": luzDia(); solEn(PX, 20); look(PX - 40 + (ha.x - (PX - 90)) * 0.7, 26, 110, ha.x + 10, 20, 20, 36); break;
+    case "golpe_contra": luzDia(); solEn(PX, 20); { const sk = t > 12.95 && t < 13.3 ? (rnd(Math.floor(t * 60)) - 0.5) * 3 * (1 - (t - 12.95) / 0.35) : 0;
+      look(PX - 14 + sk, 5 + sk, 84, PX - 2, 26, 20, 46); } break;                                                            // contrapicado del golpe con temblor
+    case "heroe_final": luzTarde(); solEn(PX, 20, -200, 160, 120); { const a = -0.35 + lt * 0.12; look(PX - 22 + Math.sin(a) * 62, 14, 20 + Math.cos(a) * 62, PX - 22, 28, 20, 36); } break;
+  }
+  renderer.render(scene, cam);
+}
+window.pintar = pintar; window.DUR = 17.2; pintar(0); window.LISTO = 1;
+</script>
+</body></html>

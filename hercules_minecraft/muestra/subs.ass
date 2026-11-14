@@ -1,0 +1,53 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: S,Montserrat,80,&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,-1,0,0,0,100,100,0,0,1,6,4,2,60,60,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.08,0:00:00.30,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Hera {\alpha&HFF&}odiaba {\alpha&HFF&}a
+Dialogue: 0,0:00:00.30,0:00:00.70,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&}Hera {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}odiaba {\alpha&HFF&}a
+Dialogue: 0,0:00:00.70,0:00:00.77,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&}Hera {\c&HFFFFFF&\alpha&H00&}odiaba {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}a
+Dialogue: 0,0:00:00.77,0:00:01.22,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Hércules {\alpha&HFF&}desde {\alpha&HFF&}el
+Dialogue: 0,0:00:01.22,0:00:01.47,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&}Hércules {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}desde {\alpha&HFF&}el
+Dialogue: 0,0:00:01.47,0:00:01.59,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&}Hércules {\c&HFFFFFF&\alpha&H00&}desde {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}el
+Dialogue: 0,0:00:01.59,0:00:01.83,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}día {\alpha&HFF&}en {\alpha&HFF&}que
+Dialogue: 0,0:00:01.83,0:00:01.93,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}día {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}en {\alpha&HFF&}que
+Dialogue: 0,0:00:01.93,0:00:02.07,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}día {\c&HFFFFFF&\alpha&H00&}en {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}que
+Dialogue: 0,0:00:02.07,0:00:03.11,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}nació
+Dialogue: 0,0:00:03.31,0:00:03.62,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Así {\alpha&HFF&}que {\alpha&HFF&}una
+Dialogue: 0,0:00:03.62,0:00:03.75,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Así {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}que {\alpha&HFF&}una
+Dialogue: 0,0:00:03.75,0:00:03.96,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Así {\c&HFFFFFF&\alpha&H00&}que {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}una
+Dialogue: 0,0:00:03.96,0:00:04.29,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}noche {\alpha&HFF&}le {\alpha&HFF&}metió
+Dialogue: 0,0:00:04.29,0:00:04.38,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}noche {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}le {\alpha&HFF&}metió
+Dialogue: 0,0:00:04.38,0:00:04.68,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}noche {\c&HFFFFFF&\alpha&H00&}le {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}metió
+Dialogue: 0,0:00:04.68,0:00:04.85,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}dos {\alpha&HFF&}serpientes {\alpha&HFF&}en
+Dialogue: 0,0:00:04.85,0:00:05.43,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}dos {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}serpientes {\alpha&HFF&}en
+Dialogue: 0,0:00:05.43,0:00:05.52,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}dos {\c&H00D6FF&\alpha&H00&}serpientes {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}en
+Dialogue: 0,0:00:05.52,0:00:05.60,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}la {\alpha&HFF&}cuna
+Dialogue: 0,0:00:05.60,0:00:06.59,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}la {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}cuna
+Dialogue: 0,0:00:06.79,0:00:06.96,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Y {\alpha&HFF&}el {\alpha&HFF&}bebé
+Dialogue: 0,0:00:06.96,0:00:07.06,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Y {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}el {\alpha&HFF&}bebé
+Dialogue: 0,0:00:07.06,0:00:07.63,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Y {\c&HFFFFFF&\alpha&H00&}el {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}bebé
+Dialogue: 0,0:00:07.63,0:00:07.81,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}las {\alpha&HFF&}estranguló
+Dialogue: 0,0:00:07.81,0:00:09.10,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}las {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}estranguló
+Dialogue: 0,0:00:09.31,0:00:10.58,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Riéndose
+Dialogue: 0,0:00:10.78,0:00:11.15,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Aquel {\alpha&HFF&}niño {\alpha&HFF&}acabaría
+Dialogue: 0,0:00:11.15,0:00:11.38,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Aquel {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}niño {\alpha&HFF&}acabaría
+Dialogue: 0,0:00:11.38,0:00:11.86,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Aquel {\c&HFFFFFF&\alpha&H00&}niño {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}acabaría
+Dialogue: 0,0:00:11.86,0:00:12.30,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}luchando {\alpha&HFF&}contra {\alpha&HFF&}leones
+Dialogue: 0,0:00:12.30,0:00:12.61,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}luchando {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}contra {\alpha&HFF&}leones
+Dialogue: 0,0:00:12.61,0:00:13.05,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}luchando {\c&HFFFFFF&\alpha&H00&}contra {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}leones
+Dialogue: 0,0:00:13.05,0:00:13.10,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}y {\alpha&HFF&}monstruos
+Dialogue: 0,0:00:13.10,0:00:14.37,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}y {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}monstruos
+Dialogue: 0,0:00:14.58,0:00:14.91,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Esta {\alpha&HFF&}es {\alpha&HFF&}la
+Dialogue: 0,0:00:14.91,0:00:15.05,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Esta {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}es {\alpha&HFF&}la
+Dialogue: 0,0:00:15.05,0:00:15.13,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Esta {\c&HFFFFFF&\alpha&H00&}es {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}la
+Dialogue: 0,0:00:15.13,0:00:15.55,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}historia {\alpha&HFF&}de {\alpha&HFF&}Hércules
+Dialogue: 0,0:00:15.55,0:00:15.71,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}historia {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}de {\alpha&HFF&}Hércules
+Dialogue: 0,0:00:15.71,0:00:16.91,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}historia {\c&HFFFFFF&\alpha&H00&}de {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Hércules
