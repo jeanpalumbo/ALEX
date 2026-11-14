@@ -239,21 +239,26 @@ PLANOS = [("china", china), ("europa", europa), ("mexico", mexico), ("australia"
 
 # ---------------- mosaico: los cuatro planos vivos en 2x2, entran uno a uno y al final todos a silueta -> color
 def mosaico(t):
+    """Zoom hacia atrás: empieza con Australia a pantalla completa (continúa del plano anterior) y la cámara
+    se aleja hasta descubrir las 4 escenas ya colocadas en 2x2. Nunca hay fondo vacío."""
     lt = t - T0["mosaico"]
-    cv = Image.new("RGBA", (W, H), (245, 248, 252, 255))
-    entradas = [3.24, 3.73, 4.07, 4.17]                 # «Pueblos» «jamás» «se» «conocieron»
+    R = 2                                                    # la rejilla se compone al doble para que el zoom no pierda detalle
+    g_ = 12; tw, th = (W - 3 * g_) // 2, (H - 3 * g_) // 2
+    q = eio(lt / 0.85)                                       # 0: Australia llena la pantalla, 1: rejilla completa
     flash = cl((t - 5.55) / 0.12) * (1 - cl((t - 6.35) / 0.35))   # «dibujaron lo mismo»: todos a silueta
-    g = 14; tw, th = (W - 3 * g) // 2, (H - 3 * g) // 2
+    cv = Image.new("RGB", (W * R, H * R), (16, 20, 28))
     for i, (nom, fn) in enumerate(PLANOS):
-        if t < entradas[i] - 0.02: continue
-        tl = T0[nom] + 0.55 + (t - entradas[i]) * 0.6          # cada plano sigue vivo, a cámara lenta
+        tl = (t if nom == "australia" else T0[nom] + 0.5 + lt * 0.6)   # cada escena sigue viva
+        if nom == "australia": tl = T0["australia"] + 0.75 + lt * 0.6
         bg, ch, cam = fn(tl)
-        fr = componer(bg, ch, cam, tl - T0[nom], tw, th, sil_override=1 - flash)
-        s = back(cl((t - entradas[i]) / 0.3), 1.6)
-        x = g + (i % 2) * (tw + g); y = g + (i // 2) * (th + g)
-        fr = fr.convert("RGBA")
-        pegar(cv, fr, (tw / 2, th / 2), (x + tw / 2, y + th / 2), (1 - s) * (8 if i % 2 else -8), max(0.01, s), max(0.01, s))
-    return cv.convert("RGB")
+        fr = componer(bg, ch, cam, tl - T0[nom], tw * R, th * R, sil_override=1 - flash)
+        x = g_ + (i % 2) * (tw + g_); y = g_ + (i // 2) * (th + g_)
+        cv.paste(fr, (x * R, y * R))
+    # cámara: del hueco de Australia (abajo a la derecha) a la rejilla entera
+    ax, ay = g_ + tw + g_ + tw / 2, g_ + th + g_ + th / 2
+    z = lerp(W / tw, 1.0, q); cx = lerp(ax, W / 2, q); cy = lerp(ay, H / 2, q)
+    vw, vh = W / z, H / z; x0 = cl(cx - vw / 2, 0, W - vw); y0 = cl(cy - vh / 2, 0, H - vh)
+    return cv.resize((W, H), Image.LANCZOS, box=(x0 * R, y0 * R, (x0 + vw) * R, (y0 + vh) * R))
 
 def componer(bg, ch, cam, lt, ow=W, oh=H, sil_override=None):
     q = 1.0
