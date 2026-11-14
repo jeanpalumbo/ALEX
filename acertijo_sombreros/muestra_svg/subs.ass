@@ -1,0 +1,50 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: S,Montserrat,84,&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,-1,0,0,0,100,100,0,0,1,6,4,2,60,60,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.08,0:00:00.26,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Tú {\alpha&HFF&}y {\alpha&HFF&}otros
+Dialogue: 0,0:00:00.26,0:00:00.38,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Tú {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}y {\alpha&HFF&}otros
+Dialogue: 0,0:00:00.38,0:00:00.70,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Tú {\c&HFFFFFF&\alpha&H00&}y {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}otros
+Dialogue: 0,0:00:00.70,0:00:00.95,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}nueve {\alpha&HFF&}prisioneros {\alpha&HFF&}estáis
+Dialogue: 0,0:00:00.95,0:00:01.53,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}nueve {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}prisioneros {\alpha&HFF&}estáis
+Dialogue: 0,0:00:01.53,0:00:01.95,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}nueve {\c&HFFFFFF&\alpha&H00&}prisioneros {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}estáis
+Dialogue: 0,0:00:01.95,0:00:02.08,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}en {\alpha&HFF&}la {\alpha&HFF&}mazmorra
+Dialogue: 0,0:00:02.08,0:00:02.16,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}en {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}la {\alpha&HFF&}mazmorra
+Dialogue: 0,0:00:02.16,0:00:02.64,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}en {\c&HFFFFFF&\alpha&H00&}la {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}mazmorra
+Dialogue: 0,0:00:02.64,0:00:02.77,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}de {\alpha&HFF&}un {\alpha&HFF&}rey
+Dialogue: 0,0:00:02.77,0:00:02.92,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}de {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}un {\alpha&HFF&}rey
+Dialogue: 0,0:00:02.92,0:00:03.77,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}de {\c&HFFFFFF&\alpha&H00&}un {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}rey
+Dialogue: 0,0:00:03.97,0:00:04.16,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}El {\alpha&HFF&}guardia {\alpha&HFF&}os
+Dialogue: 0,0:00:04.16,0:00:04.52,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}El {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}guardia {\alpha&HFF&}os
+Dialogue: 0,0:00:04.52,0:00:04.67,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}El {\c&H00D6FF&\alpha&H00&}guardia {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}os
+Dialogue: 0,0:00:04.67,0:00:04.92,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}pone {\alpha&HFF&}en {\alpha&HFF&}fila
+Dialogue: 0,0:00:04.92,0:00:05.05,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}pone {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}en {\alpha&HFF&}fila
+Dialogue: 0,0:00:05.05,0:00:05.34,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}pone {\c&HFFFFFF&\alpha&H00&}en {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}fila
+Dialogue: 0,0:00:05.34,0:00:05.53,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}con {\alpha&HFF&}un {\alpha&HFF&}sombrero
+Dialogue: 0,0:00:05.53,0:00:05.65,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}con {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}un {\alpha&HFF&}sombrero
+Dialogue: 0,0:00:05.65,0:00:06.42,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}con {\c&HFFFFFF&\alpha&H00&}un {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}sombrero
+Dialogue: 0,0:00:06.42,0:00:06.81,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}blanco {\alpha&HFF&}o {\alpha&HFF&}negro
+Dialogue: 0,0:00:06.81,0:00:06.88,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&}blanco {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}o {\alpha&HFF&}negro
+Dialogue: 0,0:00:06.88,0:00:07.91,S,,0,0,0,,{\c&H00D6FF&\alpha&H00&}blanco {\c&HFFFFFF&\alpha&H00&}o {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}negro
+Dialogue: 0,0:00:08.11,0:00:08.50,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Nadie {\alpha&HFF&}ve {\alpha&HFF&}el
+Dialogue: 0,0:00:08.50,0:00:08.65,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Nadie {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}ve {\alpha&HFF&}el
+Dialogue: 0,0:00:08.65,0:00:08.75,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Nadie {\c&HFFFFFF&\alpha&H00&}ve {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}el
+Dialogue: 0,0:00:08.75,0:00:09.78,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}suyo
+Dialogue: 0,0:00:09.98,0:00:10.23,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Si {\alpha&HFF&}lo {\alpha&HFF&}aciertas
+Dialogue: 0,0:00:10.23,0:00:10.33,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Si {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}lo {\alpha&HFF&}aciertas
+Dialogue: 0,0:00:10.33,0:00:11.16,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Si {\c&HFFFFFF&\alpha&H00&}lo {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}aciertas
+Dialogue: 0,0:00:11.16,0:00:11.47,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}eres {\alpha&HFF&}libre
+Dialogue: 0,0:00:11.47,0:00:12.45,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}eres {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}libre
+Dialogue: 0,0:00:12.65,0:00:12.88,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Si {\alpha&HFF&}fallas
+Dialogue: 0,0:00:12.88,0:00:14.06,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Si {\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}fallas
+Dialogue: 0,0:00:14.28,0:00:14.65,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&\fscy125\t(0,120,\fscy100)}Tienes {\alpha&HFF&}diez {\alpha&HFF&}segundos
+Dialogue: 0,0:00:14.65,0:00:14.87,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Tienes {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}diez {\alpha&HFF&}segundos
+Dialogue: 0,0:00:14.87,0:00:16.10,S,,0,0,0,,{\c&HFFFFFF&\alpha&H00&}Tienes {\c&H00D6FF&\alpha&H00&}diez {\c&H00D6FF&\alpha&H00&\fscy125\t(0,120,\fscy100)}segundos

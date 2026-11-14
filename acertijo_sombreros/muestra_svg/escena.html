@@ -1,0 +1,389 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{margin:0;padding:0;background:#000;overflow:hidden}
+  svg{display:block}
+</style>
+<script src="gsap.min.js"></script><script>window.__err=[];window.onerror=(m,s,l,c)=>{window.__err.push(m+" @"+l+":"+c)}</script>
+</head><body>
+<svg id="svg" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glowL" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffcf6e" stop-opacity="0.55"/><stop offset="1" stop-color="#ffcf6e" stop-opacity="0"/></radialGradient>
+    <radialGradient id="vig" cx="0.5" cy="0.45" r="0.75"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>
+    <linearGradient id="luz" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff6c8" stop-opacity="0.95"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></linearGradient>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2f5e"/><stop offset="1" stop-color="#3b5a8f"/></linearGradient>
+    <clipPath id="clipVent"><path d="M820 330 L820 200 A100 100 0 0 1 1020 200 L1020 330 Z"/></clipPath>
+    <pattern id="ladrillo" width="120" height="60" patternUnits="userSpaceOnUse">
+      <rect width="120" height="60" fill="#5d6577"/>
+      <path d="M0 0.5 H120 M0 30.5 H120 M60 0 V30 M0 30 V60 M120 30 V60" stroke="#4f5668" stroke-width="3"/>
+      <rect x="8" y="8" width="40" height="14" rx="6" fill="#646d80"/><rect x="70" y="38" width="36" height="12" rx="6" fill="#646d80"/>
+    </pattern>
+  </defs>
+  <g id="cam">
+    <!-- fondo: pared, ventana con luna, retrato del rey, antorchas -->
+    <rect x="-200" y="-100" width="2320" height="900" fill="url(#ladrillo)"/>
+    <rect x="-200" y="720" width="2320" height="400" fill="#3a3f4d"/>
+    <path d="M-200 720 H2120 V742 H-200 Z" fill="#2c303b"/>
+    <g fill="#343946"><ellipse cx="300" cy="900" rx="160" ry="14"/><ellipse cx="1280" cy="960" rx="220" ry="16"/><ellipse cx="1750" cy="860" rx="120" ry="10"/></g>
+    <g id="ventana">
+      <path d="M800 345 L800 200 A120 120 0 0 1 1040 200 L1040 345 Z" fill="#43495a"/>
+      <g clip-path="url(#clipVent)">
+        <rect x="800" y="60" width="240" height="290" fill="url(#cielo)"/>
+        <circle id="luna" cx="975" cy="165" r="34" fill="#f4f1dc"/><circle cx="962" cy="156" r="7" fill="#dcd8bd"/><circle cx="985" cy="178" r="5" fill="#dcd8bd"/>
+        <g id="nubeV" fill="#5a73a3"><ellipse cx="860" cy="250" rx="60" ry="18"/><ellipse cx="900" cy="238" rx="40" ry="18"/></g>
+        <g id="estrellas" fill="#fff"><circle cx="845" cy="130" r="2.5"/><circle cx="900" cy="105" r="2"/><circle cx="1005" cy="240" r="2"/><circle cx="870" cy="190" r="1.8"/></g>
+      </g>
+      <g stroke="#262a33" stroke-width="12" stroke-linecap="round"><path d="M860 110 V340 M920 85 V340 M980 110 V340"/></g>
+    </g>
+    <g id="retrato" transform="translate(1360 160)">
+      <rect x="-95" y="-110" width="190" height="230" rx="10" fill="#c9962f" stroke="#7a5512" stroke-width="6"/>
+      <rect x="-75" y="-90" width="150" height="190" fill="#7d2f3c"/>
+      <ellipse cx="0" cy="25" rx="48" ry="58" fill="#f0c49a"/>
+      <path d="M-45 -20 L-45 -62 L-25 -40 L0 -72 L25 -40 L45 -62 L45 -20 Z" fill="#f2c230" stroke="#9a7413" stroke-width="4"/>
+      <g id="reyOjos"><circle cx="-17" cy="12" r="8" fill="#fff"/><circle cx="17" cy="12" r="8" fill="#fff"/>
+        <circle class="rp" cx="-17" cy="12" r="4" fill="#222"/><circle class="rp" cx="17" cy="12" r="4" fill="#222"/></g>
+      <path d="M-30 45 Q -15 35 0 45 Q 15 35 30 45 Q 15 52 0 48 Q -15 52 -30 45 Z" fill="#5a3a1a"/>
+      <path d="M8 22 Q 18 32 4 34" fill="none" stroke="#c98d68" stroke-width="4"/>
+    </g>
+    <g id="antorchaI" transform="translate(620 360)">
+      <rect x="-9" y="0" width="18" height="70" rx="5" fill="#5a3b1e"/><rect x="-20" y="-6" width="40" height="14" rx="5" fill="#3d2814"/>
+      <circle cx="0" cy="-30" r="150" fill="url(#glowL)" class="halo"/>
+      <path class="llama" d="M0 -70 C 20 -40 22 -18 0 -4 C -22 -18 -20 -40 0 -70 Z" fill="#ff9d2e"/>
+      <path class="llama2" d="M0 -48 C 10 -32 11 -18 0 -9 C -11 -18 -10 -32 0 -48 Z" fill="#ffe37a"/>
+    </g>
+    <g id="antorchaD" transform="translate(1720 360)">
+      <rect x="-9" y="0" width="18" height="70" rx="5" fill="#5a3b1e"/><rect x="-20" y="-6" width="40" height="14" rx="5" fill="#3d2814"/>
+      <circle cx="0" cy="-30" r="150" fill="url(#glowL)" class="halo"/>
+      <path class="llama" d="M0 -70 C 20 -40 22 -18 0 -4 C -22 -18 -20 -40 0 -70 Z" fill="#ff9d2e"/>
+      <path class="llama2" d="M0 -48 C 10 -32 11 -18 0 -9 C -11 -18 -10 -32 0 -48 Z" fill="#ffe37a"/>
+    </g>
+    <!-- puerta (izquierda) -->
+    <g id="puertaG" transform="translate(150 470)">
+      <path d="M-95 260 V40 A95 95 0 0 1 95 40 V260 Z" fill="#23262f"/>
+      <path id="luzPuerta" d="M-90 260 L95 260 L520 420 L-90 420 Z" fill="url(#luz)" opacity="0"/>
+      <path id="huecoLuz" d="M-88 258 V42 A88 88 0 0 1 88 42 V258 Z" fill="#fff4c4" opacity="0"/>
+      <g id="hoja"><path d="M-88 258 V42 A88 88 0 0 1 88 42 V258 Z" fill="#7b4f2a" stroke="#4a2e15" stroke-width="6"/>
+        <path d="M-40 70 V250 M0 50 V250 M40 70 V250" stroke="#5f3c1e" stroke-width="5"/>
+        <rect x="-88" y="90" width="176" height="14" fill="#3a3f4b"/><rect x="-88" y="200" width="176" height="14" fill="#3a3f4b"/>
+        <circle cx="62" cy="160" r="8" fill="#c9a24a"/></g>
+    </g>
+    <g id="sombras"></g>
+    <g id="gente"></g>
+    <g id="guardia"></g>
+    <g id="vuelan"></g>
+    <!-- cadenas en primer plano para dar profundidad -->
+    <g id="cadenas" fill="none" stroke="#1b1e25" stroke-width="12">
+      <path d="M40 -20 C 60 120 20 230 70 330"/><path d="M1880 -20 C 1860 140 1900 220 1850 300"/>
+    </g>
+    <rect id="oscuro" x="-200" y="-100" width="2320" height="1300" fill="#0a0c1a" opacity="0"/>
+    <!-- reloj de cuenta atrás -->
+    <g id="reloj" transform="translate(1150 -200)">
+      <circle r="92" fill="#fffaf0" stroke="#22252e" stroke-width="10"/>
+      <circle id="aro" r="74" fill="none" stroke="#e2433b" stroke-width="16" stroke-dasharray="465" stroke-dashoffset="0" transform="rotate(-90)"/>
+      <text id="num" y="26" text-anchor="middle" font-family="Montserrat, Arial" font-weight="800" font-size="78" fill="#22252e">10</text>
+      <rect x="-14" y="-122" width="28" height="22" rx="5" fill="#22252e"/>
+    </g>
+  </g>
+  <rect width="1920" height="1080" fill="url(#vig)" pointer-events="none"/>
+  <g id="etiqueta" opacity="0">
+    <path d="M0 0 L-16 -26 H16 Z" fill="#ffd600"/>
+    <text y="-36" text-anchor="middle" font-family="Montserrat, Arial" font-weight="800" font-size="46" fill="#ffd600" stroke="#22252e" stroke-width="7" paint-order="stroke">TÚ</text>
+  </g>
+</svg>
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+function rnd(i) { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+const LINE = "#22252e";
+// ---------------- personaje (alubia con piernas de palo, nariz grande, ojos, párpados, cejas, boca, brazos con codo)
+function personaje(parent, o) {
+  const sombra = el("ellipse", { rx: o.ancho * 0.75, ry: 12, fill: "#000", opacity: 0.28 }, document.getElementById("sombras"));
+  const g = el("g", {}, parent);
+  const legL = el("g", {}, g), legR = el("g", {}, g);
+  for (const lg of [legL, legR]) { el("line", { x1: 0, y1: 0, x2: 0, y2: o.pierna, stroke: LINE, "stroke-width": 7, "stroke-linecap": "round" }, lg);
+    el("path", { d: `M-4 ${o.pierna} q 12 -2 18 4`, stroke: LINE, "stroke-width": 7, fill: "none", "stroke-linecap": "round" }, lg); }
+  const torso = el("g", {}, g);
+  const W = o.ancho, Hh = o.alto;
+  const armB = el("g", {}, torso);
+  el("path", { d: `M${-W / 2} 0 L${-W / 2} ${-Hh + W / 2} A${W / 2} ${W / 2} 0 0 1 ${W / 2} ${-Hh + W / 2} L${W / 2} 0 Q 0 10 ${-W / 2} 0 Z`, fill: o.color, stroke: LINE, "stroke-width": 4 }, torso);
+  const tip = o.tipo || "";
+  const top = -Hh;
+  if (tip === "melena") el("path", { d: `M${-W * 0.56} ${top + W * 1.4} C ${-W * 0.7} ${top + W * 0.2} ${-W * 0.4} ${top - W * 0.12} 0 ${top - W * 0.1} C ${W * 0.4} ${top - W * 0.12} ${W * 0.62} ${top + W * 0.2} ${W * 0.56} ${top + W * 0.5} L ${W * 0.3} ${top + W * 0.3} Q 0 ${top + W * 0.12} ${-W * 0.25} ${top + W * 0.32} L ${-W * 0.4} ${top + W * 1.4} Z`, fill: o.pelo || "#3b2414", stroke: LINE, "stroke-width": 3.5 }, torso);
+  if (tip === "coleta") el("path", { d: `M${-W * 0.45} ${top + W * 0.4} q ${-W * 0.5} ${W * 0.1} ${-W * 0.42} ${W * 0.9} q ${W * 0.2} ${-W * 0.3} ${W * 0.22} ${-W * 0.62} Z`, fill: o.pelo || "#2d1b10", stroke: LINE, "stroke-width": 3.5 }, torso);
+  if (tip === "pelo" || tip === "coleta") el("path", { d: `M${-W * 0.48} ${top + W * 0.42} Q ${-W * 0.5} ${top - W * 0.05} 0 ${top - W * 0.08} Q ${W * 0.5} ${top - W * 0.05} ${W * 0.48} ${top + W * 0.42} Q ${W * 0.2} ${top + W * 0.12} ${-W * 0.05} ${top + W * 0.26} Q ${-W * 0.25} ${top + W * 0.14} ${-W * 0.48} ${top + W * 0.42} Z`, fill: o.pelo || "#2d1b10", stroke: LINE, "stroke-width": 3.5 }, torso);
+  if (tip === "rizos") for (let k = 0; k < 6; k++) el("circle", { cx: -W * 0.42 + k * W * 0.17, cy: top + W * 0.08 + (k % 2) * 6, r: W * 0.14, fill: o.pelo || "#1f1f1f", stroke: LINE, "stroke-width": 3 }, torso);
+  const armF = el("g", {}, torso);
+  const cara = el("g", {}, torso);
+  const ojos = [], pupilas = [], parp = [];
+  const ey = -Hh + W * 0.62, ex = W * 0.17;
+  for (const s of [-1, 1]) {
+    const oj = el("g", {}, cara);
+    el("ellipse", { cx: s * ex, cy: ey, rx: W * 0.13, ry: W * 0.17, fill: "#fff", stroke: LINE, "stroke-width": 3 }, oj);
+    pupilas.push(el("circle", { cx: s * ex, cy: ey, r: W * 0.065, fill: LINE }, oj));
+    const cid = "ojo" + (window.__oj = (window.__oj || 0) + 1);
+    const cp = el("clipPath", { id: cid }, document.querySelector("defs")); el("ellipse", { cx: s * ex, cy: ey, rx: W * 0.13 + 1, ry: W * 0.17 + 1 }, cp);
+    const lr = el("rect", { x: s * ex - W * 0.14, y: ey - W * 0.18, width: W * 0.28, height: 0, fill: o.color, "clip-path": `url(#${cid})` }, oj);
+    const ll = el("path", { d: "", stroke: LINE, "stroke-width": 4, fill: "none", "stroke-linecap": "round" }, oj);
+    parp.push({ lr, ll });
+    ojos.push(oj);
+  }
+  const cejas = [-1, 1].map(s => el("line", { x1: s * ex - W * 0.1, y1: ey - W * 0.24, x2: s * ex + W * 0.1, y2: ey - W * 0.24, stroke: LINE, "stroke-width": 5, "stroke-linecap": "round" }, cara));
+  const nl = o.nariz_l || 0.42;
+  if (tip === "barba") el("path", { d: `M${-W * 0.42} ${ey + W * 0.3} Q ${-W * 0.45} ${ey + W * 1.25} 0 ${ey + W * 1.35} Q ${W * 0.45} ${ey + W * 1.25} ${W * 0.42} ${ey + W * 0.3} Q 0 ${ey + W * 0.55} ${-W * 0.42} ${ey + W * 0.3} Z`, fill: o.pelo || "#4a2c17", stroke: LINE, "stroke-width": 3.5 }, cara);
+  const nariz = el("path", { d: `M ${W * 0.02} ${ey + W * 0.05} q ${W * nl} ${W * 0.12} ${W * 0.02} ${W * 0.3}`, fill: o.nariz || "#e9a98c", stroke: LINE, "stroke-width": 3.5 }, cara);
+  if (tip === "gafas" || o.gafas) { for (const s2 of [-1, 1]) el("circle", { cx: s2 * ex, cy: ey, r: W * 0.2, fill: "none", stroke: LINE, "stroke-width": 4.5 }, cara);
+    el("line", { x1: -ex + W * 0.2, y1: ey, x2: ex - W * 0.2, y2: ey, stroke: LINE, "stroke-width": 4.5 }, cara); }
+  if (tip === "bigote" || o.bigote) el("path", { d: `M${-W * 0.3} ${ey + W * 0.45} Q ${-W * 0.15} ${ey + W * 0.32} 0 ${ey + W * 0.42} Q ${W * 0.15} ${ey + W * 0.32} ${W * 0.3} ${ey + W * 0.45} Q ${W * 0.15} ${ey + W * 0.52} 0 ${ey + W * 0.47} Q ${-W * 0.15} ${ey + W * 0.52} ${-W * 0.3} ${ey + W * 0.45} Z`, fill: o.pelo || "#3b2414" }, cara);
+  const boca = el("path", { d: "", fill: "#5a1d22", stroke: LINE, "stroke-width": 4, "stroke-linejoin": "round" }, cara);
+  const sudor = el("path", { d: `M0 -10 q 8 12 0 16 q -8 -4 0 -16 Z`, fill: "#8fd3ff", stroke: LINE, "stroke-width": 2, opacity: 0 }, torso);
+  const sombrero = el("g", { opacity: 0 }, torso);
+  const brazo = (grp, s) => { const sh = el("g", {}, grp); el("line", { x1: 0, y1: 0, x2: 0, y2: o.brazo * 0.5, stroke: LINE, "stroke-width": 6, "stroke-linecap": "round" }, sh);
+    const fo = el("g", {}, sh); el("line", { x1: 0, y1: 0, x2: 0, y2: o.brazo * 0.5, stroke: LINE, "stroke-width": 6, "stroke-linecap": "round" }, fo);
+    el("circle", { cx: 0, cy: o.brazo * 0.5 + 4, r: 7, fill: LINE }, fo); return { sh, fo }; };
+  const aB = brazo(armB, -1), aF = brazo(armF, 1);
+  const p = { x: o.x, y: o.y, dir: 1, giro: 1, lean: 0, sq: 1, andar: 0, salto: 0,
+    hB: 15, cB: 10, hF: -15, cF: -10, mx: 0, my: 0, parp: 0, abre: 0.0, sonr: 0.4, ceja: 0, sudor: 0, sudorY: 0, sombrero: 0, cabeza: 0, seed: o.seed || 0 };
+  return { sombra, g, legL, legR, torso, cara, ojos, pupilas, parp, cejas, boca, sudor, sombrero, aB, aF, p, o, ey, ex };
+}
+function ponerSombrero(c, blanco) {
+  const W = c.o.ancho, top = -c.o.alto - 2;
+  const f = blanco ? "#f6f4ee" : "#1d1f26";
+  el("ellipse", { cx: 0, cy: top + 4, rx: W * 0.62, ry: 9, fill: f, stroke: LINE, "stroke-width": 4 }, c.sombrero);
+  el("path", { d: `M${-W * 0.36} ${top + 4} L${-W * 0.32} ${top - W * 0.62} Q 0 ${top - W * 0.7} ${W * 0.32} ${top - W * 0.62} L${W * 0.36} ${top + 4} Z`, fill: f, stroke: LINE, "stroke-width": 4 }, c.sombrero);
+  el("rect", { x: -W * 0.35, y: top - 12, width: W * 0.7, height: 11, fill: blanco ? "#d7473f" : "#d9b23a" }, c.sombrero);
+  c.blanco = blanco;
+  c.vuelo = c.sombrero.cloneNode(true); document.getElementById("vuelan").appendChild(c.vuelo);
+}
+function dibujar(c, t) {
+  const p = c.p, o = c.o;
+  const fase = p.x / 26;                                   // ciclo de pasos ligado a la distancia: los pies no patinan
+  const paso = Math.sin(fase) * p.andar;
+  const bob = -Math.abs(Math.sin(fase)) * 7 * p.andar;
+  const resp = Math.sin(t * 2.1 + p.seed) * 0.012;           // respiración
+  const sy = p.sq * (1 + resp), sx = 1 / Math.sqrt(sy);
+  c.g.setAttribute("transform", `translate(${p.x} ${p.y + bob - p.salto}) scale(${p.dir * p.giro} 1)`);
+  const hip = -o.pierna;
+  c.legL.setAttribute("transform", `translate(${-o.ancho * 0.18} ${hip}) rotate(${paso * 28})`);
+  c.legR.setAttribute("transform", `translate(${o.ancho * 0.18} ${hip}) rotate(${-paso * 28})`);
+  c.torso.setAttribute("transform", `translate(0 ${hip + 4}) rotate(${p.lean + paso * 2}) scale(${sx} ${sy})`);
+  const shY = -o.alto * 0.42;
+  const aw = paso * 22;
+  c.aB.sh.setAttribute("transform", `translate(${-o.ancho * 0.48} ${shY}) rotate(${p.hB + aw})`); c.aB.fo.setAttribute("transform", `translate(0 ${o.brazo * 0.5}) rotate(${p.cB})`);
+  c.aF.sh.setAttribute("transform", `translate(${o.ancho * 0.48} ${shY}) rotate(${p.hF - aw})`); c.aF.fo.setAttribute("transform", `translate(0 ${o.brazo * 0.5}) rotate(${p.cF})`);
+  const W = o.ancho;
+  c.cara.setAttribute("transform", `translate(${p.cabeza * W * 0.16} 0)`);
+  c.pupilas.forEach((pu, i) => { pu.setAttribute("cx", (i ? 1 : -1) * c.ex + p.mx * W * 0.06); pu.setAttribute("cy", c.ey + p.my * W * 0.09); });
+  // parpadeo procedimental + párpado manual
+  let bl = 0; const per = 2.9 + rnd(p.seed) * 1.6, ph = (t + rnd(p.seed + 9) * per) % per; if (ph < 0.16) bl = Math.sin(ph / 0.16 * Math.PI);
+  const lid = Math.min(1, Math.max(p.parp, bl));
+  c.parp.forEach((pa, i) => { const cx = (i ? 1 : -1) * c.ex, rx = W * 0.13, ry = W * 0.17, yb = c.ey - ry + 2 * ry * lid;
+    pa.lr.setAttribute("height", Math.max(0, 2 * ry * lid + 1));
+    pa.ll.setAttribute("d", lid < 0.04 ? "" : `M${cx - rx * 0.95} ${yb - ry * 0.12 * (1 - lid)} Q ${cx} ${yb + ry * 0.18} ${cx + rx * 0.95} ${yb - ry * 0.12 * (1 - lid)}`); });
+  c.cejas.forEach((ce, i) => { const s = i ? 1 : -1, cx = s * c.ex, y = c.ey - W * 0.27 - p.ceja * 6; const a = p.ceja * 0.25 * s;
+    ce.setAttribute("x1", cx - W * 0.1); ce.setAttribute("x2", cx + W * 0.1); ce.setAttribute("y1", y + a * W * 0.1 * -1); ce.setAttribute("y2", y + a * W * 0.1); });
+  const my = c.ey + W * 0.52, mw = W * 0.24, ab = p.abre * W * 0.32, sm = p.sonr * W * 0.2;
+  c.boca.setAttribute("d", `M${-mw} ${my} Q 0 ${my + sm} ${mw} ${my} Q 0 ${my + sm + ab + 3} ${-mw} ${my} Z`);
+  c.sudor.setAttribute("opacity", p.sudor); c.sudor.setAttribute("transform", `translate(${-W * 0.42} ${-o.alto * 0.8 + p.sudorY})`);
+  const hb = p.sombrero; // 0 = en la mano del guardia, 1 = puesto
+  c.sombrero.setAttribute("opacity", hb >= 0.999 ? 1 : 0);
+  c.sombrero.setAttribute("transform", `rotate(${p.hatW || 0} 0 ${-o.alto})`);
+  c.sombra.setAttribute("cx", p.x); c.sombra.setAttribute("cy", p.y + 4); c.sombra.setAttribute("rx", o.ancho * 0.7 * (1 - p.salto / 300));
+  if (hb > 0.001 && hb < 0.999) {
+    const hx = (window.MANO || [1700, 640])[0], hy = (window.MANO || [1700, 640])[1];
+    const tx = p.x, ty = p.y - o.pierna - 4;                       // origen del sombrero: el torso en (0, -alto)
+    const x = hx + (tx - hx) * hb, y = hy + (ty - hy) * hb - Math.sin(Math.PI * hb) * 230;
+    c.vuelo.setAttribute("opacity", 1); c.vuelo.setAttribute("transform", `translate(${x} ${y}) rotate(${-540 * (1 - hb)} 0 ${-o.alto})`);
+  } else c.vuelo.setAttribute("opacity", 0);
+}
+// ---------------- guardia (grande, casco con penacho, lanza)
+function guardia(parent) {
+  const g = el("g", {}, parent);
+  const legs = [el("g", {}, g), el("g", {}, g)];
+  legs.forEach((lg, i) => { el("rect", { x: -12, y: 0, width: 24, height: 120, rx: 10, fill: "#3d3f4a", stroke: LINE, "stroke-width": 4 }, lg); el("ellipse", { cx: 10, cy: 122, rx: 26, ry: 12, fill: "#22252e" }, lg); });
+  const torso = el("g", {}, g);
+  const brazoB = el("g", {}, torso);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 150, stroke: LINE, "stroke-width": 16, "stroke-linecap": "round" }, brazoB);
+  el("line", { x1: -10, y1: -260, x2: -10, y2: 260, stroke: "#6b4a26", "stroke-width": 12, "stroke-linecap": "round" }, brazoB);
+  el("path", { d: "M-10 -300 L-28 -250 L8 -250 Z", fill: "#c8ccd6", stroke: LINE, "stroke-width": 4 }, brazoB);
+  el("path", { d: "M-95 0 L-95 -230 Q -95 -330 0 -330 Q 95 -330 95 -230 L95 0 Q 0 16 -95 0 Z", fill: "#8a3b3b", stroke: LINE, "stroke-width": 5 }, torso);
+  el("path", { d: "M-95 -150 L95 -150 L95 -120 L-95 -120 Z", fill: "#c9962f", stroke: LINE, "stroke-width": 4 }, torso);
+  el("path", { d: "M-80 -230 Q 0 -350 80 -230 L80 -215 L-80 -215 Z", fill: "#a8afbd", stroke: LINE, "stroke-width": 5 }, torso);
+  el("path", { d: "M0 -300 Q 30 -350 70 -330 Q 40 -310 20 -285", fill: "#d33a2f", stroke: LINE, "stroke-width": 4 }, torso);
+  const ojos = [], pup = [];
+  for (const s of [-1, 1]) { ojos.push(el("ellipse", { cx: s * 28, cy: -190, rx: 14, ry: 16, fill: "#fff", stroke: LINE, "stroke-width": 3 }, torso)); pup.push(el("circle", { cx: s * 28, cy: -190, r: 7, fill: LINE }, torso)); }
+  const ceja = el("path", { d: "M-46 -212 L-12 -204 M46 -212 L12 -204", stroke: LINE, "stroke-width": 7, "stroke-linecap": "round" }, torso);
+  el("path", { d: "M5 -185 q 40 15 5 40", fill: "#e09a7a", stroke: LINE, "stroke-width": 4 }, torso);
+  const boca = el("path", { d: "", fill: "#5a1d22", stroke: LINE, "stroke-width": 4 }, torso);
+  el("path", { d: "M-45 -128 Q 0 -100 45 -128 Q 30 -150 0 -140 Q -30 -150 -45 -128 Z", fill: "#3b2512" }, torso);
+  const brazoF = el("g", {}, torso);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 85, stroke: LINE, "stroke-width": 16, "stroke-linecap": "round" }, brazoF);
+  const ante = el("g", {}, brazoF); el("line", { x1: 0, y1: 85, x2: 0, y2: 165, stroke: LINE, "stroke-width": 16, "stroke-linecap": "round" }, ante);
+  el("circle", { cx: 0, cy: 170, r: 15, fill: LINE }, ante);
+  const dedo = el("line", { x1: 0, y1: 175, x2: 0, y2: 205, stroke: LINE, "stroke-width": 9, "stroke-linecap": "round", opacity: 0 }, ante);
+  const pila = el("g", {}, ante);
+  const p = { x: 2250, y: 818, andar: 0, lean: 0, hF: -40, cF: -90, hB: 8, mx: -1, sonr: 0, abre: 0, pila: 1, dedo: 0, sq: 1 };
+  return { g, legs, torso, brazoB, brazoF, ante, dedo, pila, ojos, pup, boca, ceja, p };
+}
+const sombraG = el("ellipse", { rx: 130, ry: 16, fill: "#000", opacity: 0.3 }, document.getElementById("sombras"));
+function dibujarGuardia(G, t) {
+  sombraG.setAttribute("cx", G.p.x); sombraG.setAttribute("cy", G.p.y + 128);
+  const p = G.p, fase = p.x / 34, paso = Math.sin(fase) * p.andar, bob = -Math.abs(Math.sin(fase)) * 9 * p.andar;
+  const resp = 1 + Math.sin(t * 1.7) * 0.01;
+  G.g.setAttribute("transform", `translate(${p.x} ${p.y + bob}) scale(-1 1)`);
+  G.legs[0].setAttribute("transform", `translate(-40 0) rotate(${paso * 24})`); G.legs[1].setAttribute("transform", `translate(40 0) rotate(${-paso * 24})`);
+  G.torso.setAttribute("transform", `translate(0 6) rotate(${p.lean}) scale(${1 / Math.sqrt(p.sq * resp)} ${p.sq * resp})`);
+  G.brazoB.setAttribute("transform", `translate(-92 -200) rotate(${p.hB + paso * 10})`);
+  G.brazoF.setAttribute("transform", `translate(92 -200) rotate(${p.hF - paso * 14})`); G.ante.setAttribute("transform", `rotate(${p.cF})`);
+  G.pila.setAttribute("opacity", 0);
+  window.MANO = [p.x - 150, p.y - 470]; G.dedo.setAttribute("opacity", p.dedo);
+  G.pup.forEach((pu, i) => { pu.setAttribute("cx", (i ? 28 : -28) + p.mx * 6); });
+  const ab = p.abre * 30, sm = p.sonr * 18;
+  G.boca.setAttribute("d", `M-30 -122 Q 0 ${-122 + sm} 30 -122 Q 0 ${-122 + sm + ab + 3} -30 -122 Z`);
+}
+// ---------------- montaje
+const gente = document.getElementById("gente");
+const N = 10, X0 = 380, DX = 126, SUELO = 945;
+const colores = ["#f08a3c", "#5cc2d6", "#e86a8c", "#9bcf54", "#b58ae0", "#f2c94c", "#6aa8f0", "#e8735a", "#58c9a0", "#d98fd9"];
+const BLANCO = [true, false, true, false, false, true, true, false, true, false];
+const TIPOS = ["pelo", "melena", "barba", "gafas", "rizos", "coleta", "bigote", "pelo", "melena", "rizos"];
+const ANCHOS = [112, 98, 120, 90, 106, 92, 108, 84, 96, 88];
+const PELOS = ["#2d1b10", "#c2502a", "#4a2c17", "#1f1f1f", "#1f1f1f", "#6b3a1c", "#555", "#e0b84a", "#2d1b10", "#7a3b12"];
+const NARIZ = [0.42, 0.55, 0.35, 0.6, 0.4, 0.5, 0.7, 0.38, 0.52, 0.45];
+const P = [];
+for (let i = 0; i < N; i++) {
+  const alto = 340 - i * 17, ancho = ANCHOS[i];
+  const c = personaje(gente, { x: X0 + i * DX, y: SUELO, alto, ancho, pierna: 92 - i * 3, brazo: 150 - i * 5, color: colores[i], seed: i * 3 + 1, tipo: TIPOS[i], pelo: PELOS[i], nariz_l: NARIZ[i] });
+  ponerSombrero(c, BLANCO[i]); P.push(c);
+}
+// orden de dibujo: el de atrás (protagonista, i=0) delante del todo para que se vea bien
+for (let i = N - 1; i >= 0; i--) gente.appendChild(P[i].g);
+const G = guardia(document.getElementById("guardia"));
+// pila de sombreros en la mano del guardia
+for (let k = 0; k < 3; k++) { el("ellipse", { cx: 0, cy: 150 - k * 22, rx: 48, ry: 10, fill: k % 2 ? "#f6f4ee" : "#1d1f26", stroke: LINE, "stroke-width": 4 }, G.pila); el("path", { d: `M-30 ${150 - k * 22} L-26 ${110 - k * 22} L26 ${110 - k * 22} L30 ${150 - k * 22} Z`, fill: k % 2 ? "#f6f4ee" : "#1d1f26", stroke: LINE, "stroke-width": 4 }, G.pila); }
+
+const tl = gsap.timeline({ paused: true });
+const S = {}; // estado global
+S.rey = 0; S.puerta = 0; S.luz = 0; S.osc = 0; S.reloj = 0; S.aro = 0; S.num = 10; S.etq = 0; S.rey = 0; S.reyMira = 0; S.cam = 0; S.camX = 960; S.camY = 540;
+// --- 0-3.4: «Tú y otros nueve prisioneros… en la mazmorra de un rey»
+// el protagonista ya está; los otros nueve entran caminando desde la derecha hasta su sitio (de espaldas a la cámara no: de perfil)
+P.forEach((c, i) => {
+  if (i === 0) { c.p.x = X0; c.p.dir = 1; return; }
+  const dest = X0 + i * DX, ini = 1990 + i * 95;
+  c.p.x = ini; c.p.dir = -1; c.p.andar = 1;
+  const t0 = 0.45 + i * 0.07, dur = 1.6 + i * 0.12;
+  tl.to(c.p, { x: dest, duration: dur, ease: "power1.out" }, t0);
+  tl.to(c.p, { andar: 0, duration: 0.25, ease: "power2.out" }, t0 + dur - 0.22);
+  tl.to(c.p, { sq: 0.9, duration: 0.08, ease: "power2.out" }, t0 + dur - 0.05).to(c.p, { sq: 1, duration: 0.35, ease: "back.out(3)" });
+});
+// el protagonista saluda a cámara con la etiqueta «TÚ»
+const pr = P[0].p;
+pr.mx = 0.2; pr.my = 0.3; pr.sonr = 0.5;
+tl.to(S, { etq: 1, duration: 0.25, ease: "back.out(2)" }, 0.05).to(S, { etq: 0, duration: 0.3 }, 1.7);
+tl.to(pr, { hF: -150, cF: -30, duration: 0.25, ease: "back.out(2)" }, 0.08).to(pr, { cF: 10, duration: 0.14, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.35).to(pr, { hF: -15, cF: -10, duration: 0.35, ease: "power2.inOut" }, 1.1);
+tl.to(pr, { mx: 1, my: 0, duration: 0.3, ease: "power2.inOut" }, 1.0);       // mira a los que llegan
+tl.to(pr, { cabeza: 0.5, duration: 0.3 }, 1.0);
+// «rey»: el retrato del rey cae de lado y se endereza; sus ojos miran a los prisioneros
+tl.to(S, { rey: 1, duration: 0.1, ease: "power2.in" }, 2.85).to(S, { rey: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" }, 2.95);
+tl.to(S, { reyMira: 1, duration: 0.4, ease: "power2.inOut" }, 3.0);
+// los nueve se miran unos a otros al llegar
+P.forEach((c, i) => { if (!i) return; tl.to(c.p, { mx: i % 2 ? 1 : -1, cabeza: i % 2 ? 0.4 : -0.4, duration: 0.25, ease: "power2.inOut" }, 2.6 + i * 0.05).to(c.p, { mx: 0, cabeza: 0, duration: 0.3 }, 3.5); });
+
+// --- 4.0-7.3: «El guardia os pone en fila con un sombrero: blanco o negro»
+const g = G.p;
+g.andar = 1; tl.to(g, { x: 1750, duration: 1.0, ease: "power1.out" }, 3.85).to(g, { andar: 0, duration: 0.2 }, 4.7);
+tl.to(g, { sq: 0.95, duration: 0.08 }, 4.85).to(g, { sq: 1, duration: 0.3, ease: "back.out(3)" });
+// «fila»: todos se giran hacia delante (derecha) con anticipación
+P.forEach((c, i) => { if (!i) { tl.to(c.p, { mx: 1, cabeza: 0.3, duration: 0.2 }, 4.95); return; }
+  const t0 = 5.0 + (N - i) * 0.025;
+  tl.to(c.p, { sq: 0.92, duration: 0.07 }, t0).to(c.p, { giro: 0, duration: 0.08, ease: "power2.in" }, t0 + 0.04)
+    .call(() => {}, [], t0 + 0.12).set(c.p, { dir: 1 }, t0 + 0.12).to(c.p, { giro: 1, sq: 1, duration: 0.2, ease: "back.out(2.5)" }, t0 + 0.12); });
+// el guardia sujeta la pila y lanza un sombrero a cada uno, del primero de la fila (derecha) al último (el protagonista)
+const lanz = []; // vuelos
+for (let k = 0; k < N; k++) {
+  const i = N - 1 - k, t0 = 5.6 + k * 0.17;
+  tl.to(g, { hF: -150, cF: -50, duration: 0.07, ease: "power2.in" }, t0 - 0.07).to(g, { hF: -120, cF: 10, duration: 0.09, ease: "power2.out" }, t0);
+  tl.fromTo(P[i].p, { sombrero: 0.0011 }, { sombrero: 1, duration: 0.42, ease: "power1.inOut", immediateRender: false }, t0);
+  tl.to(P[i].p, { sq: 0.86, duration: 0.06, ease: "power2.out" }, t0 + 0.42).to(P[i].p, { sq: 1, duration: 0.35, ease: "back.out(4)" });
+  tl.to(P[i].p, { my: -1, mx: 0, duration: 0.12 }, t0 + 0.42).to(P[i].p, { my: 0, duration: 0.3 }, t0 + 0.9);
+}
+tl.to(g, { pila: 0, duration: 0.01 }, 7.3).to(g, { hF: -10, cF: -10, duration: 0.4, ease: "power2.inOut" }, 7.35);
+// «blanco» / «negro»: se balancean los sombreros de ese color
+P.forEach((c, i) => { const t0 = BLANCO[i] ? 6.44 : 6.9;
+  if (i === 0) return;
+  tl.to(c.p, { hatW: -14, duration: 0.09, ease: "power2.out" }, t0).to(c.p, { hatW: 10, duration: 0.12 }).to(c.p, { hatW: 0, duration: 0.3, ease: "back.out(3)" }); });
+
+// --- 8.1-9.2: «Nadie ve el suyo»: todos miran hacia arriba intentando ver su sombrero; interrogaciones
+P.forEach((c, i) => { const t0 = 8.1 + rnd(i) * 0.25;
+  tl.to(c.p, { my: -1.3, mx: 0.3 * (i % 2 ? 1 : -1), lean: (i % 2 ? 6 : -6), ceja: 1, duration: 0.3, ease: "power2.out" }, t0)
+    .to(c.p, { lean: 0, my: 0, mx: 0.6, ceja: 0, duration: 0.4, ease: "power2.inOut" }, 9.5); });
+tl.to(P[3].p, { hF: -150, cF: -60, duration: 0.25, ease: "back.out(2)" }, 8.5).to(P[3].p, { hF: -15, cF: -10, duration: 0.3 }, 9.1);   // uno intenta tocarlo…
+tl.to(g, { hF: -120, cF: -40, dedo: 1, duration: 0.2, ease: "back.out(2)" }, 8.75).to(g, { cF: -10, duration: 0.1, yoyo: true, repeat: 3 }, 8.95)
+  .to(g, { hF: -10, cF: -10, dedo: 0, duration: 0.3 }, 9.5);                                                                               // …y el guardia dice que no con el dedo
+tl.to(g, { mx: 1, duration: 0.2 }, 8.7).to(g, { mx: -1, duration: 0.3 }, 9.6);
+S.q = 0; tl.to(S, { q: 1, duration: 0.25, ease: "back.out(3)" }, 8.3).to(S, { q: 0, duration: 0.25 }, 9.7);
+
+// --- 10.0-11.9: «Si lo aciertas, eres libre»: la puerta se abre con luz; el protagonista se gira, sonríe y salta
+tl.to(S, { puerta: 1, luz: 1, duration: 0.55, ease: "power3.out" }, 10.0);
+tl.to(pr, { mx: -1, cabeza: -0.5, duration: 0.25, ease: "power2.inOut" }, 10.05);
+tl.to(pr, { sonr: 1, abre: 0.5, ceja: 0.8, duration: 0.3 }, 10.4);
+tl.to(pr, { sq: 0.8, duration: 0.14, ease: "power2.in" }, 11.15).to(pr, { sq: 1.12, salto: 70, hB: 150, cB: 30, hF: -150, cF: -30, duration: 0.25, ease: "power2.out" })
+  .to(pr, { salto: 0, sq: 1, duration: 0.25, ease: "power2.in" }).to(pr, { sq: 0.86, duration: 0.06 }).to(pr, { sq: 1, hB: 15, cB: 10, hF: -15, cF: -10, duration: 0.3, ease: "back.out(3)" });
+
+// --- 12.6-13.5: «Si fallas…»: la puerta se cierra de golpe, se oscurece, el guardia sonríe; el protagonista traga saliva y suda
+tl.to(S, { puerta: 0, duration: 0.18, ease: "power3.in" }, 12.62).to(S, { luz: 0, duration: 0.15 }, 12.7);
+tl.to(S, { osc: 0.45, duration: 0.35, ease: "power2.out" }, 12.75);
+tl.to(S, { cam: 1, duration: 0.6, ease: "power2.out" }, 12.75);
+tl.to(pr, { sonr: -0.7, abre: 0.15, ceja: -0.4, mx: 1, cabeza: 0.4, duration: 0.25 }, 12.8);
+tl.to(pr, { sudor: 1, duration: 0.15 }, 13.0).to(pr, { sudorY: 90, duration: 0.9, ease: "power1.in" }, 13.05).to(pr, { sudor: 0, duration: 0.15 }, 13.85);
+tl.to(pr, { sq: 0.93, duration: 0.1, yoyo: true, repeat: 1 }, 13.1);   // traga saliva
+tl.to(g, { sonr: 0.9, abre: 0.3, lean: 6, mx: -1, duration: 0.3, ease: "back.out(2)" }, 12.85).to(g, { lean: 0, duration: 0.4 }, 13.6);
+
+// --- 14.3-16.3: «Tienes diez segundos»: cae el reloj; todos sudan y miran a un lado y a otro
+tl.to(S, { reloj: 1, duration: 0.5, ease: "back.out(1.6)" }, 14.2);
+tl.to(S, { cam: 0, osc: 0.25, duration: 0.6, ease: "power2.inOut" }, 14.2);
+tl.fromTo(S, { aro: 0 }, { aro: 1, duration: 10, ease: "none" }, 14.7);
+tl.set(S, { num: 9 }, 15.7);
+P.forEach((c, i) => { const t0 = 14.4 + rnd(i + 5) * 0.4;
+  tl.to(c.p, { sudor: 1, duration: 0.15 }, t0).to(c.p, { sudorY: 70, duration: 1.2, ease: "power1.in" }, t0 + 0.05);
+  tl.to(c.p, { mx: -1, duration: 0.12 }, t0 + 0.3).to(c.p, { mx: 1, duration: 0.12 }, t0 + 0.75).to(c.p, { mx: -0.6, duration: 0.12 }, t0 + 1.2);
+  tl.to(c.p, { sonr: -0.5, abre: 0.1, duration: 0.25 }, t0); });
+tl.to({}, { duration: 0.01 }, 16.49);
+
+// ---------------- pintar un instante
+const $ = id => document.getElementById(id);
+const interr = [];
+[2, 5, 7].forEach(i => { const c = P[i]; const q = el("text", { "text-anchor": "middle", "font-family": "Montserrat, Arial", "font-weight": 800, "font-size": 70, fill: "#ffd600", stroke: LINE, "stroke-width": 7, "paint-order": "stroke" }, document.getElementById("vuelan")); q.textContent = "?"; interr.push({ q, c }); });
+function pintar(t) {
+  tl.seek(t, false);
+  P.forEach(c => dibujar(c, t)); dibujarGuardia(G, t);
+  // antorchas: llama que tiembla (determinista)
+  document.querySelectorAll(".llama,.llama2").forEach((f, k) => { const s = 1 + 0.12 * Math.sin(t * 17 + k * 2.1) + 0.06 * Math.sin(t * 29 + k); const r = 6 * Math.sin(t * 11 + k * 1.7);
+    f.setAttribute("transform", `rotate(${r}) scale(${1 / s} ${s})`); });
+  document.querySelectorAll(".halo").forEach((h, k) => h.setAttribute("opacity", 0.85 + 0.15 * Math.sin(t * 13 + k * 3)));
+  $("nubeV").setAttribute("transform", `translate(${(t * 9) % 260 - 60} 0)`);
+  $("estrellas").setAttribute("opacity", 0.6 + 0.4 * Math.sin(t * 3));
+  // retrato del rey
+  $("retrato").setAttribute("transform", `translate(1360 160) rotate(${S.rey * 25}, 0, -110)`);
+  document.querySelectorAll(".rp").forEach((e, i) => e.setAttribute("cx", (i ? 17 : -17) + (-3 * S.reyMira) + 2 * Math.sin(t * 0.9)));
+  document.querySelectorAll(".rp").forEach(e => e.setAttribute("cy", 12 + 3 * S.reyMira));
+  // puerta: la hoja gira (escala x) y entra luz
+  $("hoja").setAttribute("transform", `translate(-88 0) scale(${1 - 0.85 * S.puerta} 1) translate(88 0)`);
+  $("huecoLuz").setAttribute("opacity", S.puerta); $("luzPuerta").setAttribute("opacity", S.luz * 0.8);
+  $("oscuro").setAttribute("opacity", S.osc);
+  // etiqueta «TÚ»
+  const e = $("etiqueta"), pp = P[0].p; e.setAttribute("opacity", Math.min(1, S.etq)); e.setAttribute("transform", `translate(${pp.x} ${pp.y - P[0].o.alto - P[0].o.pierna - 20 - 10 * Math.sin(t * 6)}) scale(${0.6 + 0.4 * Math.min(1.2, S.etq)})`);
+  // interrogaciones
+  interr.forEach(({ q, c }, k) => { const s = S.q; q.setAttribute("opacity", s > 0.01 ? 1 : 0);
+    q.setAttribute("transform", `translate(${c.p.x + 50} ${c.p.y - c.o.alto - c.o.pierna - 70 - 8 * Math.sin(t * 5 + k)}) scale(${s}) rotate(${10 * Math.sin(t * 4 + k)})`); });
+  // reloj
+  const ry = -260 + S.reloj * 500; $("reloj").setAttribute("transform", `translate(1120 ${ry}) scale(1.6) rotate(${Math.sin(t * 8) * 2 * S.reloj})`);
+  $("aro").setAttribute("stroke-dashoffset", 465 * S.aro); $("num").textContent = String(S.num);
+  const pulso = 1 + 0.08 * Math.max(0, 1 - ((t - 14.7) % 1) / 0.25) * (t > 14.7 ? 1 : 0); $("num").setAttribute("transform", `scale(${pulso})`);
+  // cámara casi fija: deriva mínima y acercamiento en «Si fallas…»
+  const z = 1.0 + 0.012 * Math.sin(t * 0.35) + 0.06 * S.cam, cx = 960 - 260 * S.cam, cy = 540 + 60 * S.cam;
+  $("cam").setAttribute("transform", `translate(960 540) scale(${z}) translate(${-cx} ${-cy})`);
+}
+window.pintar = pintar; window.DUR = 16.5;
+pintar(0);
+</script>
+</body></html>
