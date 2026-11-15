@@ -12,17 +12,20 @@ html,body{margin:0;background:#000;overflow:hidden;width:1920px;height:1080px}ca
 #prox{position:absolute;left:0;right:0;top:780px;text-align:center;color:#fff;font-weight:900;font-size:46px;-webkit-text-stroke:7px #1a1206;paint-order:stroke fill}
 .bicho{display:inline-block;width:60px;height:44px;background:#5f9e3a;border:6px solid #1a1206;margin-right:18px;vertical-align:middle;position:relative}
 .bicho:before,.bicho:after{content:"";position:absolute;top:10px;width:10px;height:10px;background:#fff;border:3px solid #1a1206}.bicho:before{left:8px}.bicho:after{right:8px}
+#inv{position:absolute;left:50%;transform:translateX(-50%);top:70px;display:none;gap:14px;padding:14px;background:#1a1206d0;border:6px solid #8a8a8a}
+.slot{width:118px;height:118px;background:#3a3a3a;border:5px solid #6a6a6a;color:#888;font-weight:900;font-size:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.slot i{width:52px;height:52px;display:block;opacity:.15;border:4px solid #1a1206}.slot.on{background:#5a5a3a;border-color:#ffcf3a;color:#fff}.slot.on i{opacity:1}
 </style>
 <script>window.__err=[];window.onerror=(m,s,l,c)=>{window.__err.push(m+" @"+s+":"+l+":"+c)};window.addEventListener("unhandledrejection",e=>window.__err.push(String(e.reason&&e.reason.stack||e.reason)))</script>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script></head><body>
-<div id="ov"><div id="t1" class="tit">LA HISTORIA DE</div><div id="t2" class="tit">HÉRCULES</div><div id="logo"><span class="bicho"></span>EL BICHO CURIOSO</div>
-<div id="cap"><small>CAPÍTULO</small><span id="capn"></span></div><div id="dato"></div><div id="sus">SUSCRÍBETE</div><div id="prox">PRÓXIMO: OTRO HÉROE, OTRA SUEGRA</div></div>
+<div id="ov"><div id="t1" class="tit">LA HISTORIA DE</div><div id="t2" class="tit">PERSEO</div><div id="logo"><span class="bicho"></span>EL BICHO CURIOSO</div>
+<div id="cap"><small>CAPÍTULO</small><span id="capn"></span></div><div id="dato"></div><div id="sus">SUSCRÍBETE</div><div id="inv"><div class="slot"><i style="background:#c89a4a"></i>ESCUDO</div><div class="slot"><i style="background:#d0d4dc"></i>ESPADA</div><div class="slot"><i style="background:#ffffff"></i>SANDALIAS</div><div class="slot"><i style="background:#8a6a3a"></i>BOLSA</div><div class="slot"><i style="background:#4a4a5a"></i>CASCO</div></div><div id="prox">PRÓXIMO: TESEO Y EL LABERINTO</div></div>
 <script type="module">
 import { THREE, cl, seg, back, eout, rnd } from "./motor.js";
 import { escenario, vivos, solSobre, mira, renderer, scene, cam, part, postpro, render } from "./mundo.js";
 import { E, ocultaTodo, resetExtras, setLt } from "./escenas.js";
 const B = await (await fetch("bloques.json")).json(), PAL = await (await fetch("palabras.json")).json(), ENV = await (await fetch("env.json")).json();
-const CAP = { 0: "", 1: "", 2: "Un bebé con problemas", 3: "Juventud y locura", 4: "El león de Nemea", 5: "La Hidra de Lerna", 6: "La cierva y el jabalí", 7: "Establos y pájaros", 8: "El toro y las yeguas", 9: "Amazonas y bueyes", 10: "Atlas y las manzanas", 11: "Cerbero", 12: "El final de Hércules" };
+const CAP = { 0: "", 1: "", 2: "Una profecía muy incómoda", 3: "La caja en el mar", 4: "El rey que quería un caballo", 5: "¿Quién es Medusa?", 6: "El kit de los dioses", 7: "Las Greas y su único ojo", 8: "Equipo completo", 9: "La guarida de las Gorgonas", 10: "La huida", 11: "El titán cansado", 12: "Andrómeda y el monstruo", 13: "Vuelta a casa", 14: "La profecía se cumple", 15: "" };
 const DUR = B[B.length - 1].t1;
 // ---- cortes: cada bloque se trocea en planos de ~3 s, cortando al inicio de una palabra
 for (const b of B) { const ws = PAL.filter(w => w.b === b.i).map(w => w.t); const cuts = [b.t0]; let cur = b.t0;
@@ -37,11 +40,11 @@ function pintar(t) {
   let nombreSet = e.set; let cams = e.cams; if (e.alt && lt >= e.alt.from) { nombreSet = e.alt.set; cams = e.alt.cams; }
   const X = { t, lt, t0: b.t0, dur: b.t1 - b.t0, set: null, env: tt => ENV[Math.min(ENV.length - 1, Math.max(0, Math.floor(tt * 60)))] || 0,
     una: k => { if (usadas.has(k)) return false; usadas.add(k); return true; }, cerca: () => false,
-    cambiaSet: n => { nombreSet = n; }, titulo, cta, rios: q => { X._rios = q; }, dato: tx => { X._dato = tx; } };
+    cambiaSet: n => { nombreSet = n; }, titulo, cta, rios: q => { X._rios = q; }, dato: (tx, de = 0.4) => { X._dato = tx; X._de = de; }, inv: n => { X._inv = n; },
+    w: (s, k = 0) => { const n = s.toLowerCase(); const ws = PAL.filter(w => w.b === b.i && w.w.toLowerCase().replace(/[^a-záéíóúñü]/g, '').startsWith(n.replace(/[^a-záéíóúñü]/g, ''))); const w = ws[Math.min(k, ws.length - 1)]; return w ? w.t - b.t0 : 0; } };
   e.act(X);
   const S = escenario(nombreSet); X.set = S;
-  if (nombreSet === "establos") { const r1 = S.g.getObjectByName("rio1"), r2 = S.g.getObjectByName("rio2"), q = X._rios || 0; r1.position.x = -320 + 220 * q; r2.position.x = 320 - 220 * q; r1.scale.x = r2.scale.x = 0.3 + 0.7 * q; }
-  if (nombreSet === "cielo_noche") { const c = S.g.getObjectByName("constelacion"); c.visible = b.esc === "cancer_chiste" || lt > 6.2; c.children.forEach((m, i) => m.scale.setScalar(0.8 + 0.3 * Math.sin(t * 4 + i))); }
+  if (nombreSet === "cielo_noche") { const c = S.g.getObjectByName("constelacion"); c.visible = false; }
   vivos(t); part.update(t);
   // plano actual dentro del bloque
   let k = 0; for (let i = 0; i < b.cuts.length; i++) if (t >= b.cuts[i]) k = i; const tk = b.cuts[k], tk1 = b.cuts[k + 1] || b.t1, q = (t - tk) / (tk1 - tk);
@@ -54,7 +57,8 @@ function pintar(t) {
   // rótulo de capítulo (2,6 s al empezar cada capítulo)
   const cb = B.find(x => x.cap === b.cap); const ct = t - cb.t0; const capOn = CAP[b.cap] && ct < 2.6;
   $("cap").style.display = capOn ? "block" : "none"; if (capOn) { $("capn").textContent = CAP[b.cap]; $("cap").firstChild.textContent = "CAPÍTULO " + (b.cap - 1); const s = back(cl(ct / 0.35), 1.8) * (1 - cl((ct - 2.3) / 0.3)); $("cap").style.transform = `translateX(${(1 - s) * -600}px)`; }
-  { const d = $("dato"); if (X._dato && lt > 0.4 && lt < 4.4) { d.style.display = "block"; d.textContent = X._dato; const s = back(cl((lt - 0.4) / 0.3), 2) * (1 - cl((lt - 4.1) / 0.3)); d.style.transform = `scale(${s})`; } else d.style.display = "none"; }
+  { const d = $("dato"), de = X._de || 0.4, dl = lt - de; if (X._dato && dl > 0 && dl < 4.0) { d.style.display = "block"; d.textContent = X._dato; const s = back(cl(dl / 0.3), 2) * (1 - cl((dl - 3.7) / 0.3)); d.style.transform = `scale(${s})`; } else d.style.display = "none"; }
+  { const iv = $("inv"); if (X._inv) { iv.style.display = "flex"; [...iv.children].forEach((c, i) => { const on = i < X._inv; c.className = on ? "slot on" : "slot"; c.style.transform = on && i === X._inv - 1 ? `scale(${1 + 0.25 * Math.max(0, Math.sin(t * 6))})` : "scale(1)"; }); } else iv.style.display = "none"; }
   if (b.esc !== "intro") titulo(-1); if (b.esc !== "cierre") cta(-1);
 }
 const usadas = new Set();

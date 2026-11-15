@@ -1,0 +1,1757 @@
+[
+{
+"i": 0,
+"esc": "gancho_cueva",
+"cap": 0,
+"t0": 0.3,
+"t1": 5.985,
+"frases": [
+{
+"txt": "Imagina entrar en una cueva llena de estatuas.",
+"t0": 0.3,
+"t1": 2.754
+},
+{
+"txt": "Pero no son estatuas.",
+"t0": 3.134,
+"t1": 4.273
+},
+{
+"txt": "Son personas.",
+"t0": 4.653,
+"t1": 5.605
+}
+]
+},
+{
+"i": 1,
+"esc": "gancho_mirada",
+"cap": 0,
+"t0": 5.985,
+"t1": 9.706,
+"frases": [
+{
+"txt": "Gente que miró a la persona equivocada durante un segundo de más.",
+"t0": 5.985,
+"t1": 9.326
+}
+]
+},
+{
+"i": 2,
+"esc": "gancho_escudo",
+"cap": 0,
+"t0": 9.706,
+"t1": 16.714,
+"frases": [
+{
+"txt": "Y tú tienes que cortarle la cabeza a esa persona…",
+"t0": 9.706,
+"t1": 12.317
+},
+{
+"txt": "sin mirarla.",
+"t0": 12.867,
+"t1": 13.627
+},
+{
+"txt": "Con los ojos cerrados.",
+"t0": 14.007,
+"t1": 15.156
+},
+{
+"txt": "Con un espejo.",
+"t0": 15.536,
+"t1": 16.334
+}
+]
+},
+{
+"i": 3,
+"esc": "gancho_casco",
+"cap": 0,
+"t0": 16.714,
+"t1": 22.724,
+"frases": [
+{
+"txt": "Y con un casco que te hace invisible.",
+"t0": 16.714,
+"t1": 18.61
+},
+{
+"txt": "¿Cómo demonios acabó un chaval normal metido en este lío?",
+"t0": 18.99,
+"t1": 21.844
+}
+]
+},
+{
+"i": 4,
+"esc": "intro",
+"cap": 1,
+"t0": 22.724,
+"t1": 26.924,
+"frases": []
+},
+{
+"i": 5,
+"esc": "argos",
+"cap": 2,
+"t0": 26.924,
+"t1": 29.966,
+"frases": [
+{
+"txt": "Todo empieza en Argos, con un rey llamado Acrisio.",
+"t0": 26.924,
+"t1": 29.586
+}
+]
+},
+{
+"i": 6,
+"esc": "acrisio_hijo",
+"cap": 2,
+"t0": 29.966,
+"t1": 37.69,
+"frases": [
+{
+"txt": "Acrisio quería un hijo varón, así que hizo lo que hacía todo el mundo en la antigua Grecia cuando tenía una duda:",
+"t0": 29.966,
+"t1": 35.835
+},
+{
+"txt": "preguntar al oráculo.",
+"t0": 36.215,
+"t1": 37.31
+}
+]
+},
+{
+"i": 7,
+"esc": "oraculo",
+"cap": 2,
+"t0": 37.69,
+"t1": 43.124,
+"frases": [
+{
+"txt": "Y el oráculo le dijo:",
+"t0": 37.69,
+"t1": 38.865
+},
+{
+"txt": "Hijo no vas a tener.",
+"t0": 39.245,
+"t1": 40.353
+},
+{
+"txt": "Pero tu nieto…",
+"t0": 40.733,
+"t1": 41.435
+},
+{
+"txt": "te va a matar.",
+"t0": 41.985,
+"t1": 42.744
+}
+]
+},
+{
+"i": 8,
+"esc": "oraculo_chiste",
+"cap": 2,
+"t0": 43.124,
+"t1": 45.866,
+"frases": [
+{
+"txt": "Gracias, oráculo.",
+"t0": 43.124,
+"t1": 44.417
+},
+{
+"txt": "Muy útil.",
+"t0": 44.797,
+"t1": 45.486
+}
+]
+},
+{
+"i": 9,
+"esc": "danae_plan",
+"cap": 2,
+"t0": 45.866,
+"t1": 55.584,
+"frases": [
+{
+"txt": "Acrisio tenía una hija, Dánae.",
+"t0": 45.866,
+"t1": 47.967
+},
+{
+"txt": "Y pensó:",
+"t0": 48.347,
+"t1": 48.92
+},
+{
+"txt": "Fácil.",
+"t0": 49.3,
+"t1": 49.824
+},
+{
+"txt": "Si mi hija nunca tiene hijos, no hay nieto.",
+"t0": 50.204,
+"t1": 52.836
+},
+{
+"txt": "Y si no hay nieto, no hay problema.",
+"t0": 53.216,
+"t1": 55.204
+}
+]
+},
+{
+"i": 10,
+"esc": "torre",
+"cap": 2,
+"t0": 55.584,
+"t1": 62.292,
+"frases": [
+{
+"txt": "Así que encerró a Dánae en una torre de bronce, sin puertas, con una ventanita en el techo.",
+"t0": 55.584,
+"t1": 60.713
+},
+{
+"txt": "Plan perfecto.",
+"t0": 61.093,
+"t1": 61.912
+}
+]
+},
+{
+"i": 11,
+"esc": "torre_dentro",
+"cap": 2,
+"t0": 62.292,
+"t1": 71.193,
+"frases": [
+{
+"txt": "Plan perfecto…",
+"t0": 62.292,
+"t1": 63.108
+},
+{
+"txt": "hasta que Zeus se enteró.",
+"t0": 63.658,
+"t1": 64.873
+},
+{
+"txt": "Y Zeus, el rey de los dioses, tenía un pequeño problema:",
+"t0": 65.253,
+"t1": 68.855
+},
+{
+"txt": "se enamoraba de todo el mundo.",
+"t0": 69.235,
+"t1": 70.813
+}
+]
+},
+{
+"i": 12,
+"esc": "lluvia_oro",
+"cap": 2,
+"t0": 71.193,
+"t1": 76.5,
+"frases": [
+{
+"txt": "Para entrar en la torre, se convirtió en una lluvia de oro y se coló por la ventanita del techo.",
+"t0": 71.193,
+"t1": 76.12
+}
+]
+},
+{
+"i": 13,
+"esc": "nace_perseo",
+"cap": 2,
+"t0": 76.5,
+"t1": 83.141,
+"frases": [
+{
+"txt": "Nueve meses después nació un bebé:",
+"t0": 76.5,
+"t1": 78.285
+},
+{
+"txt": "Perseo.",
+"t0": 78.665,
+"t1": 79.186
+},
+{
+"txt": "Nieto de Acrisio.",
+"t0": 79.566,
+"t1": 80.51
+},
+{
+"txt": "El nieto de la profecía.",
+"t0": 80.89,
+"t1": 82.261
+}
+]
+},
+{
+"i": 14,
+"esc": "acrisio_panico",
+"cap": 3,
+"t0": 83.141,
+"t1": 92.872,
+"frases": [
+{
+"txt": "Acrisio escuchó llorar al bebé y casi se le cae la corona.",
+"t0": 83.141,
+"t1": 86.281
+},
+{
+"txt": "No se atrevía a matar a su propia hija y a su nieto, porque matar a la familia enfadaba muchísimo a los dioses.",
+"t0": 86.661,
+"t1": 92.492
+}
+]
+},
+{
+"i": 15,
+"esc": "cofre_mete",
+"cap": 3,
+"t0": 92.872,
+"t1": 99.293,
+"frases": [
+{
+"txt": "Así que encontró una solución creativa:",
+"t0": 92.872,
+"t1": 94.943
+},
+{
+"txt": "los metió a los dos en un cofre de madera…",
+"t0": 95.323,
+"t1": 97.336
+},
+{
+"txt": "y los tiró al mar.",
+"t0": 97.886,
+"t1": 98.913
+}
+]
+},
+{
+"i": 16,
+"esc": "cofre_mar",
+"cap": 3,
+"t0": 99.293,
+"t1": 104.886,
+"frases": [
+{
+"txt": "Técnicamente no los mató él.",
+"t0": 99.293,
+"t1": 100.892
+},
+{
+"txt": "Fue el mar.",
+"t0": 101.272,
+"t1": 101.947
+},
+{
+"txt": "Un abogado griego lo habría defendido así.",
+"t0": 102.327,
+"t1": 104.506
+}
+]
+},
+{
+"i": 17,
+"esc": "zeus_vigila",
+"cap": 3,
+"t0": 104.886,
+"t1": 113.793,
+"frases": [
+{
+"txt": "Pero Zeus vigilaba desde arriba.",
+"t0": 104.886,
+"t1": 106.516
+},
+{
+"txt": "El cofre flotó días y días, hasta llegar a la isla de Sérifos, donde un pescador llamado Dictis lo pescó con su red.",
+"t0": 106.896,
+"t1": 113.413
+}
+]
+},
+{
+"i": 18,
+"esc": "dictis_red",
+"cap": 3,
+"t0": 113.793,
+"t1": 122.009,
+"frases": [
+{
+"txt": "Dictis abrió el cofre esperando peces…",
+"t0": 113.793,
+"t1": 115.883
+},
+{
+"txt": "y encontró una madre y un bebé.",
+"t0": 116.433,
+"t1": 118.212
+},
+{
+"txt": "Buen tipo, Dictis:",
+"t0": 118.592,
+"t1": 120.038
+},
+{
+"txt": "los acogió en su casa.",
+"t0": 120.418,
+"t1": 121.629
+}
+]
+},
+{
+"i": 19,
+"esc": "crece",
+"cap": 3,
+"t0": 122.009,
+"t1": 128.069,
+"frases": [
+{
+"txt": "Y allí creció Perseo, fuerte, valiente y, digámoslo claro, un poco chulito.",
+"t0": 122.009,
+"t1": 127.189
+}
+]
+},
+{
+"i": 20,
+"esc": "polidectes",
+"cap": 4,
+"t0": 128.069,
+"t1": 135.004,
+"frases": [
+{
+"txt": "El problema llegó con el hermano de Dictis:",
+"t0": 128.069,
+"t1": 130.279
+},
+{
+"txt": "Polidectes, el rey de la isla.",
+"t0": 130.659,
+"t1": 132.623
+},
+{
+"txt": "Polidectes se enamoró de Dánae.",
+"t0": 133.003,
+"t1": 134.624
+}
+]
+},
+{
+"i": 21,
+"esc": "estorbo",
+"cap": 4,
+"t0": 135.004,
+"t1": 141.425,
+"frases": [
+{
+"txt": "Pero había un estorbo:",
+"t0": 135.004,
+"t1": 136.057
+},
+{
+"txt": "Perseo, que ya era un mozo grandote y protegía a su madre como un perro guardián.",
+"t0": 136.437,
+"t1": 141.045
+}
+]
+},
+{
+"i": 22,
+"esc": "plan_banquete",
+"cap": 4,
+"t0": 141.425,
+"t1": 150.347,
+"frases": [
+{
+"txt": "Así que Polidectes montó un plan.",
+"t0": 141.425,
+"t1": 143.226
+},
+{
+"txt": "Organizó un banquete y dijo que iba a casarse con otra princesa, y que cada invitado tenía que regalarle un caballo.",
+"t0": 143.606,
+"t1": 149.967
+}
+]
+},
+{
+"i": 23,
+"esc": "sin_caballo",
+"cap": 4,
+"t0": 150.347,
+"t1": 158.004,
+"frases": [
+{
+"txt": "Perseo no tenía caballo.",
+"t0": 150.347,
+"t1": 151.728
+},
+{
+"txt": "No tenía ni una oveja.",
+"t0": 152.108,
+"t1": 153.465
+},
+{
+"txt": "Y por orgullo, soltó la frase más peligrosa de toda la mitología:",
+"t0": 153.845,
+"t1": 157.624
+}
+]
+},
+{
+"i": 24,
+"esc": "frase",
+"cap": 4,
+"t0": 158.004,
+"t1": 162.51,
+"frases": [
+{
+"txt": "Pídeme lo que quieras.",
+"t0": 158.004,
+"t1": 159.096
+},
+{
+"txt": "Lo que sea.",
+"t0": 159.476,
+"t1": 160.189
+},
+{
+"txt": "Incluso la cabeza de Medusa.",
+"t0": 160.569,
+"t1": 162.13
+}
+]
+},
+{
+"i": 25,
+"esc": "silencio",
+"cap": 4,
+"t0": 162.51,
+"t1": 166.381,
+"frases": [
+{
+"txt": "Silencio total.",
+"t0": 162.51,
+"t1": 163.535
+},
+{
+"txt": "Polidectes sonrió.",
+"t0": 163.915,
+"t1": 164.897
+},
+{
+"txt": "Trato hecho.",
+"t0": 165.277,
+"t1": 166.001
+}
+]
+},
+{
+"i": 26,
+"esc": "tarde",
+"cap": 4,
+"t0": 166.381,
+"t1": 170.619,
+"frases": [
+{
+"txt": "Perseo se dio cuenta de lo que acababa de decir medio segundo tarde.",
+"t0": 166.381,
+"t1": 169.739
+}
+]
+},
+{
+"i": 27,
+"esc": "gorgonas",
+"cap": 5,
+"t0": 170.619,
+"t1": 180.509,
+"frases": [
+{
+"txt": "Medusa era una de las tres Gorgonas.",
+"t0": 170.619,
+"t1": 172.733
+},
+{
+"txt": "Sus dos hermanas, Esteno y Euríale, eran inmortales.",
+"t0": 173.113,
+"t1": 176.695
+},
+{
+"txt": "Medusa no.",
+"t0": 177.075,
+"t1": 177.759
+},
+{
+"txt": "Ella era la única que se podía matar.",
+"t0": 178.139,
+"t1": 180.129
+}
+]
+},
+{
+"i": 28,
+"esc": "sacerdotisa",
+"cap": 5,
+"t0": 180.509,
+"t1": 185.779,
+"frases": [
+{
+"txt": "Según la leyenda, Medusa había sido una mujer bellísima, sacerdotisa de Atenea.",
+"t0": 180.509,
+"t1": 185.399
+}
+]
+},
+{
+"i": 29,
+"esc": "castigo",
+"cap": 5,
+"t0": 185.779,
+"t1": 195.903,
+"frases": [
+{
+"txt": "Pero Poseidón la persiguió dentro del templo, y Atenea, en vez de castigar a Poseidón, castigó a Medusa.",
+"t0": 185.779,
+"t1": 191.931
+},
+{
+"txt": "Sí, la mitología griega no es famosa por ser justa.",
+"t0": 192.311,
+"t1": 195.523
+}
+]
+},
+{
+"i": 30,
+"esc": "transforma",
+"cap": 5,
+"t0": 195.903,
+"t1": 199.701,
+"frases": [
+{
+"txt": "Su pelo se convirtió en serpientes vivas, y su mirada en un arma.",
+"t0": 195.903,
+"t1": 199.321
+}
+]
+},
+{
+"i": 31,
+"esc": "petrifica",
+"cap": 5,
+"t0": 199.701,
+"t1": 205.85,
+"frases": [
+{
+"txt": "Cualquiera que la mirase a los ojos se convertía en piedra.",
+"t0": 199.701,
+"t1": 202.354
+},
+{
+"txt": "Al instante.",
+"t0": 202.734,
+"t1": 203.51
+},
+{
+"txt": "Sin devoluciones.",
+"t0": 203.89,
+"t1": 204.97
+}
+]
+},
+{
+"i": 32,
+"esc": "perseo_fatal",
+"cap": 6,
+"t0": 205.85,
+"t1": 213.443,
+"frases": [
+{
+"txt": "Perseo estaba fatal.",
+"t0": 205.85,
+"t1": 207.024
+},
+{
+"txt": "No sabía dónde vivía Medusa, no tenía armas y no tenía ni idea de cómo matar a alguien sin mirarlo.",
+"t0": 207.404,
+"t1": 213.063
+}
+]
+},
+{
+"i": 33,
+"esc": "dioses_llegan",
+"cap": 6,
+"t0": 213.443,
+"t1": 219.165,
+"frases": [
+{
+"txt": "Pero, recordemos, era hijo de Zeus.",
+"t0": 213.443,
+"t1": 216.005
+},
+{
+"txt": "Y los dioses adoran los proyectos difíciles.",
+"t0": 216.385,
+"t1": 218.785
+}
+]
+},
+{
+"i": 34,
+"esc": "regalos",
+"cap": 6,
+"t0": 219.165,
+"t1": 228.813,
+"frases": [
+{
+"txt": "Atenea le regaló un escudo de bronce tan pulido que brillaba como un espejo.",
+"t0": 219.165,
+"t1": 223.156
+},
+{
+"txt": "Hermes le dio una espada curva capaz de cortar cualquier cosa, hasta la piel de una Gorgona.",
+"t0": 223.536,
+"t1": 228.433
+}
+]
+},
+{
+"i": 35,
+"esc": "inventario1",
+"cap": 6,
+"t0": 228.813,
+"t1": 237.153,
+"frases": [
+{
+"txt": "Pero le faltaban tres cosas más:",
+"t0": 228.813,
+"t1": 230.565
+},
+{
+"txt": "unas sandalias con alas para volar, un casco que lo hiciera invisible y una bolsa mágica para guardar la cabeza.",
+"t0": 230.945,
+"t1": 236.773
+}
+]
+},
+{
+"i": 36,
+"esc": "ninfas_dir",
+"cap": 6,
+"t0": 237.153,
+"t1": 242.217,
+"frases": [
+{
+"txt": "Y eso solo lo tenían unas ninfas…",
+"t0": 237.153,
+"t1": 239.136
+},
+{
+"txt": "cuya dirección no sabía nadie.",
+"t0": 239.686,
+"t1": 241.337
+}
+]
+},
+{
+"i": 37,
+"esc": "greas",
+"cap": 7,
+"t0": 242.217,
+"t1": 252.537,
+"frases": [
+{
+"txt": "Para encontrar a las ninfas, Perseo tuvo que visitar a las Greas:",
+"t0": 242.217,
+"t1": 245.814
+},
+{
+"txt": "tres hermanas viejísimas que compartían un solo ojo y un solo diente.",
+"t0": 246.194,
+"t1": 250.038
+},
+{
+"txt": "Se los iban pasando por turnos.",
+"t0": 250.418,
+"t1": 252.157
+}
+]
+},
+{
+"i": 38,
+"esc": "greas_pelea",
+"cap": 7,
+"t0": 252.537,
+"t1": 256.473,
+"frases": [
+{
+"txt": "¡Me toca a mí el ojo!",
+"t0": 252.537,
+"t1": 253.667
+},
+{
+"txt": "¡Que no, que tú lo tuviste el martes!",
+"t0": 254.047,
+"t1": 256.093
+}
+]
+},
+{
+"i": 39,
+"esc": "ojo_robo",
+"cap": 7,
+"t0": 256.473,
+"t1": 263.438,
+"frases": [
+{
+"txt": "Perseo esperó escondido, y justo cuando una le pasaba el ojo a otra…",
+"t0": 256.473,
+"t1": 260.334
+},
+{
+"txt": "¡zas!",
+"t0": 260.884,
+"t1": 261.412
+},
+{
+"txt": "Se lo quitó en el aire.",
+"t0": 261.792,
+"t1": 263.058
+}
+]
+},
+{
+"i": 40,
+"esc": "greas_ciegas",
+"cap": 7,
+"t0": 263.438,
+"t1": 273.908,
+"frases": [
+{
+"txt": "Ahora las Greas no veían nada.",
+"t0": 263.438,
+"t1": 265.266
+},
+{
+"txt": "Y Perseo les hizo una oferta que no podían rechazar:",
+"t0": 265.646,
+"t1": 268.509
+},
+{
+"txt": "Os devuelvo el ojo si me decís dónde están las ninfas.",
+"t0": 268.889,
+"t1": 271.582
+},
+{
+"txt": "Cantaron enseguida.",
+"t0": 271.962,
+"t1": 273.028
+}
+]
+},
+{
+"i": 41,
+"esc": "ninfas",
+"cap": 8,
+"t0": 273.908,
+"t1": 283.262,
+"frases": [
+{
+"txt": "Las ninfas fueron mucho más amables.",
+"t0": 273.908,
+"t1": 275.949
+},
+{
+"txt": "Le dieron las sandalias aladas, la bolsa mágica, llamada kibisis, y el casco de Hades, que te hace invisible.",
+"t0": 276.329,
+"t1": 282.882
+}
+]
+},
+{
+"i": 42,
+"esc": "vuelo_arbol",
+"cap": 8,
+"t0": 283.262,
+"t1": 291.422,
+"frases": [
+{
+"txt": "Perseo se puso las sandalias, dio un salto…",
+"t0": 283.262,
+"t1": 285.764
+},
+{
+"txt": "y salió volando como un cohete.",
+"t0": 286.314,
+"t1": 288.029
+},
+{
+"txt": "Directo contra un árbol.",
+"t0": 288.409,
+"t1": 289.741
+},
+{
+"txt": "Hay que practicar.",
+"t0": 290.121,
+"t1": 291.042
+}
+]
+},
+{
+"i": 43,
+"esc": "vuelo_nubes",
+"cap": 8,
+"t0": 291.422,
+"t1": 298.414,
+"frases": [
+{
+"txt": "Al segundo intento ya volaba como un pájaro, rumbo al lugar más temido del mundo:",
+"t0": 291.422,
+"t1": 295.728
+},
+{
+"txt": "la guarida de las Gorgonas.",
+"t0": 296.108,
+"t1": 297.534
+}
+]
+},
+{
+"i": 44,
+"esc": "isla",
+"cap": 9,
+"t0": 298.414,
+"t1": 302.659,
+"frases": [
+{
+"txt": "Al llegar, lo primero que vio fueron las estatuas.",
+"t0": 298.414,
+"t1": 301.226
+},
+{
+"txt": "Cientos.",
+"t0": 301.606,
+"t1": 302.279
+}
+]
+},
+{
+"i": 45,
+"esc": "estatuas",
+"cap": 9,
+"t0": 302.659,
+"t1": 309.982,
+"frases": [
+{
+"txt": "Guerreros, cazadores, animales…",
+"t0": 302.659,
+"t1": 305.09
+},
+{
+"txt": "todos con la misma cara:",
+"t0": 305.64,
+"t1": 306.859
+},
+{
+"txt": "la de alguien que acaba de ver algo que no debía.",
+"t0": 307.239,
+"t1": 309.602
+}
+]
+},
+{
+"i": 46,
+"esc": "casco_invisible",
+"cap": 9,
+"t0": 309.982,
+"t1": 314.991,
+"frases": [
+{
+"txt": "Las tres Gorgonas dormían.",
+"t0": 309.982,
+"t1": 311.442
+},
+{
+"txt": "Perseo se puso el casco de Hades y se volvió invisible.",
+"t0": 311.822,
+"t1": 314.611
+}
+]
+},
+{
+"i": 47,
+"esc": "reflejo",
+"cap": 9,
+"t0": 314.991,
+"t1": 321.885,
+"frases": [
+{
+"txt": "Y entonces hizo el truco más inteligente de toda la historia:",
+"t0": 314.991,
+"t1": 318.143
+},
+{
+"txt": "no miró a Medusa.",
+"t0": 318.523,
+"t1": 319.542
+},
+{
+"txt": "Miró su reflejo en el escudo.",
+"t0": 319.922,
+"t1": 321.505
+}
+]
+},
+{
+"i": 48,
+"esc": "atras",
+"cap": 9,
+"t0": 321.885,
+"t1": 328.922,
+"frases": [
+{
+"txt": "Caminaba hacia atrás, guiándose solo por el espejo.",
+"t0": 321.885,
+"t1": 324.762
+},
+{
+"txt": "Un paso.",
+"t0": 325.142,
+"t1": 325.728
+},
+{
+"txt": "Otro.",
+"t0": 326.108,
+"t1": 326.51
+},
+{
+"txt": "Una serpiente abrió un ojo…",
+"t0": 326.89,
+"t1": 328.372
+}
+]
+},
+{
+"i": 49,
+"esc": "corte",
+"cap": 9,
+"t0": 328.922,
+"t1": 332.015,
+"frases": [
+{
+"txt": "Y la espada de Hermes cayó.",
+"t0": 328.922,
+"t1": 330.339
+},
+{
+"txt": "Un solo golpe.",
+"t0": 330.719,
+"t1": 331.635
+}
+]
+},
+{
+"i": 50,
+"esc": "bolsa",
+"cap": 9,
+"t0": 332.015,
+"t1": 339.13,
+"frases": [
+{
+"txt": "Perseo metió la cabeza en la bolsa sin mirarla.",
+"t0": 332.015,
+"t1": 334.429
+},
+{
+"txt": "Y aquí viene lo raro:",
+"t0": 334.809,
+"t1": 335.964
+},
+{
+"txt": "del cuello de Medusa salieron dos criaturas.",
+"t0": 336.344,
+"t1": 338.75
+}
+]
+},
+{
+"i": 51,
+"esc": "pegaso",
+"cap": 9,
+"t0": 339.13,
+"t1": 344.974,
+"frases": [
+{
+"txt": "Un gigante con espada dorada, Crisaor…",
+"t0": 339.13,
+"t1": 341.513
+},
+{
+"txt": "y Pegaso, el caballo con alas.",
+"t0": 342.063,
+"t1": 344.094
+}
+]
+},
+{
+"i": 52,
+"esc": "hermanas",
+"cap": 10,
+"t0": 344.974,
+"t1": 351.943,
+"frases": [
+{
+"txt": "Las otras dos Gorgonas se despertaron gritando.",
+"t0": 344.974,
+"t1": 347.417
+},
+{
+"txt": "Buscaban al asesino por todas partes, pero Perseo era invisible.",
+"t0": 347.797,
+"t1": 351.563
+}
+]
+},
+{
+"i": 53,
+"esc": "huida",
+"cap": 10,
+"t0": 351.943,
+"t1": 357.552,
+"frases": [
+{
+"txt": "Pasaron volando a su lado sin verlo.",
+"t0": 351.943,
+"t1": 353.731
+},
+{
+"txt": "Él contuvo la respiración y se fue volando con sus sandalias.",
+"t0": 354.111,
+"t1": 357.172
+}
+]
+},
+{
+"i": 54,
+"esc": "arma",
+"cap": 10,
+"t0": 357.552,
+"t1": 368.949,
+"frases": [
+{
+"txt": "Y lo mejor:",
+"t0": 357.552,
+"t1": 358.168
+},
+{
+"txt": "aunque Medusa estaba muerta, su cabeza seguía funcionando.",
+"t0": 358.548,
+"t1": 361.748
+},
+{
+"txt": "Cualquiera que la mirara seguía convirtiéndose en piedra.",
+"t0": 362.128,
+"t1": 364.763
+},
+{
+"txt": "Perseo llevaba en la bolsa el arma más poderosa del mundo.",
+"t0": 365.143,
+"t1": 368.069
+}
+]
+},
+{
+"i": 55,
+"esc": "atlas",
+"cap": 11,
+"t0": 368.949,
+"t1": 375.682,
+"frases": [
+{
+"txt": "De camino a casa, Perseo pasó por el reino del titán Atlas, que estaba castigado a sujetar el cielo para siempre.",
+"t0": 368.949,
+"t1": 375.302
+}
+]
+},
+{
+"i": 56,
+"esc": "atlas_largo",
+"cap": 11,
+"t0": 375.682,
+"t1": 381.126,
+"frases": [
+{
+"txt": "Perseo le pidió un sitio para descansar, y Atlas, de mal humor, le dijo que se largara.",
+"t0": 375.682,
+"t1": 380.746
+}
+]
+},
+{
+"i": 57,
+"esc": "atlas_piedra",
+"cap": 11,
+"t0": 381.126,
+"t1": 387.344,
+"frases": [
+{
+"txt": "Así que Perseo sacó la cabeza de Medusa.",
+"t0": 381.126,
+"t1": 383.267
+},
+{
+"txt": "Atlas se convirtió en piedra…",
+"t0": 383.647,
+"t1": 385.097
+},
+{
+"txt": "y en una montaña enorme.",
+"t0": 385.647,
+"t1": 386.964
+}
+]
+},
+{
+"i": 58,
+"esc": "atlas_mapa",
+"cap": 11,
+"t0": 387.344,
+"t1": 391.542,
+"frases": [
+{
+"txt": "Por eso hoy hay unas montañas en el norte de África que se llaman el Atlas.",
+"t0": 387.344,
+"t1": 391.162
+}
+]
+},
+{
+"i": 59,
+"esc": "atlas_chiste",
+"cap": 11,
+"t0": 391.542,
+"t1": 398.449,
+"frases": [
+{
+"txt": "Ahora, eso sí:",
+"t0": 391.542,
+"t1": 392.742
+},
+{
+"txt": "Atlas ya no notaba el peso del cielo.",
+"t0": 393.122,
+"t1": 395.098
+},
+{
+"txt": "Visto así, casi le hizo un favor.",
+"t0": 395.478,
+"t1": 397.569
+}
+]
+},
+{
+"i": 60,
+"esc": "andromeda",
+"cap": 12,
+"t0": 398.449,
+"t1": 407.012,
+"frases": [
+{
+"txt": "Volando sobre la costa de Etiopía, Perseo vio algo rarísimo:",
+"t0": 398.449,
+"t1": 401.995
+},
+{
+"txt": "una princesa encadenada a una roca junto al mar.",
+"t0": 402.375,
+"t1": 405.06
+},
+{
+"txt": "Se llamaba Andrómeda.",
+"t0": 405.44,
+"t1": 406.632
+}
+]
+},
+{
+"i": 61,
+"esc": "casiopea",
+"cap": 12,
+"t0": 407.012,
+"t1": 413.043,
+"frases": [
+{
+"txt": "Su madre, la reina Casiopea, había presumido de que su hija era más guapa que las ninfas del mar.",
+"t0": 407.012,
+"t1": 412.663
+}
+]
+},
+{
+"i": 62,
+"esc": "poseidon",
+"cap": 12,
+"t0": 413.043,
+"t1": 421.437,
+"frases": [
+{
+"txt": "Y Poseidón, que se ofendía rápido, mandó un monstruo marino a destruir el reino.",
+"t0": 413.043,
+"t1": 417.835
+},
+{
+"txt": "La única forma de calmarlo era entregarle a la princesa.",
+"t0": 418.215,
+"t1": 421.057
+}
+]
+},
+{
+"i": 63,
+"esc": "trato_boda",
+"cap": 12,
+"t0": 421.437,
+"t1": 428.979,
+"frases": [
+{
+"txt": "Perseo bajó volando y le dijo a los padres:",
+"t0": 421.437,
+"t1": 423.755
+},
+{
+"txt": "Si la salvo, me caso con ella.",
+"t0": 424.135,
+"t1": 426.041
+},
+{
+"txt": "¡Hecho!, dijeron sin pensarlo mucho.",
+"t0": 426.421,
+"t1": 428.599
+}
+]
+},
+{
+"i": 64,
+"esc": "ceto",
+"cap": 12,
+"t0": 428.979,
+"t1": 430.78,
+"frases": [
+{
+"txt": "El monstruo salió del agua.",
+"t0": 428.979,
+"t1": 430.4
+}
+]
+},
+{
+"i": 65,
+"esc": "combate",
+"cap": 12,
+"t0": 430.78,
+"t1": 438.259,
+"frases": [
+{
+"txt": "Perseo voló a su alrededor, esquivó los mordiscos y lo atacó con la espada una y otra vez, hasta que la bestia se hundió para siempre.",
+"t0": 430.78,
+"t1": 437.879
+}
+]
+},
+{
+"i": 66,
+"esc": "boda",
+"cap": 12,
+"t0": 438.259,
+"t1": 444.785,
+"frases": [
+{
+"txt": "Hubo boda.",
+"t0": 438.259,
+"t1": 438.913
+},
+{
+"txt": "Aunque en la boda apareció un antiguo prometido de Andrómeda con todo un ejército para montar bronca.",
+"t0": 439.293,
+"t1": 444.405
+}
+]
+},
+{
+"i": 67,
+"esc": "boda_cabeza",
+"cap": 12,
+"t0": 444.785,
+"t1": 450.258,
+"frases": [
+{
+"txt": "Perseo gritó:",
+"t0": 444.785,
+"t1": 445.654
+},
+{
+"txt": "¡Los que sean mis amigos, que aparten la vista!",
+"t0": 446.034,
+"t1": 448.498
+},
+{
+"txt": "Y sacó la cabeza.",
+"t0": 448.878,
+"t1": 449.878
+}
+]
+},
+{
+"i": 68,
+"esc": "boda_chiste",
+"cap": 12,
+"t0": 450.258,
+"t1": 453.806,
+"frases": [
+{
+"txt": "La boda acabó con mucha más decoración de la prevista.",
+"t0": 450.258,
+"t1": 452.926
+}
+]
+},
+{
+"i": 69,
+"esc": "vuelta",
+"cap": 13,
+"t0": 453.806,
+"t1": 463.979,
+"frases": [
+{
+"txt": "Perseo volvió por fin a Sérifos.",
+"t0": 453.806,
+"t1": 455.63
+},
+{
+"txt": "Y descubrió que Polidectes no había cambiado nada:",
+"t0": 456.01,
+"t1": 458.641
+},
+{
+"txt": "seguía acosando a su madre, que tuvo que esconderse en un templo con el bueno de Dictis.",
+"t0": 459.021,
+"t1": 463.599
+}
+]
+},
+{
+"i": 70,
+"esc": "banquete2",
+"cap": 13,
+"t0": 463.979,
+"t1": 470.094,
+"frases": [
+{
+"txt": "Perseo entró en el banquete del rey.",
+"t0": 463.979,
+"t1": 465.787
+},
+{
+"txt": "Polidectes se rio:",
+"t0": 466.167,
+"t1": 467.155
+},
+{
+"txt": "¿Qué?",
+"t0": 467.535,
+"t1": 467.757
+},
+{
+"txt": "¿Me traes la cabeza de Medusa?",
+"t0": 468.137,
+"t1": 469.714
+}
+]
+},
+{
+"i": 71,
+"esc": "pues_si",
+"cap": 13,
+"t0": 470.094,
+"t1": 471.532,
+"frases": [
+{
+"txt": "Pues mira, sí.",
+"t0": 470.094,
+"t1": 471.152
+}
+]
+},
+{
+"i": 72,
+"esc": "corte_piedra",
+"cap": 13,
+"t0": 471.532,
+"t1": 475.677,
+"frases": [
+{
+"txt": "Polidectes y toda su corte se quedaron de piedra.",
+"t0": 471.532,
+"t1": 474.024
+},
+{
+"txt": "Literalmente.",
+"t0": 474.404,
+"t1": 475.297
+}
+]
+},
+{
+"i": 73,
+"esc": "dictis_rey",
+"cap": 13,
+"t0": 475.677,
+"t1": 480.179,
+"frases": [
+{
+"txt": "Perseo nombró rey de la isla a Dictis, el pescador que los había salvado.",
+"t0": 475.677,
+"t1": 479.799
+}
+]
+},
+{
+"i": 74,
+"esc": "devuelve",
+"cap": 13,
+"t0": 480.179,
+"t1": 489.799,
+"frases": [
+{
+"txt": "Y devolvió todos los regalos:",
+"t0": 480.179,
+"t1": 481.85
+},
+{
+"txt": "las sandalias, el casco y la bolsa a Hermes, y la cabeza de Medusa a Atenea, que la puso en el centro de su escudo.",
+"t0": 482.23,
+"t1": 488.919
+}
+]
+},
+{
+"i": 75,
+"esc": "huye_abuelo",
+"cap": 14,
+"t0": 489.799,
+"t1": 496.574,
+"frases": [
+{
+"txt": "¿Y el abuelo Acrisio?",
+"t0": 489.799,
+"t1": 490.869
+},
+{
+"txt": "Se enteró de que su nieto había vuelto y huyó a otra ciudad, para estar lo más lejos posible.",
+"t0": 491.249,
+"t1": 496.194
+}
+]
+},
+{
+"i": 76,
+"esc": "juegos",
+"cap": 14,
+"t0": 496.574,
+"t1": 503.257,
+"frases": [
+{
+"txt": "Años después, Perseo participó en unos juegos atléticos en esa misma ciudad.",
+"t0": 496.574,
+"t1": 501.163
+},
+{
+"txt": "Le tocó lanzar el disco.",
+"t0": 501.543,
+"t1": 502.877
+}
+]
+},
+{
+"i": 77,
+"esc": "disco",
+"cap": 14,
+"t0": 503.257,
+"t1": 508.843,
+"frases": [
+{
+"txt": "Lo lanzó con todas sus fuerzas…",
+"t0": 503.257,
+"t1": 505.029
+},
+{
+"txt": "y una ráfaga de viento lo desvió directo hacia las gradas.",
+"t0": 505.579,
+"t1": 508.463
+}
+]
+},
+{
+"i": 78,
+"esc": "disco_golpe",
+"cap": 14,
+"t0": 508.843,
+"t1": 513.015,
+"frases": [
+{
+"txt": "Directo a la cabeza de un señor mayor.",
+"t0": 508.843,
+"t1": 510.834
+},
+{
+"txt": "Sí.",
+"t0": 511.214,
+"t1": 511.562
+},
+{
+"txt": "Era Acrisio.",
+"t0": 511.942,
+"t1": 512.635
+}
+]
+},
+{
+"i": 79,
+"esc": "destino",
+"cap": 14,
+"t0": 513.015,
+"t1": 523.952,
+"frases": [
+{
+"txt": "La profecía se cumplió.",
+"t0": 513.015,
+"t1": 514.271
+},
+{
+"txt": "Sin querer, sin odio y sin cabeza de Medusa.",
+"t0": 514.651,
+"t1": 517.407
+},
+{
+"txt": "Un simple disco.",
+"t0": 517.787,
+"t1": 518.744
+},
+{
+"txt": "Por mucho que corras, en la mitología griega el destino siempre te encuentra.",
+"t0": 519.124,
+"t1": 523.072
+}
+]
+},
+{
+"i": 80,
+"esc": "constelaciones",
+"cap": 15,
+"t0": 523.952,
+"t1": 530.787,
+"frases": [
+{
+"txt": "Perseo y Andrómeda vivieron felices y tuvieron muchos hijos.",
+"t0": 523.952,
+"t1": 527.261
+},
+{
+"txt": "Y cuando murieron, los dioses los subieron al cielo.",
+"t0": 527.641,
+"t1": 530.407
+}
+]
+},
+{
+"i": 81,
+"esc": "estrellas",
+"cap": 15,
+"t0": 530.787,
+"t1": 539.571,
+"frases": [
+{
+"txt": "Esta noche, si miras las estrellas, puedes ver las constelaciones de Perseo, Andrómeda, Casiopea…",
+"t0": 530.787,
+"t1": 536.813
+},
+{
+"txt": "y Pegaso.",
+"t0": 537.363,
+"t1": 537.984
+},
+{
+"txt": "Toda la familia.",
+"t0": 538.364,
+"t1": 539.191
+}
+]
+},
+{
+"i": 82,
+"esc": "casiopea_abajo",
+"cap": 15,
+"t0": 539.571,
+"t1": 545.041,
+"frases": [
+{
+"txt": "Y Casiopea, por presumida, está colocada de forma que pasa media noche cabeza abajo.",
+"t0": 539.571,
+"t1": 544.661
+}
+]
+},
+{
+"i": 83,
+"esc": "cierre",
+"cap": 15,
+"t0": 545.041,
+"t1": 557.519,
+"frases": [
+{
+"txt": "Si te ha gustado, suscríbete a El Bicho Curioso y activa la campanita.",
+"t0": 545.041,
+"t1": 549.045
+},
+{
+"txt": "En el próximo vídeo:",
+"t0": 549.425,
+"t1": 550.574
+},
+{
+"txt": "un héroe que entró en un laberinto del que nadie salía vivo…",
+"t0": 550.954,
+"t1": 553.891
+},
+{
+"txt": "con un ovillo de lana.",
+"t0": 554.441,
+"t1": 555.56
+},
+{
+"txt": "Nos vemos.",
+"t0": 555.94,
+"t1": 556.639
+}
+]
+}
+]

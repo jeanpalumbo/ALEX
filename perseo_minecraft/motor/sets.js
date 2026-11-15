@@ -312,3 +312,151 @@ export const CIELOS = {   // [arriba, horizonte, niebla, cerca, lejos, hemiCielo
   tormenta: ["#3a4050", "#7a8090", "#6a7080", 250, 1400, "#a0a8b8", "#3a3a3a", 0.8, "#c0c8d8", 1.2, 1.15, [300, 400, 200]],
   inframundo: ["#2a0505", "#8a2a10", "#4a1008", 200, 1100, "#ff8a5a", "#2a0a0a", 0.55, "#ff6a3a", 0.8, 1.2, [0, 400, 200]],
 };
+// ======================= ESCENARIOS NUEVOS DE PERSEO (3 capas: primer plano, plano medio con vida, fondo lejano)
+// estatua de piedra: personaje con todo el material cambiado a piedra
+const _piedraM = liso("#9a968c", 0.14, 8, 501);
+export function estatua(k, pz = {}) { const e = extra(k, { escala: 1 }); e.root.traverse(o => { if (o.isMesh) o.material = _piedraM; }); return e; }
+function estatuas(g, vivos, lista, k0 = 0) { lista.forEach(([x, z, ry, tipo], i) => { const e = estatua(k0 + i); g.add(e.root);
+  const P = [{ bR: [-150, 30], bL: [-150, -30], cR: 20, cL: 20, lean: -12 }, { bR: [-90, 10], cR: 0, bL: [-40, -20], cL: 60 }, { bR: [-60, 40], bL: [-60, -40], cR: 90, cL: 90, cabZ: 10 }, { bR: [-170, 20], cR: 10, lean: 8, pR: -30, kR: 40 }][(tipo ?? i) % 4];
+  pose(e, Object.assign({ x, z, ry }, P), 0); cara(e, ["susto", "grito", "sorpresa", "enfado"][(tipo ?? i) % 4]); }); }
+// mar con olas de bloques (instanciado, se mueve)
+function oleaje(g, vivos, cx, cz, n = 60, s = 16, alt = 10, mat = MAT.agua, vel = 1) { const im = new THREE.InstancedMesh(new THREE.BoxGeometry(s, s, s), mat, n * n), mm = new THREE.Matrix4(); im.receiveShadow = true; g.add(im);
+  vivos.push(t => { let k = 0; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { const x = cx + (i - n / 2) * s, z = cz + (j - n / 2) * s; const y = Math.round((Math.sin(x * 0.012 + t * 1.3 * vel) + Math.sin(z * 0.017 - t * 0.9 * vel) + 0.6 * Math.sin((x + z) * 0.03 + t * 2 * vel)) * alt / s) * s * 0.5 - s;
+      mm.makeTranslation(x, y, z); im.setMatrixAt(k++, mm); } im.instanceMatrix.needsUpdate = true; }); return im; }
+// lluvia: segmentos azulados que caen
+function lluvia(g, vivos, n, cx, cz, rango, alto = 260, col = "#a8c0e0") { const geo = new THREE.BoxGeometry(0.5, 8, 0.5), m = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.55 }), ms = [];
+  for (let i = 0; i < n; i++) { const r = new THREE.Mesh(geo, m); g.add(r); ms.push(r); }
+  vivos.push(t => ms.forEach((r, i) => { const q = (t * (1.6 + rnd(i) * 0.6) + rnd(i * 3)) % 1; r.position.set(cx + (rnd(i * 7) - 0.5) * rango + q * 20, alto * (1 - q), cz + (rnd(i * 11) - 0.5) * rango); r.rotation.z = 0.12; })); }
+// relámpago: luz que destella de vez en cuando
+function relampagos(g, vivos, k = 0) { const l = new THREE.DirectionalLight("#dfe8ff", 0); l.position.set(200, 600, 100); g.add(l); vivos.push(t => { const c = (t + k) % 5.3; l.intensity = c < 0.12 || (c > 0.2 && c < 0.27) ? 6 : 0; }); }
+function barca(g, vivos, x, z, k, vela = "#e9dcc0") { const b = new THREE.Group(); b.add(caja(36, 6, 14, MAT.tronco, 0, 3, 0)); b.add(caja(30, 2, 10, MAT.madera, 0, 6.5, 0)); b.add(caja(1.6, 40, 1.6, MAT.madera, 0, 26, 0)); b.add(caja(1, 26, 22, liso(vela, 0.06, 4), 1, 30, 0)); b.position.set(x, 0, z); g.add(b);
+  vivos.push(t => { b.position.y = 2 * Math.sin(t * 1.2 + k); b.rotation.z = 0.05 * Math.sin(t * 0.9 + k); }); return b; }
+function gaviotas(g, vivos, n, y, z, k0 = 0) { bandada(g, vivos, n, y, z, "#f2f2f2", 30, 1200, k0); }
+Object.assign(SETS, {
+  cueva_gorgonas: { cielo: "cueva", build(g, v) { const b = new Blq(g);
+    suelo(b, 30, liso("#4a4a44", 0.18, 16, 510), 0);
+    for (let i = -14; i <= 14; i++) for (let k = 0; k < 14; k++) b.add(i * BL, k * BL, -260 + Math.abs(i) * 3, liso("#3a3a36", 0.2, 16, 511));
+    for (let j = -14; j <= 8; j++) for (let k = 0; k < 14; k++) { b.add(-240 - (k % 3) * 4, k * BL, j * BL, liso("#3a3a36", 0.2, 16, 511)); b.add(240 + (k % 3) * 4, k * BL, j * BL, liso("#3a3a36", 0.2, 16, 511)); }
+    for (let i = -14; i <= 14; i++) for (let j = -14; j <= 8; j++) if (rnd(i * 13 + j) > 0.25) b.add(i * BL, 13 * BL - Math.floor(rnd(i + j * 7) * 2) * BL, j * BL, liso("#2e2e2a", 0.2, 16, 512));
+    for (let k = 0; k < 22; k++) { const x = (rnd(k * 3) - 0.5) * 440, z = -230 + rnd(k * 7) * 300, h = 1 + Math.floor(rnd(k) * 3); for (let y = 0; y < h; y++) b.add(x, 12 * BL - y * BL, z, liso("#55554c", 0.2, 16, 513)); }
+    rocas(b, 30, 0, 140, 420, liso("#5a5a50", 0.15)); b.fin();
+    estatuas(g, v, [[-90, -40, 20], [-150, -120, 40, 1], [70, -70, -30, 2], [140, -150, -10, 3], [-40, -180, 10, 1], [180, -30, -60, 0], [-190, 20, 70, 2], [20, -220, 0, 3]], 900);
+    for (const [x, z] of [[-200, -100], [200, -100], [-120, -240], [120, -240]]) antorcha(g, v, x, 20, z, x + z, true, 0.9);
+    const l = new THREE.PointLight("#7aff9a", 3000, 400, 1.4); l.position.set(0, 60, -120); g.add(l); v.push(t => l.intensity = 3000 * (0.8 + 0.2 * Math.sin(t * 2)));
+    ambiente(g, v, 30, "esporas", 0, -100, 420, 0, 180); ambiente(g, v, 40, "polvo", 0, 0, 400, 0, 120); alfombra(g, ["hueso", "seca", "hueso"], 90, 0, -40, 400, (x, z) => Math.abs(x) < 70 && z > -60);
+    return {}; } },
+  isla_gorgonas: { cielo: "tormenta_verde", build(g, v) { const b = new Blq(g);
+    suelo(b, 34, liso("#5a5a50", 0.18, 16, 514), 5);
+    for (let k = 0; k < 18; k++) { const x = (rnd(k * 5) - 0.5) * 900, z = -200 - rnd(k * 9) * 400, h = 3 + Math.floor(rnd(k + 1) * 7); for (let y = 0; y < h; y++) for (let i = -1; i <= 1; i++) if (y < h - 1 || i === 0) b.add(x + i * BL, y * BL, z, liso("#4a4a44", 0.2, 16, 515)); }
+    for (let y = 0; y < 6; y++) for (let i = -5 + y; i <= 5 - y; i++) for (let j = -3; j <= 2; j++) { if (y < 3 && Math.abs(i) < 2 && j > -2) continue; b.add(i * BL, y * BL, -260 + j * BL, liso("#3a3a36", 0.2, 16, 511)); }
+    for (let k = 0; k < 10; k++) { const x = (rnd(k * 7) - 0.5) * 900, z = -150 - rnd(k) * 200; for (let j = 0; j < 4; j++) b.add(x, j * BL, z, liso("#4a3a2a", 0.2, 16, 516)); for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1]]) b.add(x + dx * BL, 4 * BL, z + dz * BL, liso("#4a3a2a", 0.2, 16, 516)); }
+    montanas(b, -1100, 8, 3000, 7, liso("#3a4440", 0.12, 16, 517), null); b.fin();
+    oleaje(g, v, 0, 520, 40, 24, 14, MAT.agua, 1.4);
+    estatuas(g, v, [[-120, 20, 30], [-60, -60, 10, 1], [90, 0, -20, 2], [150, -80, -40, 3], [-170, -110, 50, 1], [30, -130, 0], [210, 40, -70, 2], [-230, 60, 80, 3], [0, 80, 180, 0], [120, 100, 200, 1]], 920);
+    relampagos(g, v, 1); lluvia(g, v, 220, 0, 0, 700); ambiente(g, v, 60, "esporas", 0, -60, 600, 0, 120); bandada(g, v, 4, 220, -400, "#1a1a1a", 25);
+    alfombra(g, ["seca", "hueso", "seca"], 160, 0, 0, 700, (x, z) => Math.abs(x) < 60 && Math.abs(z) < 60);
+    return {}; } },
+  torre: { cielo: "dia", build(g, v) { const b = new Blq(g); const bronce = liso("#b07a3a", 0.14, 16, 520);
+    suelo(b, 50, MAT.hierba, 5); for (let y = 0; y < 16; y++) for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) if (Math.abs(i) === 2 || Math.abs(j) === 2) b.add(i * BL, y * BL, -120 + j * BL, y % 5 === 4 ? MAT.oro : bronce);
+    for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) if (!(i === 0 && j === 0)) b.add(i * BL, 16 * BL, -120 + j * BL, bronce);
+    for (let k = 0; k < 6; k++) casa(b, -500 + k * 180, -420 - (k % 2) * 60, k + 40); templo(b, 420, -560, 5, 3, 5);
+    for (let k = 0; k < 20; k++) roble(b, (rnd(k * 3) - 0.5) * 1300, -250 - rnd(k) * 300, k + 140); montanas(b, -1100, 10, 3000, 9); nubes(b, 30, 300, -800, 2800, 36); b.fin();
+    paseantes(g, v, 3, [[[-260, 60], [-60, 80]], [[260, 40], [100, 70]]], 300, { cascoPenacho: "#c83a2f", casco: "#a8afbd", ropa: "#8a3b3b", peto: "#c8a040" });
+    alfombra(g, ["hierba", "hierba", "amarilla", "roja"], 380, 0, 0, 800, (x, z) => Math.abs(x) < 60 && z < -80 && z > -170); bandada(g, v, 7, 260, -300); ambiente(g, v, 40, "hojas", 0, 0, 600, 0, 160);
+    return {}; } },
+  torre_interior: { cielo: "interior_bronce", build(g, v) { const b = new Blq(g); const bronce = liso("#c8964a", 0.14, 16, 521);
+    suelo(b, 14, liso("#6a4a2a", 0.1, 16, 522)); for (let k = 0; k < 9; k++) for (let i = -6; i <= 6; i++) { b.add(i * BL, k * BL, -100, bronce); b.add(-100, k * BL, i * BL, bronce); b.add(100, k * BL, i * BL, bronce); } b.fin();
+    g.add(caja(40, 8, 26, MAT.madera, -50, 4, -70)); g.add(caja(36, 4, 22, liso("#c8506a", 0.1, 4), -50, 10, -70)); g.add(caja(16, 18, 10, MAT.madera, 60, 9, -88)); for (let j = 0; j < 4; j++) g.add(caja(5, 7, 5, liso(["#b5452f", "#3f6fb5", "#d9a630", "#5f9e3a"][j], 0.1, 4), 52 + j * 5, 21.5, -88));
+    g.add(caja(50, 0.6, 40, M(tex(16, 16, (px, w, h, r) => { fill(px, 16, 16, "#7a2f4f", r, 0.08); for (let i = 0; i < 16; i++) { px(i, 0, "#d9a630"); px(i, 15, "#d9a630"); } }, 523)), 0, 0.3, 0));
+    const haz = new THREE.Mesh(new THREE.BoxGeometry(24, 160, 24), new THREE.MeshBasicMaterial({ color: "#fff2b0", transparent: true, opacity: 0.18 })); haz.position.set(0, 80, -10); g.add(haz);
+    const sp = new THREE.SpotLight("#fff2c0", 3500, 400, 0.35, 0.5, 1.4); sp.position.set(0, 160, -10); sp.target.position.set(0, 0, -10); sp.castShadow = true; g.add(sp, sp.target);
+    ambiente(g, v, 60, "polvo", 0, -10, 40, 0, 150); antorcha(g, v, -96, 40, -40, 3, true, 0.7); antorcha(g, v, 96, 40, -40, 4, true, 0.7);
+    return {}; } },
+  mar_tormenta: { cielo: "tormenta", build(g, v) {
+    oleaje(g, v, 0, -200, 70, 24, 22, MAT.agua, 1.6); const b = new Blq(g); nubes(b, 50, 260, -500, 2800, 48, liso("#5a6070", 0.05, 8)); nubes(b, 30, 200, -200, 2000, 40, liso("#4a5060", 0.05, 8)); b.fin();
+    relampagos(g, v, 0); lluvia(g, v, 400, 0, -50, 600, 300); bandada(g, v, 3, 180, -300, "#1a1a1a", 60);
+    const rayo = new THREE.Group(); for (let k = 0; k < 8; k++) rayo.add(caja(4, 30, 4, MAT.brillo("#f4f8ff"), (k % 2 ? 8 : -8), k * 28, 0)); rayo.position.set(-260, 0, -600); g.add(rayo); v.push(t => { const c = (t) % 5.3; rayo.visible = c < 0.12 || (c > 0.2 && c < 0.27); });
+    const peces = []; for (let i = 0; i < 4; i++) { const p = caja(6, 4, 10, liso("#6a9ac0", 0.1, 4), 0, 0, 0); g.add(p); peces.push(p); }
+    v.push(t => peces.forEach((p, i) => { const q = ((t * 0.6 + i * 0.37) % 1.6); p.visible = q < 1; const a = q * Math.PI; p.position.set(-120 + i * 80 + q * 40, Math.sin(a) * 40 - 10, -60 - i * 30); p.rotation.x = -Math.cos(a) * 1.2; }));
+    return {}; } },
+  playa_serifos: { cielo: "amanecer", build(g, v) { const b = new Blq(g);
+    suelo(b, 40, MAT.arena, 2, 0, -160); for (let k = 0; k < 7; k++) casa(b, -420 + k * 130, -330 - (k % 2) * 40, k + 60, liso("#f2efe6", 0.05, 16, 72), liso("#3f6fb5", 0.1, 16, 73));
+    for (let k = 0; k < 12; k++) { const x = (rnd(k * 3) - 0.5) * 1100, z = -220 - rnd(k) * 80; if (Math.abs(x) < 200) continue; for (let j = 0; j < 6; j++) b.add(x + j * 2, j * BL, z, MAT.tronco); for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1], [2, 0], [-2, 0]]) b.add(x + dx * BL, 6 * BL - Math.abs(dx) * 4, z + dz * BL, MAT.hoja); }
+    montanas(b, -1100, 8, 3000, 7, liso("#9a8a6a", 0.12, 16, 61), null); nubes(b, 25, 260, -800, 2600, 34, liso("#ffd0a0", 0.05, 8)); rocas(b, 16, 0, 60, 800, liso("#a89a80", 0.12)); b.fin();
+    agua(g, v, 0, 420, 2600, 600); oleaje(g, v, 0, 160, 30, 16, 6, MAT.agua, 0.8); sol_(g, -500, 120, -1300, 160, "#ffc070");
+    barca(g, v, -200, 230, 1); barca(g, v, 260, 300, 2, "#d8a0a0"); gaviotas(g, v, 7, 150, -60);
+    for (let k = 0; k < 4; k++) { g.add(caja(2, 20, 2, MAT.madera, -300 + k * 30, 10, -40)); } g.add(caja(100, 14, 1, M(tex(8, 8, (px, w, h, r) => { for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) px(x, y, (x + y) % 3 === 0 ? "#6b5a3a" : "#00000000"); }, 524)), -255, 12, -40));
+    quietos(g, v, [[-260, -80, 20, "trabaja"], [300, -120, -40, "charla"], [330, -100, -100, "charla"]], 330, { ropa: "#c8b890" }); paseantes(g, v, 3, [[[-420, -200], [420, -210]]], 340);
+    alfombra(g, ["seca", "hierba"], 120, 0, -200, 900, (x, z) => Math.abs(x) < 200); ambiente(g, v, 30, "polvo", 0, 0, 500, 0, 80);
+    return {}; } },
+  banquete: { cielo: "interior", build(g, v) { const b = new Blq(g);
+    suelo(b, 26, M(tex(16, 16, (px, w, h, r) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, shade((Math.floor(x / 8) + Math.floor(y / 8)) % 2 ? "#e8e2d4" : "#3a5a8a", 0.95 + 0.1 * r(x, y))); }, 525)));
+    for (let i = -12; i <= 12; i++) for (let k = 0; k < 9; k++) b.add(i * BL, k * BL, -200, k === 5 ? MAT.oro : MAT.marmol);
+    for (let j = -12; j <= 6; j++) for (let k = 0; k < 9; k++) { b.add(-200, k * BL, j * BL, MAT.marmol); b.add(200, k * BL, j * BL, MAT.marmol); }
+    for (const x of [-140, -70, 70, 140]) for (const z of [-140, -40]) columna(b, x, z, 7, MAT.oro); b.fin();
+    for (const z of [-110, -10]) { g.add(caja(180, 10, 24, MAT.madera, 0, 9, z)); g.add(caja(184, 1, 28, liso("#f2efe6", 0.04, 4), 0, 14.5, z));
+      for (let k = 0; k < 14; k++) g.add(caja(5, 4 + (k % 3) * 2, 5, liso(["#e0302a", "#f2c84a", "#7fbf4a", "#b07a3a", "#ff8a2a"][k % 5], 0.1, 4), -80 + k * 12, 17 + (k % 3), z + (k % 2 ? 6 : -6))); }
+    g.add(caja(36, 30, 20, MAT.oro, 0, 15, -180)); g.add(caja(36, 40, 4, MAT.oro, 0, 40, -190));
+    for (const x of [-190, -100, 100, 190]) antorcha(g, v, x, 40, -196, x, true, 1.0);
+    quietos(g, v, [[-80, -88, 180, "charla"], [-40, -88, 180, "aplaude"], [40, -88, 180, "charla"], [80, -88, 180, "charla"], [-80, -132, 0, "charla"], [0, -132, 0, "aplaude"], [80, -132, 0, "charla"], [-60, 12, 180, "charla"], [30, 12, 180, "aplaude"], [-30, -32, 0, "charla"], [60, -32, 0, "charla"]], 350, { faldaLarga: 1 });
+    for (let k = 0; k < 3; k++) { const c = cuadrupedo({ seed: 530 + k, color: ["#f2f2f2", "#6a4a2a", "#2a2a2a"][k], largo: 20, alto: 11, patas: 14, ancho: 9, cola: 5, melena: "#3a2a1a", hocico: "#8a6a5a" }); c.g.position.set(-160 + k * 40, 0, 60); c.g.rotation.y = Math.PI / 2; g.add(c.g); v.push(t => animaCuadrupedo(c, t + k, 0)); }
+    ambiente(g, v, 40, "polvo", 0, -60, 300, 0, 140);
+    return {}; } },
+  templo_atenea: { cielo: "templo", build(g, v) { const b = new Blq(g);
+    suelo(b, 40, MAT.marmol, 4); templo(b, 0, -160, 8, 5, 7); for (let i = -6; i <= 6; i++) for (let j = 0; j < 2; j++) b.add(i * BL, j * BL, -150, MAT.marmol);
+    for (let k = 0; k < 14; k++) { const x = (rnd(k * 5) - 0.5) * 1200, z = -300 - rnd(k) * 300; if (Math.abs(x) < 220) continue; for (let j = 0; j < 4; j++) b.add(x, j * BL, z, MAT.tronco); for (let i = -1; i <= 1; i++) for (let jj = -1; jj <= 1; jj++) b.add(x + i * BL, 4 * BL, z + jj * BL, liso("#7a9a5a", 0.2, 16, 526)); }
+    montanas(b, -1100, 9, 3000, 9, liso("#8a9a8a", 0.12, 16, 527)); nubes(b, 30, 300, -800, 2800, 36); b.fin();
+    const est = estatua(950); est.root.scale.setScalar(2.4); pose(est, { x: 0, z: -175, ry: 0, bR: [-170, 10], cR: 0 }, 0); est.root.position.y = 32; g.add(est.root); g.add(caja(40, 32, 30, MAT.marmol, 0, 16, -175));
+    const buho = new THREE.Group(); buho.add(caja(10, 12, 9, liso("#8a7a6a", 0.15, 4), 0, 6, 0)); for (const x of [-2.4, 2.4]) buho.add(caja(3, 3, 1, MAT.brillo("#ffcf3a"), x, 9, 4.8)); buho.position.set(70, 40, -140); g.add(buho); v.push(t => buho.rotation.y = 0.6 * Math.sin(t * 0.7));
+    for (const x of [-90, 90]) { g.add(caja(14, 18, 14, MAT.oro, x, 9, -60)); antorcha(g, v, x, 18, -60, x, true, 0.5); }
+    alfombra(g, ["hierba", "amarilla", "azul"], 260, 0, 120, 900, (x, z) => Math.abs(x) < 160 && z < 200); bandada(g, v, 6, 240, -300, "#ffffff", 40); ambiente(g, v, 40, "polvo", 0, 0, 500, 0, 160);
+    quietos(g, v, [[-170, -20, 40, "charla"], [170, -30, -40, "charla"]], 360, { faldaLarga: 1, ropa: "#f2efe6", melena: 1 });
+    return {}; } },
+  cueva_greas: { cielo: "invierno_gris", build(g, v) { const b = new Blq(g);
+    suelo(b, 44, MAT.nieve, 5); for (let y = 0; y < 10; y++) for (let i = -12 + y; i <= 12 - y; i++) for (let j = -3; j <= 3; j++) { if (y < 5 && Math.abs(i) < 4 && j > -3) continue; b.add(i * BL, y * BL, -200 + j * BL, y > 6 ? MAT.nieve[2] : liso("#6a7078", 0.15, 16, 528)); }
+    for (let k = 0; k < 30; k++) { const x = (rnd(k * 3) - 0.5) * 1300, z = -150 - rnd(k * 5) * 500; if (Math.abs(x) < 240 && z > -300) continue; pino(b, x, z, k + 70, undefined, liso("#f2f6fa", 0.03, 16, 52)); }
+    for (let i = -3; i <= 3; i++) for (let k = 0; k < 5; k++) b.add(i * BL, k * BL, -240, liso("#3a3e44", 0.2, 16, 529));
+    montanas(b, -1100, 10, 3000, 11); rocas(b, 16, 0, 80, 600, liso("#9aa0a8", 0.12)); b.fin();
+    for (let k = 0; k < 12; k++) g.add(caja(3, 8 + rnd(k) * 10, 3, liso("#cfe8ff", 0.05, 4), -56 + k * 10, 74 - rnd(k) * 6, -152));
+    hoguera(g, v, -110, -120, 9); g.add(caja(26, 6, 10, MAT.piedra, 0, 3, -195)); ambiente(g, v, 200, "nieve", 0, 0, 700, 0, 240); bandada(g, v, 3, 220, -400, "#2a2a2a", 25);
+    alfombra(g, ["hueso", "seca"], 40, 0, -170, 120, () => false);
+    return {}; } },
+  vuelo_nubes: { cielo: "dia_alto", build(g, v) { const b = new Blq(g);
+    nubes(b, 120, -60, 300, 3000, 40); nubes(b, 80, -20, -400, 3000, 48); nubes(b, 40, 140, -900, 3000, 56); nubes(b, 40, -160, 0, 3000, 48);
+    for (let k = 0; k < 9; k++) for (let i = 0; i < 6; i++) b.add(-1200 + k * 300 + i * 30, -380, -600 + (i % 3) * 30, liso("#5f9e3a", 0.15, 16, 530), 30); b.fin();
+    agua(g, v, 0, -400, 6000, 3000, -400); bandada(g, v, 10, 40, -200, "#ffffff", 70, 2000); bandada(g, v, 6, 120, -500, "#3a3a4a", 50, 2000, 2);
+    const g2 = new THREE.Group(); g.add(g2); const bb = new Blq(g2); nubes(bb, 30, 30, 200, 1600, 30); bb.fin(); v.push(t => g2.position.x = -((t * 120) % 800) + 400);
+    return {}; } },
+  desierto_atlas: { cielo: "atardecer", build(g, v) { const b = new Blq(g);
+    suelo(b, 50, MAT.arena, 6); for (let k = 0; k < 12; k++) { const cx = (rnd(k * 3) - 0.5) * 1400, cz = -200 - rnd(k) * 600; for (let y = 0; y < 3; y++) for (let i = -5 + y * 2; i <= 5 - y * 2; i++) b.add(cx + i * BL, y * BL, cz, liso("#e8c890", 0.08, 16, 531)); }
+    for (let k = 0; k < 10; k++) { const x = (rnd(k * 13) - 0.5) * 1200, z = -100 - rnd(k * 5) * 300; if (Math.abs(x) < 200) continue; for (let j = 0; j < 3; j++) b.add(x, j * BL, z, liso("#4f8a3a", 0.2, 16, 532)); b.add(x + BL, BL, z, liso("#4f8a3a", 0.2, 16, 532)); b.add(x + BL, 2 * BL, z, liso("#4f8a3a", 0.2, 16, 532)); }
+    montanas(b, -1300, 9, 3200, 9, liso("#a8806a", 0.12, 16, 533), null); b.fin(); sol_(g, 400, 120, -1400, 180, "#ffb060");
+    animales(g, v, 3, { color: "#c8a070", largo: 20, alto: 12, patas: 16, ancho: 9, lomo: "#b08a5a", cola: 3, orejas: 1 }, 300, -200, 300, 31);
+    ambiente(g, v, 80, "polvo", 0, 0, 700, 0, 60); bandada(g, v, 4, 260, -400, "#2a2a2a", 30); alfombra(g, ["seca", "seca", "hueso"], 160, 0, 0, 900, (x, z) => Math.abs(x) < 180 && Math.abs(z + 80) < 140);
+    return {}; } },
+  acantilado_etiopia: { cielo: "tarde", build(g, v) { const b = new Blq(g);
+    for (let i = -24; i <= 0; i++) for (let j = -20; j <= 20; j++) { const h = 5 + Math.floor(rnd(i * 7 + j) * 2); for (let k = 0; k < h; k++) b.add(-120 + i * BL, (k - 6) * BL, j * BL, k === h - 1 ? MAT.hierba : liso("#8a7a6a", 0.15, 16, 534)); }
+    for (let y = 0; y < 5; y++) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) b.add(30 + i * BL, (y - 4) * BL, -20 + j * BL, liso("#6a6058", 0.15, 16, 535));
+    for (let k = 0; k < 6; k++) casa(b, -360 - k * 70, -160 + (k % 2) * 80, k + 80, liso("#e8d0a0", 0.08, 16, 536), liso("#c8603a", 0.12, 16, 65));
+    for (let k = 0; k < 12; k++) roble(b, -420 - rnd(k) * 400, (rnd(k * 9) - 0.5) * 700, k + 160, liso("#6a9a3a", 0.2, 16, 537)); nubes(b, 25, 280, -800, 2800, 36, liso("#ffe0c0", 0.05, 8)); b.fin();
+    oleaje(g, v, 300, 0, 60, 24, 14, MAT.agua, 1); for (const s of [-1, 1]) { const c = new THREE.Group(); for (let j = 0; j < 8; j++) c.add(caja(2, 2, 4, liso("#5a5a5a", 0.1, 4), 0, 0, j * 3.6)); c.position.set(36, 20, -20 + s * 4); c.rotation.y = s * 0.6; g.add(c); }
+    quietos(g, v, [[-200, -40, 80, "susto"], [-210, 10, 90, "charla"], [-230, -20, 90, "charla"], [-190, 40, 100, "aplaude"]], 380, { ropa: "#d9a630", piel: "#8a5a3a" }); gaviotas(g, v, 6, 140, 0, 3);
+    return {}; } },
+  estadio: { cielo: "dia", build(g, v) { const b = new Blq(g);
+    suelo(b, 40, liso("#c9a87a", 0.1, 16, 538)); for (let i = -20; i <= 20; i++) for (let j = -1; j <= 1; j++) b.add(i * BL, -BL + 1, j * BL * 2 + 40, liso("#d8c090", 0.08, 16, 539));
+    for (let r = 0; r < 6; r++) for (let i = -24; i <= 24; i++) b.add(i * BL, r * BL, -140 - r * BL, MAT.marmol);
+    for (let r = 0; r < 6; r++) for (let j = -8; j <= 8; j++) b.add(-400 - r * BL, r * BL, -60 + j * BL, MAT.marmol);
+    templo(b, 0, -460, 6, 3, 6); montanas(b, -1100, 10, 3000, 8, liso("#8a9a6a", 0.12, 16, 53), null); nubes(b, 25, 280, -800, 2600, 34); b.fin();
+    const pub = []; for (let r = 0; r < 4; r++) for (let i = 0; i < 9; i++) pub.push([-320 + i * 80 + (r % 2) * 30, -150 - r * BL - 8, 0, "aplaude"]);
+    const xs = quietos(g, v, pub, 400); xs.forEach((e, i) => { const r = Math.floor(i / 9); v.push(t => { e.root.position.y = (r + 1) * BL; }); });
+    for (const x of [-300, 300]) { g.add(caja(2, 50, 2, MAT.madera, x, 25, 0)); g.add(caja(20, 12, 1, liso(["#c83a2f", "#3f6fb5"][x > 0 ? 1 : 0], 0.1, 4), x + 11, 44, 0)); }
+    bandada(g, v, 6, 240, -400); ambiente(g, v, 50, "polvo", 0, 0, 600, 0, 80);
+    return {}; } },
+});
+Object.assign(CIELOS, {
+  cueva: ["#0a120c", "#1f3424", "#1a2a1e", 260, 900, "#9ad0aa", "#3a3a30", 1.0, "#c8ffd0", 1.0, 1.45, [0, 400, 200]],
+  tormenta_verde: ["#2a3a34", "#5a7a6a", "#4a6a5a", 200, 1100, "#9ab8a8", "#2a2a2a", 0.75, "#c0e0c8", 1.1, 1.15, [300, 400, 200]],
+  interior_bronce: ["#1a1008", "#3a2410", "#2a1a10", 250, 900, "#ffe8c8", "#5a4020", 0.95, "#ffe0b0", 0.8, 1.1, [0, 400, 100]],
+  templo: ["#3f8ce0", "#d8ecff", "#d8ecff", 600, 2600, "#e0ecff", "#a8a090", 1.0, "#fff2e0", 2.2, 0.85, [300, 600, 300]],
+  invierno_gris: ["#7a8898", "#d8e0e8", "#d0d8e0", 260, 1300, "#e8eef4", "#a8b0b8", 1.0, "#f0f4ff", 1.6, 1.05, [300, 400, 300]],
+});

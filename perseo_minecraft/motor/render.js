@@ -1,18 +1,18 @@
 // Render del HTML a MP4: Edge headless por CDP, pinta cada fotograma con window.pintar(t) y lo pasa a ffmpeg.
 // Uso: node render.js escena.html salida.mp4 [desde hasta] | node render.js escena.html --fotos t1,t2,... carpeta
 const { spawn } = require('child_process'); const fs = require('fs'); const path = require('path');
-const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', PORT = +(process.env.PORT || 9555), FPS = 30;
+const EDGE = process.env.BROWSER || (process.platform === 'win32' ? 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' : '/opt/pw-browsers/chromium-1243/chrome-linux64/chrome'), PORT = +(process.env.PORT || 9555), FPS = 30;
 const [html, out, a, b] = process.argv.slice(2);
 (async () => {
-  const prof = path.join(process.env.TEMP, 'edge_render_prof_' + PORT);
-  const br = spawn(EDGE, ['--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, '--hide-scrollbars', '--force-device-scale-factor=1', '--window-size=1920,1080', '--disable-gpu-vsync', '--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', 'about:blank'], { stdio: 'ignore' });
+  const prof = path.join(process.env.TEMP || require('os').tmpdir(), 'edge_render_prof_' + PORT);
+  const br = spawn(EDGE, ['--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, '--hide-scrollbars', '--force-device-scale-factor=1', '--window-size=1920,1080', '--disable-gpu-vsync', ...(process.platform === 'win32' ? ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] : ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--use-gl=angle']), 'about:blank'], { stdio: 'ignore' });
   let lista; for (let k = 0; k < 60; k++) { try { lista = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json(); if (lista.length) break; } catch (e) {} await new Promise(r => setTimeout(r, 250)); }
   const pag = lista.find(p => p.type === 'page');
   const ws = new WebSocket(pag.webSocketDebuggerUrl); await new Promise((ok, ko) => { ws.onopen = ok; ws.onerror = ko; });
   let id = 0; const pend = new Map(); ws.onmessage = ev => { const m = JSON.parse(ev.data); if (m.id && pend.has(m.id)) { pend.get(m.id)(m); pend.delete(m.id); } };
   const cdp = (method, params = {}) => new Promise(ok => { const i = ++id; pend.set(i, ok); ws.send(JSON.stringify({ id: i, method, params })); });
   await cdp('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false });
-  await cdp('Page.enable'); await cdp('Page.navigate', { url: html.startsWith('http') ? html : 'file:///' + path.resolve(html).split(path.sep).join('/') });
+  await cdp('Network.enable'); await cdp('Network.setCacheDisabled', { cacheDisabled: true }); await cdp('Page.enable'); await cdp('Page.navigate', { url: html.startsWith('http') ? html : 'file:///' + path.resolve(html).split(path.sep).join('/') });
   for (let k = 0; k < 60; k++) { const r0 = await cdp('Runtime.evaluate', { expression: 'window.LISTO||0', returnByValue: true }); if (r0.result.result.value) break; await new Promise(r => setTimeout(r, 500)); }
   const ev = async e => { const r = await cdp('Runtime.evaluate', { expression: e, returnByValue: true, awaitPromise: true }); if (r.result.exceptionDetails) throw new Error(JSON.stringify(r.result.exceptionDetails).slice(0, 400)); return r.result.result.value; };
   const dur = await ev('window.DUR');
