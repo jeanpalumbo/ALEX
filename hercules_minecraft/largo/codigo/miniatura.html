@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000;overflow:hidden;width:1920px;height:1080px}canvas{display:block}
+.t{position:absolute;font-family:Montserrat,Arial,sans-serif;font-weight:900;color:#fff;-webkit-text-stroke:18px #120a02;paint-order:stroke fill;text-shadow:0 14px 0 #120a02;line-height:.95}
+#a{right:60px;top:60px;font-size:170px;text-align:right}#b{right:60px;top:250px;font-size:230px;color:#ffd21f;text-align:right}
+#sat{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,transparent 40%,#000a 100%)}</style>
+<script>window.__err=[];window.onerror=(m,s,l,c)=>{window.__err.push(m+" @"+l)}</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script></head><body>
+<div id="sat"></div><div id="a" class="t"></div><div id="b" class="t"></div>
+<script type="module">
+import { escenario, vivos, solSobre, mira, renderer, scene, cam, part, render } from "./mundo.js";
+import { E, C, K, ocultaTodo, resetExtras } from "./escenas.js";
+import { cara } from "./motor.js";
+const v = new URLSearchParams(location.search).get("v") || "a";
+const ENV = () => 0;
+window.pintar = async t => { ocultaTodo(); resetExtras(); const X = { t: 8, lt: 1.75, t0: 6, dur: 4, env: ENV, una: () => false, cambiaSet: () => {}, titulo: () => {}, cta: () => {}, rios: () => {} };
+  let s;
+  if (v === "a") { E.hidra_frio.act(X); s = escenario("lerna"); renderer.toneMappingExposure = 1.45; const h = C.HERCL; h.root.position.set(-36, 0, 70); h.root.rotation.y = 0.35; h.aR.sh.rotation.set(-2.6, 0, 0.3); h.aR.el.rotation.set(-0.4, 0, 0); h.aL.sh.rotation.set(-0.8, 0, -0.5); h.cuello.rotation.set(0, 0.15, 0.1); h.torso.rotation.set(-0.1, 0.2, 0);
+    mira(-6, 38, 150, -22, 40, 30, 44); document.getElementById("a").textContent = "12 TRABAJOS"; document.getElementById("b").textContent = "IMPOSIBLES"; }
+  else { X.lt = 0.8; E.cerbero.act(X); s = escenario("inframundo"); renderer.toneMappingExposure = 1.5; K.CERB.g.position.set(40, 0, -40); K.CERB.g.rotation.y = -0.3; K.CERB.g.scale.setScalar(2.0);
+    const h = C.HERCL; h.root.position.set(-70, 0, 110); h.root.rotation.y = 0.4; h.aR.sh.rotation.set(-1.6, 0, 0.2); h.aR.el.rotation.set(-1.2, 0, 0); h.aL.sh.rotation.set(-1.6, 0, -0.2); h.aL.el.rotation.set(-1.2, 0, 0); h.cuello.rotation.set(-0.1, 0.2, 0);
+    import("./mundo.js").then(m => { m.hemi.intensity = 1.4; }); mira(-20, 22, 220, 0, 55, -10, 50); document.getElementById("a").textContent = "VS PERRO DE"; document.getElementById("b").textContent = "3 CABEZAS"; }
+  cara(C.HERCL, v === "a" ? "grito" : "susto"); if (v === "b") { (await import("./mundo.js")).hemi.intensity = 1.5; }
+  vivos(8); part.update(8); solSobre(0, 0, s); render(); };
+window.DUR = 1; setTimeout(async () => { await window.pintar(0); setTimeout(async () => { await window.pintar(0); window.LISTO = 1; }, 300); }, 100);
+</script></body></html>
