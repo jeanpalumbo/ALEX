@@ -271,7 +271,7 @@ export const E = {
     cams: [sigue(PG, 14, 44, 32, 30, 32), () => [-80, 30, 0, 0, 20, -100, 44]] },
   atras: { set: "cueva_gorgonas", act(X) { const { t, lt } = X; const oj = W(X, "abrió") - 0.3; P(PG, mezcla({ x: 0, z: lerp(-40, -100, seg(lt, 0, oj)), ry: 0, andar: lt * 4, amp: lt < oj ? 0.5 : 0, bL: [-90, -10], cL: 80 }), t, lt < oj ? "cerrados" : "sudor"); enCodo(PG, ESCUDO); REFLEJO.visible = true; enMano(PG, ESPADA);
       med(C.MED, { x: 0, z: -140, ry: 0, sentado: 1, y: 4, cabX: 25 }, t, "dormido", lt > oj ? 1 : 0.3); },
-    cams: [() => [40, 20, -40, 0, 20, -140, 34], cerca(C.MED, 22, 0.1, 24), cerca(PG, 28, 0.2, 28)] },
+    cams: [() => [40, 20, -40, 0, 20, -140, 34], () => [-90, 38, -95, 0, 30, -125, 40], () => [95, 42, -105, 0, 30, -118, 40]] },
   corte: { set: "cueva_gorgonas", act(X) { const { t, lt } = X; const g = W(X, "golpe") - 0.2; P(PG, mezcla({ x: 0, z: -110, ry: 180 }, golpe(lt, g)), t, "enfado"); enMano(PG, ESPADA); FL.intensity = lt > g && lt < g + 0.25 ? 6000 : 0; FL.color.set("#ffffff"); FL.position.set(0, 40, -100);
       if (lt < g + 0.05) med(C.MED, { x: 0, z: -140, ry: 0, sentado: 1, y: 4, cabX: 25 }, t, "susto", 1); else { med(C.MED, { x: 0, z: -140, ry: 0, sentado: 1, y: 4, cabX: 25 }, t, "dormido", 0); C.MED.cabeza.visible = false; C.MED.serp.forEach(s => s.g.visible = false); }
       if (X.una("c")) part.add(X.t0 + g + 0.05, 0, 30, -140, 30, ["#7aa86a", "#3f8f3a", "#2a5a2a"], 50, 1.2, 60, 1.6); },
