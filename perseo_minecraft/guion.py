@@ -1,0 +1,107 @@
+# Guion del vídeo largo de Perseo en Minecraft. Cada bloque = (escena, capítulo, texto).
+# La escena es una entrada de escenas.js. El texto lo lee Jorge (edge-tts es-MX-JorgeNeural +5 %).
+CAP = {0: "Gancho", 1: "Intro", 2: "Una profecía muy incómoda", 3: "La caja en el mar", 4: "El rey que quería un caballo… o una cabeza",
+       5: "¿Quién es Medusa?", 6: "El kit de los dioses", 7: "Las Greas y su único ojo", 8: "Equipo completo",
+       9: "La guarida de las Gorgonas", 10: "La huida", 11: "El titán cansado", 12: "Andrómeda y el monstruo marino",
+       13: "Vuelta a casa", 14: "La profecía se cumple", 15: "Cierre"}
+B = [
+ # ---------- 0. gancho en frío
+ ("gancho_cueva", 0, "Imagina entrar en una cueva llena de estatuas. Pero no son estatuas. Son personas."),
+ ("gancho_mirada", 0, "Gente que miró a la persona equivocada durante un segundo de más."),
+ ("gancho_escudo", 0, "Y tú tienes que cortarle la cabeza a esa persona… sin mirarla. Con los ojos cerrados. Con un espejo."),
+ ("gancho_casco", 0, "Y con un casco que te hace invisible. ¿Cómo demonios acabó un chaval normal metido en este lío?"),
+ ("intro", 1, ""),
+ # ---------- 1. profecía
+ ("argos", 2, "Todo empieza en Argos, con un rey llamado Acrisio."),
+ ("acrisio_hijo", 2, "Acrisio quería un hijo varón, así que hizo lo que hacía todo el mundo en la antigua Grecia cuando tenía una duda: preguntar al oráculo."),
+ ("oraculo", 2, "Y el oráculo le dijo: Hijo no vas a tener. Pero tu nieto… te va a matar."),
+ ("oraculo_chiste", 2, "Gracias, oráculo. Muy útil."),
+ ("danae_plan", 2, "Acrisio tenía una hija, Dánae. Y pensó: Fácil. Si mi hija nunca tiene hijos, no hay nieto. Y si no hay nieto, no hay problema."),
+ ("torre", 2, "Así que encerró a Dánae en una torre de bronce, sin puertas, con una ventanita en el techo. Plan perfecto."),
+ ("torre_dentro", 2, "Plan perfecto… hasta que Zeus se enteró. Y Zeus, el rey de los dioses, tenía un pequeño problema: se enamoraba de todo el mundo."),
+ ("lluvia_oro", 2, "Para entrar en la torre, se convirtió en una lluvia de oro y se coló por la ventanita del techo."),
+ ("nace_perseo", 2, "Nueve meses después nació un bebé: Perseo. Nieto de Acrisio. El nieto de la profecía."),
+ # ---------- 2. cofre
+ ("acrisio_panico", 3, "Acrisio escuchó llorar al bebé y casi se le cae la corona. No se atrevía a matar a su propia hija y a su nieto, porque matar a la familia enfadaba muchísimo a los dioses."),
+ ("cofre_mete", 3, "Así que encontró una solución creativa: los metió a los dos en un cofre de madera… y los tiró al mar."),
+ ("cofre_mar", 3, "Técnicamente no los mató él. Fue el mar. Un abogado griego lo habría defendido así."),
+ ("zeus_vigila", 3, "Pero Zeus vigilaba desde arriba. El cofre flotó días y días, hasta llegar a la isla de Sérifos, donde un pescador llamado Dictis lo pescó con su red."),
+ ("dictis_red", 3, "Dictis abrió el cofre esperando peces… y encontró una madre y un bebé. Buen tipo, Dictis: los acogió en su casa."),
+ ("crece", 3, "Y allí creció Perseo, fuerte, valiente y, digámoslo claro, un poco chulito."),
+ # ---------- 3. Polidectes
+ ("polidectes", 4, "El problema llegó con el hermano de Dictis: Polidectes, el rey de la isla. Polidectes se enamoró de Dánae."),
+ ("estorbo", 4, "Pero había un estorbo: Perseo, que ya era un mozo grandote y protegía a su madre como un perro guardián."),
+ ("plan_banquete", 4, "Así que Polidectes montó un plan. Organizó un banquete y dijo que iba a casarse con otra princesa, y que cada invitado tenía que regalarle un caballo."),
+ ("sin_caballo", 4, "Perseo no tenía caballo. No tenía ni una oveja. Y por orgullo, soltó la frase más peligrosa de toda la mitología:"),
+ ("frase", 4, "Pídeme lo que quieras. Lo que sea. Incluso la cabeza de Medusa."),
+ ("silencio", 4, "Silencio total. Polidectes sonrió. Trato hecho."),
+ ("tarde", 4, "Perseo se dio cuenta de lo que acababa de decir medio segundo tarde."),
+ # ---------- 4. Medusa
+ ("gorgonas", 5, "Medusa era una de las tres Gorgonas. Sus dos hermanas, Esteno y Euríale, eran inmortales. Medusa no. Ella era la única que se podía matar."),
+ ("sacerdotisa", 5, "Según la leyenda, Medusa había sido una mujer bellísima, sacerdotisa de Atenea."),
+ ("castigo", 5, "Pero Poseidón la persiguió dentro del templo, y Atenea, en vez de castigar a Poseidón, castigó a Medusa. Sí, la mitología griega no es famosa por ser justa."),
+ ("transforma", 5, "Su pelo se convirtió en serpientes vivas, y su mirada en un arma."),
+ ("petrifica", 5, "Cualquiera que la mirase a los ojos se convertía en piedra. Al instante. Sin devoluciones."),
+ # ---------- 5. kit de los dioses
+ ("perseo_fatal", 6, "Perseo estaba fatal. No sabía dónde vivía Medusa, no tenía armas y no tenía ni idea de cómo matar a alguien sin mirarlo."),
+ ("dioses_llegan", 6, "Pero, recordemos, era hijo de Zeus. Y los dioses adoran los proyectos difíciles."),
+ ("regalos", 6, "Atenea le regaló un escudo de bronce tan pulido que brillaba como un espejo. Hermes le dio una espada curva capaz de cortar cualquier cosa, hasta la piel de una Gorgona."),
+ ("inventario1", 6, "Pero le faltaban tres cosas más: unas sandalias con alas para volar, un casco que lo hiciera invisible y una bolsa mágica para guardar la cabeza."),
+ ("ninfas_dir", 6, "Y eso solo lo tenían unas ninfas… cuya dirección no sabía nadie."),
+ # ---------- 6. Greas
+ ("greas", 7, "Para encontrar a las ninfas, Perseo tuvo que visitar a las Greas: tres hermanas viejísimas que compartían un solo ojo y un solo diente. Se los iban pasando por turnos."),
+ ("greas_pelea", 7, "¡Me toca a mí el ojo! ¡Que no, que tú lo tuviste el martes!"),
+ ("ojo_robo", 7, "Perseo esperó escondido, y justo cuando una le pasaba el ojo a otra… ¡zas! Se lo quitó en el aire."),
+ ("greas_ciegas", 7, "Ahora las Greas no veían nada. Y Perseo les hizo una oferta que no podían rechazar: Os devuelvo el ojo si me decís dónde están las ninfas. Cantaron enseguida."),
+ # ---------- 7. equipo
+ ("ninfas", 8, "Las ninfas fueron mucho más amables. Le dieron las sandalias aladas, la bolsa mágica, llamada kibisis, y el casco de Hades, que te hace invisible."),
+ ("vuelo_arbol", 8, "Perseo se puso las sandalias, dio un salto… y salió volando como un cohete. Directo contra un árbol. Hay que practicar."),
+ ("vuelo_nubes", 8, "Al segundo intento ya volaba como un pájaro, rumbo al lugar más temido del mundo: la guarida de las Gorgonas."),
+ # ---------- 8. guarida
+ ("isla", 9, "Al llegar, lo primero que vio fueron las estatuas. Cientos."),
+ ("estatuas", 9, "Guerreros, cazadores, animales… todos con la misma cara: la de alguien que acaba de ver algo que no debía."),
+ ("casco_invisible", 9, "Las tres Gorgonas dormían. Perseo se puso el casco de Hades y se volvió invisible."),
+ ("reflejo", 9, "Y entonces hizo el truco más inteligente de toda la historia: no miró a Medusa. Miró su reflejo en el escudo."),
+ ("atras", 9, "Caminaba hacia atrás, guiándose solo por el espejo. Un paso. Otro. Una serpiente abrió un ojo…"),
+ ("corte", 9, "Y la espada de Hermes cayó. Un solo golpe."),
+ ("bolsa", 9, "Perseo metió la cabeza en la bolsa sin mirarla. Y aquí viene lo raro: del cuello de Medusa salieron dos criaturas."),
+ ("pegaso", 9, "Un gigante con espada dorada, Crisaor… y Pegaso, el caballo con alas."),
+ # ---------- 9. huida
+ ("hermanas", 10, "Las otras dos Gorgonas se despertaron gritando. Buscaban al asesino por todas partes, pero Perseo era invisible."),
+ ("huida", 10, "Pasaron volando a su lado sin verlo. Él contuvo la respiración y se fue volando con sus sandalias."),
+ ("arma", 10, "Y lo mejor: aunque Medusa estaba muerta, su cabeza seguía funcionando. Cualquiera que la mirara seguía convirtiéndose en piedra. Perseo llevaba en la bolsa el arma más poderosa del mundo."),
+ # ---------- 10. Atlas
+ ("atlas", 11, "De camino a casa, Perseo pasó por el reino del titán Atlas, que estaba castigado a sujetar el cielo para siempre."),
+ ("atlas_largo", 11, "Perseo le pidió un sitio para descansar, y Atlas, de mal humor, le dijo que se largara."),
+ ("atlas_piedra", 11, "Así que Perseo sacó la cabeza de Medusa. Atlas se convirtió en piedra… y en una montaña enorme."),
+ ("atlas_mapa", 11, "Por eso hoy hay unas montañas en el norte de África que se llaman el Atlas."),
+ ("atlas_chiste", 11, "Ahora, eso sí: Atlas ya no notaba el peso del cielo. Visto así, casi le hizo un favor."),
+ # ---------- 11. Andrómeda
+ ("andromeda", 12, "Volando sobre la costa de Etiopía, Perseo vio algo rarísimo: una princesa encadenada a una roca junto al mar. Se llamaba Andrómeda."),
+ ("casiopea", 12, "Su madre, la reina Casiopea, había presumido de que su hija era más guapa que las ninfas del mar."),
+ ("poseidon", 12, "Y Poseidón, que se ofendía rápido, mandó un monstruo marino a destruir el reino. La única forma de calmarlo era entregarle a la princesa."),
+ ("trato_boda", 12, "Perseo bajó volando y le dijo a los padres: Si la salvo, me caso con ella. ¡Hecho!, dijeron sin pensarlo mucho."),
+ ("ceto", 12, "El monstruo salió del agua."),
+ ("combate", 12, "Perseo voló a su alrededor, esquivó los mordiscos y lo atacó con la espada una y otra vez, hasta que la bestia se hundió para siempre."),
+ ("boda", 12, "Hubo boda. Aunque en la boda apareció un antiguo prometido de Andrómeda con todo un ejército para montar bronca."),
+ ("boda_cabeza", 12, "Perseo gritó: ¡Los que sean mis amigos, que aparten la vista! Y sacó la cabeza."),
+ ("boda_chiste", 12, "La boda acabó con mucha más decoración de la prevista."),
+ # ---------- 12. vuelta
+ ("vuelta", 13, "Perseo volvió por fin a Sérifos. Y descubrió que Polidectes no había cambiado nada: seguía acosando a su madre, que tuvo que esconderse en un templo con el bueno de Dictis."),
+ ("banquete2", 13, "Perseo entró en el banquete del rey. Polidectes se rio: ¿Qué? ¿Me traes la cabeza de Medusa?"),
+ ("pues_si", 13, "Pues mira, sí."),
+ ("corte_piedra", 13, "Polidectes y toda su corte se quedaron de piedra. Literalmente."),
+ ("dictis_rey", 13, "Perseo nombró rey de la isla a Dictis, el pescador que los había salvado."),
+ ("devuelve", 13, "Y devolvió todos los regalos: las sandalias, el casco y la bolsa a Hermes, y la cabeza de Medusa a Atenea, que la puso en el centro de su escudo."),
+ # ---------- 13. profecía cumplida
+ ("huye_abuelo", 14, "¿Y el abuelo Acrisio? Se enteró de que su nieto había vuelto y huyó a otra ciudad, para estar lo más lejos posible."),
+ ("juegos", 14, "Años después, Perseo participó en unos juegos atléticos en esa misma ciudad. Le tocó lanzar el disco."),
+ ("disco", 14, "Lo lanzó con todas sus fuerzas… y una ráfaga de viento lo desvió directo hacia las gradas."),
+ ("disco_golpe", 14, "Directo a la cabeza de un señor mayor. Sí. Era Acrisio."),
+ ("destino", 14, "La profecía se cumplió. Sin querer, sin odio y sin cabeza de Medusa. Un simple disco. Por mucho que corras, en la mitología griega el destino siempre te encuentra."),
+ # ---------- cierre
+ ("constelaciones", 15, "Perseo y Andrómeda vivieron felices y tuvieron muchos hijos. Y cuando murieron, los dioses los subieron al cielo."),
+ ("estrellas", 15, "Esta noche, si miras las estrellas, puedes ver las constelaciones de Perseo, Andrómeda, Casiopea… y Pegaso. Toda la familia."),
+ ("casiopea_abajo", 15, "Y Casiopea, por presumida, está colocada de forma que pasa media noche cabeza abajo."),
+ ("cierre", 15, "Si te ha gustado, suscríbete a El Bicho Curioso y activa la campanita. En el próximo vídeo: un héroe que entró en un laberinto del que nadie salía vivo… con un ovillo de lana. Nos vemos."),
+]
