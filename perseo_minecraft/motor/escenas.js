@@ -380,3 +380,4 @@ function quietos2(X, lista, accion) { lista.forEach(([x, z, ry], i) => { if (!_e
   const e = _ex[_exUsados++], t = X.t, s = Math.sin(t * 12 + i); const p = { x, z, ry, seed: i };
   if (accion === "aplaude") Object.assign(p, { bR: [-80, 25 + 15 * s], bL: [-80, -25 - 15 * s], cR: 60, cL: 60 }); if (accion === "susto") Object.assign(p, { bR: [-150, 30], bL: [-150, -30], cR: 20, cL: 20, salto: Math.abs(s) * 3 });
   if (accion === "tapa") Object.assign(p, { bR: [-150, 70], bL: [-150, -70], cR: 120, cL: 120 }); P(e, p, t, accion === "aplaude" ? "risa" : (accion === "tapa" ? "enfado" : "susto")); }); }
+export { P, enMano, enCodo, med, CABEZA, ESCUDO, ESPADA, REFLEJO, FL, BOLSALUZ, PE, PH, PG };

@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000;overflow:hidden;width:1920px;height:1080px}canvas{display:block}
+.t{position:absolute;font-family:Montserrat,Arial,sans-serif;font-weight:900;color:#fff;-webkit-text-stroke:20px #0a1a06;paint-order:stroke fill;text-shadow:0 16px 0 #0a1a06;line-height:.92}
+#a{right:70px;top:90px;font-size:190px;text-align:right}#b{right:70px;top:300px;font-size:250px;color:#9dff3a;text-align:right}
+#sat{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 55%,transparent 35%,#000b 100%)}</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script></head><body>
+<div id="sat"></div><div id="a" class="t"></div><div id="b" class="t"></div>
+<script type="module">
+import { escenario, vivos, solSobre, mira, renderer, part, render } from "./mundo.js";
+import { C, ocultaTodo, resetExtras, P, enMano, enCodo, med, CABEZA, ESCUDO, ESPADA, REFLEJO, FL, PH } from "./escenas.js";
+const v = new URLSearchParams(location.search).get("v") || "a";
+window.pintar = async () => { ocultaTodo(); resetExtras(); const t = 8; let s;
+  if (v === "a") {
+    P(PH, { x: -40, z: 60, ry: 20, bR: [-165, -15], cR: 10, bL: [-60, -40], cL: 50, cabY: -10 }, t, "grito"); enMano(PH, CABEZA, "R");
+    s = escenario("desierto_atlas"); renderer.toneMappingExposure = 1.2; FL.intensity = 260; FL.color.set("#fff0d8"); FL.position.set(-20, 50, 120);
+    mira(-10, 34, 122, -30, 32, 60, 42); document.getElementById("a").textContent = "¡NO LA"; document.getElementById("b").textContent = "MIRES!";
+  } else {
+    P(PH, { x: -62, z: 92, ry: 20, bL: [-30, -50], cL: 30, bR: [-30, 50], cR: 30 }, t, "cerrados"); enMano(PH, ESPADA);
+    med(C.MED, { x: -22, z: 0, ry: 15, bR: [-90, 30], bL: [-90, -30], cR: 20, cL: 20, sq: 1.0 }, t, "malvado", 1); C.MED.root.scale.setScalar(2.0);
+    s = escenario("templo_atenea"); renderer.toneMappingExposure = 1.0; FL.intensity = 220; FL.color.set("#fff0d8"); FL.position.set(-30, 50, 150);
+    mira(-50, 22, 160, -26, 46, 40, 46); document.getElementById("a").style.top = "620px"; document.getElementById("b").style.top = "800px"; document.getElementById("b").style.fontSize = "230px"; document.getElementById("a").textContent = "LA MIRADA"; document.getElementById("b").textContent = "MORTAL";
+  }
+  vivos(t); part.update(t); solSobre(0, 0, s); render(); };
+window.DUR = 1; setTimeout(async () => { await window.pintar(0); setTimeout(async () => { await window.pintar(0); window.LISTO = 1; }, 300); }, 100);
+</script></body></html>
