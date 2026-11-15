@@ -67,7 +67,7 @@ function escatter(P, cx, cz, rx, rz, n, tipos, seed, evita = () => false, y = 0,
 export function construirSets(scene) {
   const SETS = {}, llamas = [], idx = { trecen: 0, delfos: 1, camino: 2, atenas: 3, creta: 4, laberinto: 5, mar: 6, naxos: 7, mapa: 8 };
   const nuevo = (n, luz) => { const g = new THREE.Group(); g.visible = false; scene.add(g); const ox = idx[n] * 5000; SETS[n] = { g, ox, luz, spots: {}, aguas: [], vida: {} }; return SETS[n]; };
-  const spot = (s, n, x, y, z, pts = {}, extra = {}) => { s.spots[n] = Object.assign({ x: s.ox + x, y, z, pts: Object.fromEntries(Object.entries(pts).map(([k, v]) => [k, [s.ox + v[0], v[1], v[2]]])) }, extra); };
+  const spot = (s, n, x, y, z, pts = {}, extra = {}) => { s.spots[n] = Object.assign({ x: s.ox + x, y, z, pts: Object.fromEntries(Object.entries(pts).map(([k, v]) => [k, [s.ox + x + v[0], y + v[1], z + v[2]]])) }, extra); };
 
   // ========== TRECÉN: pueblo, prado con la roca, olivos, mar al fondo, montañas
   { const s = nuevo("trecen", "dia"), V = new Vox(s.g), P = new Plantas(s.g), o = s.ox;
@@ -114,7 +114,7 @@ export function construirSets(scene) {
     s.aguas.push(mar(s.g, -150, 7000)); s.g.children.at(-1).position.set(o + 800, -150, -1200);
     for (let x = o + 680; x < o + 970; x += BL) for (let l = 1; l < 10; l++) V.cubo("roca", x, -l * BL, -40 + (l % 2) * 4);    // pared del acantilado
     for (let z = -40; z > -400; z -= BL) for (let l = 1; l < 10; l++) { V.cubo("roca", o + 680, -l * BL, z); V.cubo("roca", o + 970, -l * BL, z); }
-    montanas(V, o + 600, 0, 800, 1300, 18, 31, ["roca", "hierbaSeca", "nieve"]); MAT.hierbaSeca = MAT.hierbaSeca;
+    montanas(V, o + 600, 0, 1150, 1600, 18, 31, ["roca", "hierbaSeca", "nieve"]); MAT.hierbaSeca = MAT.hierbaSeca;
     // rocas grandes del tramo de Perifetes
     for (let k = 0; k < 12; k++) { const x = o - 200 + rnd(k) * 400, z = -60 - rnd(k + 3) * 200; for (let l = 0; l < 1 + Math.floor(rnd(k * 7) * 3); l++) V.cubo("roca", x + l * 6, l * BL, z); }
     // bosque de pinos
@@ -145,14 +145,14 @@ export function construirSets(scene) {
   }
   // ========== ATENAS: acrópolis, casas, mercado, palacio (trono y banquete), puerto, acantilado
   { const s = nuevo("atenas", "dia"), V = new Vox(s.g), P = new Plantas(s.g), o = s.ox;
-    suelo(V, o, 0, 110, 70, (x, z) => { if (z < -420 && x < o + 400) return null; if (x > o + 520 && z < -100) return null; return (Math.abs(x - o) < 220 && Math.abs(z - 100) < 160) ? "piedra" : "hierbaSeca"; });
+    suelo(V, o, 0, 110, 70, (x, z) => { if (z < -420 && x < o + 400) return null; if (x > o + 520 && z < -100) return null; if (x > o + 520 && z > 140 && z < 460) return null; return (Math.abs(x - o) < 220 && Math.abs(z - 100) < 160) ? "piedra" : "hierbaSeca"; });
     s.aguas.push(mar(s.g, -8, 8000)); s.g.children.at(-1).position.set(o, -8, -3500);
-    const mAc = mar(s.g, -160, 4000); s.aguas.push(mAc); s.g.children.at(-1).position.set(o + 2600, -160, 0);
+    const mAc = mar(s.g, -160, 4000); s.aguas.push(mAc); s.g.children.at(-1).position.set(o + 2500, -160, 300);
     // acrópolis (colina con el Partenón) al fondo
     for (let l = 0; l < 5; l++) for (let i = -10 + l; i <= 10 - l; i++) for (let j = -6 + l; j <= 6 - l; j++) V.cubo("roca", o - 200 + i * BL * 1.4, l * BL, 520 + j * BL * 1.4);
     templo(V, o - 270, 470, 10, 6, 5 * BL);
     // barrio de casas blancas alrededor
-    for (let k = 0; k < 26; k++) { const a = rnd(k * 4) * Math.PI * 2, r = 330 + rnd(k * 9) * 260; const x = o + Math.sin(a) * r, z = 100 + Math.cos(a) * r * 0.8; if (z < -300 || x > o + 500) continue; casa(V, x, z, 3 + Math.floor(rnd(k) * 3), 3 + Math.floor(rnd(k + 1) * 2), 2 + Math.floor(rnd(k + 2) * 2)); }
+    for (let k = 0; k < 26; k++) { const a = rnd(k * 4) * Math.PI * 2, r = 330 + rnd(k * 9) * 260; const x = o + Math.sin(a) * r, z = 100 + Math.cos(a) * r * 0.8; if (z < -300 || x > o + 500 || (x > o + 200 && z < 140) || (Math.abs(x - o) < 260 && z < 290)) continue; casa(V, x, z, 3 + Math.floor(rnd(k) * 3), 3 + Math.floor(rnd(k + 1) * 2), 2 + Math.floor(rnd(k + 2) * 2)); }
     // muralla con puerta (spot puerta en z=0 mirando a +z)
     for (let i = -25; i <= 25; i++) for (let k = 0; k < 6; k++) { if (Math.abs(i) <= 2 && k < 4) continue; V.cubo("piedra", o + i * BL, k * BL, -150); }
     for (const sx of [-1, 1]) for (let k = 0; k < 8; k++) for (let i = 0; i < 3; i++) V.cubo("piedra", o + sx * (4 + i) * BL, k * BL, -150 + BL);
@@ -168,7 +168,7 @@ export function construirSets(scene) {
     for (let i = -8; i <= 8; i++) for (let k = 0; k < 6; k++) { V.cubo(k === 4 ? "friso" : "cal", px0 + i * BL, k * BL, pz0 - 6 * BL); }
     for (let j = -6; j <= 4; j++) for (let k = 0; k < 6; k++) { const v = k > 1 && k < 4 && j % 3 === 0; V.cubo(v ? "vidrio" : (k === 4 ? "friso" : "cal"), px0 - 8 * BL, k * BL, pz0 + j * BL); V.cubo(v ? "vidrio" : (k === 4 ? "friso" : "cal"), px0 + 8 * BL, k * BL, pz0 + j * BL); }
     for (let i = -8; i <= 8; i++) for (let j = -6; j <= 6; j += 2) if (Math.abs(i) % 4 === 0) V.cubo("maderaOsc", px0 + i * BL, 6 * BL, pz0 + j * BL);
-    for (const x of [-96, -32, 32, 96]) for (let k = 0; k < 5; k++) V.cubo("columna", px0 + x, k * BL, pz0 + 60);
+    for (const x of [-112, 112]) for (let k = 0; k < 5; k++) V.cubo("columna", px0 + x, k * BL, pz0 + 60);
     const est = M(tex(4, 10, (px, w, h, r) => { fill(px, 4, 10, "#2f5fa0", r, 0.1); for (let y = 0; y < 10; y++) { px(0, y, "#e0b040"); px(3, y, "#e0b040"); } px(1, 4, "#e0b040"); px(2, 4, "#e0b040"); px(1, 5, "#f2ead8"); px(2, 5, "#f2ead8"); }, 731));
     for (const x of [-60, 60]) s.g.add(caja(16, 44, 1, est, px0 + x, 50, pz0 - 6 * BL + 8.6));
     const tr = new THREE.Group(); tr.add(caja(22, 12, 18, MAT.oro, 0, 6, 0)); tr.add(caja(24, 36, 5, MAT.oro, 0, 18, -9)); tr.add(caja(4, 20, 18, MAT.oro, -11, 10, 0)); tr.add(caja(4, 20, 18, MAT.oro, 11, 10, 0)); tr.add(caja(18, 3, 14, M(T.alfombra), 0, 13, 2)); tr.position.set(px0, 0, pz0 - 10); s.g.add(tr);
@@ -177,26 +177,26 @@ export function construirSets(scene) {
     // banquete (en la misma sala, más adelante): mesa con comida
     const mesa = new THREE.Group(); mesa.add(caja(110, 4, 26, MAT.madera, 0, 14, 0)); for (const x of [-48, 48]) for (const z of [-10, 10]) mesa.add(caja(3, 14, 3, MAT.maderaOsc, x, 7, z));
     for (let f = 0; f < 9; f++) { const c = ["#c88a3a", "#7f3a9a", "#d33a2f", "#f2c84a", "#e8e2cc"][f % 5]; mesa.add(caja(5 + (f % 3), 4, 5, MB(c), -44 + f * 11, 18, (f % 2) * 6 - 3)); }
-    mesa.position.set(px0, 0, pz0 + 10); s.g.add(mesa);
+    mesa.position.set(px0, 0, pz0 + 50); mesa.name = "mesa"; s.g.add(mesa);
     // puerto (a la izquierda, borde del agua en z=-420)
     for (let i = -6; i <= 6; i++) for (let j = 0; j < 8; j++) V.add("madera", o - 300 + i * BL, -2, -440 - j * BL, BL, 4, BL);
     for (let i = -6; i <= 6; i += 3) for (let j = 0; j < 8; j += 3) V.add("maderaOsc", o - 300 + i * BL, -20, -440 - j * BL, 4, 36, 4);
     for (let k = 0; k < 6; k++) V.cubo("madera", o - 380 + rnd(k) * 40, 0, -400 + rnd(k + 2) * 30, 10);
     // acantilado de Egeo (x+700) con templete
-    for (let l = 1; l < 11; l++) for (let j = -10; j <= 10; j++) V.cubo("roca", o + 520 + (l % 2) * 3, -l * BL, j * BL);
-    for (const z of [-40, 40]) for (const x of [500, 460]) for (let k = 0; k < 4; k++) V.cubo("columna", o + x, k * BL, z);
-    for (let i = 0; i < 4; i++) for (let j = -3; j <= 3; j++) V.cubo("marmol", o + 452 + i * BL, 4 * BL, j * BL);
+    for (let l = 1; l < 11; l++) for (let j = -10; j <= 10; j++) V.cubo("roca", o + 520 + (l % 2) * 3, -l * BL, 300 + j * BL);
+    for (const z of [260, 340]) for (const x of [500, 460]) for (let k = 0; k < 4; k++) V.cubo("columna", o + x, k * BL, z);
+    for (let i = 0; i < 4; i++) for (let j = -3; j <= 3; j++) V.cubo("marmol", o + 452 + i * BL, 4 * BL, 300 + j * BL);
     montanas(V, o, 0, 1100, 1500, 14, 41, ["roca", "hierbaSeca", "nieve"], 0, [60, 300]);
-    for (let k = 0; k < 30; k++) { const x = o + (rnd(k * 5) - 0.5) * 1100, z = 100 + (rnd(k * 6) - 0.5) * 800; if (Math.abs(x - o) < 240 && Math.abs(z - 100) < 180) continue; if (x > o + 230 && x < o + 540 && z < 120) continue; if (z < -330) continue; arbol(V, P, x, z, k % 4 ? "olivo" : "cipres", k + 150); }
-    escatter(P, o, 0, 520, 420, 1000, ["seca", "hierba", "arbusto", "roja", "amarilla", "hierba"], 404, (x, z) => (Math.abs(x - o) < 230 && Math.abs(z - 100) < 170) || (x > o + 230 && x < o + 520 && z < 70 && z > -150) || z < -330 || Math.abs(x - o) < 60 && z < -100);
+    for (let k = 0; k < 30; k++) { const x = o + (rnd(k * 5) - 0.5) * 1100, z = 100 + (rnd(k * 6) - 0.5) * 800; if (Math.abs(x - o) < 240 && Math.abs(z - 100) < 180) continue; if (x > o + 230 && x < o + 540 && z < 120) continue; if (x > o + 360 && Math.abs(z - 300) < 140) continue; if (z < -330) continue; arbol(V, P, x, z, k % 4 ? "olivo" : "cipres", k + 150); }
+    escatter(P, o, 0, 520, 420, 1000, ["seca", "hierba", "arbusto", "roja", "amarilla", "hierba"], 404, (x, z) => (Math.abs(x - o) < 230 && Math.abs(z - 100) < 170) || (x > o + 230 && x < o + 520 && z < 70 && z > -150) || z < -330 || Math.abs(x - o) < 60 && z < -100 || (x > o + 400 && Math.abs(z - 300) < 60));
     V.hacer(); P.hacer();
     s.vida = { pajaros: "pajaro", humo: [[o - 400, 60, 300], [o + 200, 60, 520], [o - 100, 50, 420]], aldeanos: [[o - 200, 160, o + 200, 160], [o - 180, 60, o + 150, 60], [o + 160, 240, o - 220, 240]], fuente: fAg };
-    spot(s, "plaza", 0, 0, 60, {}, { vida: { aldeanosOn: 1 } });
-    spot(s, "puerta", 0, 0, -80, {}, { vida: { aldeanosOn: 0 } });
+    spot(s, "plaza", 0, 0, 0, {}, { vida: { aldeanosOn: 1, aldeanos: [[o - 160, -70, o + 160, -70], [o + 170, -120, o - 170, -120], [o - 140, -180, o + 140, -180], [o + 120, -40, o + 120, -220]] } });
+    spot(s, "puerta", 0, 0, -80, {}, { vida: { aldeanosOn: 1, aldeanos: [[o - 140, -60, o - 60, -60], [o + 60, -50, o + 150, -50], [o - 120, 30, o - 50, 30], [o + 50, 40, o + 130, 40]] } });
     spot(s, "trono", 380, 0, -40, {}, { luz: "interior" });
-    spot(s, "banquete", 380, 0, 40, { mesa: [0, 16, -20], copa: [0, 20, -20], veneno_suelo: [-10, 0, 0] }, { luz: "interior" });
-    spot(s, "puerto", -300, 0, -380, { barco: [0, 0, -150] }, { vida: { pajaros: "gaviota" }, barco: [-300, -8, -560, 0] });
-    spot(s, "acantilado", 500, 0, 0, {}, { vida: { pajaros: "gaviota" }, barcoLejos: [1500, -160, -300, 0] });
+    spot(s, "banquete", 380, 0, 40, { mesa: [0, 16, -30], copa: [0, 20, -30], veneno_suelo: [-10, 0, 0] }, { luz: "interior" });
+    spot(s, "puerto", -300, 0, -380, { barco: [0, 10, -180] }, { vida: { pajaros: "gaviota" }, barco: [-300, -8, -560, 0] });
+    spot(s, "acantilado", 500, 0, 300, {}, { vida: { pajaros: "gaviota" }, barcoLejos: [1500, -160, 0, 0] });
   }
   // ========== CRETA: palacio de Cnosos (columnas rojas, cuernos), sala del trono con grifos, taller de Dédalo, puerta del laberinto
   { const s = nuevo("creta", "dia"), V = new Vox(s.g), P = new Plantas(s.g), o = s.ox;
@@ -210,8 +210,9 @@ export function construirSets(scene) {
     for (let l = 0; l < 3; l++) for (let i = -4; i <= 4; i++) V.add("marmol", o + i * BL, l * 5 + 2.5, -110 - l * 10, BL, 5, 20);
     // jardín con cipreses, palmeras y estanque
     for (let k = 0; k < 12; k++) arbol(V, P, o + (k < 6 ? -1 : 1) * (300 + (k % 6) * 40), -100 + (k % 3) * 80, k % 2 ? "cipres" : "palma", k + 200);
-    s.aguas.push(mar(s.g, -10, 7000)); s.g.children.at(-1).position.set(o, -10, 3000);
-    montanas(V, o, 0, 900, 1400, 16, 51, ["roca", "hierba", "nieve"], 0, [120, 340]);
+    s.aguas.push(mar(s.g, -10, 7000)); s.g.children.at(-1).position.set(o, -10, 4200);
+    montanas(V, o, 0, 1350, 1800, 16, 51, ["roca", "hierba", "nieve"], 0, [150, 330]);
+    suelo(V, o + 1500, 60, 50, 36, (x, z) => (Math.abs(x - o - 1500) < 120 && z > -100) ? "camino" : "hierba");
     // sala del trono (x-700)
     const tx = o - 700;
     for (let i = -7; i <= 7; i++) for (let j = -5; j <= 5; j++) V.cubo("ocre", tx + i * BL, -BL + 0.5, j * BL);
@@ -220,7 +221,7 @@ export function construirSets(scene) {
     for (const sx of [-60, 60]) s.g.add(caja(64, 32, 1, grifo, tx + sx, 34, -6 * BL + 8.6));
     for (let j = -6; j <= 3; j++) for (let k = 0; k < 6; k++) { V.cubo(k === 5 ? "friso" : "rojo", tx - 7 * BL, k * BL, j * BL); V.cubo(k === 5 ? "friso" : "rojo", tx + 7 * BL, k * BL, j * BL); }
     for (const x of [-64, 64]) for (const z of [-30, 30]) { for (let k = 0; k < 4; k++) V.add("rojo", tx + x, k * BL + 8, z, 12, 16, 12); V.add("negro", tx + x, 4 * BL + 4, z, 16, 8, 16); }
-    const tro = new THREE.Group(); tro.add(caja(20, 12, 16, MAT.marmol, 0, 6, 0)); tro.add(caja(20, 34, 4, MAT.marmol, 0, 17, -8)); for (let k = 0; k < 5; k++) tro.add(caja(4, 4, 4, MAT.marmol, -8 + k * 4, 36 + (k % 2 ? 2 : 0) - Math.abs(k - 2) * 2, -8)); tro.position.set(tx, 0, -20); s.g.add(tro);
+    const tro = new THREE.Group(); tro.add(caja(20, 12, 16, MAT.marmol, 0, 6, 0)); tro.add(caja(20, 34, 4, MAT.marmol, 0, 17, -8)); for (let k = 0; k < 5; k++) tro.add(caja(4, 4, 4, MAT.marmol, -8 + k * 4, 36 + (k % 2 ? 2 : 0) - Math.abs(k - 2) * 2, -8)); tro.position.set(tx, 0, -14); s.g.add(tro);
     const ll = []; for (const x of [-80, 80]) brasero(s.g, V, tx + x, 0, -60, ll); llamas.push(...ll);
     // taller de Dédalo (x+700): mesas, ruedas, alas colgadas, maqueta del laberinto
     const dx = o + 700;
@@ -242,7 +243,7 @@ export function construirSets(scene) {
     escatter(P, o, 0, 900, 500, 900, ["hierba", "hierba", "roja", "amarilla", "arbusto", "helecho", "morada"], 505, (x, z) => (Math.abs(x - o) < 270 && Math.abs(z) < 210) || Math.abs(x - tx) < 130 || Math.abs(x - dx) < 110 || (Math.abs(x - lx) < 340 && z > -110 && z < 120));
     V.hacer(); P.hacer();
     s.vida = { pajaros: "pajaro", aldeanos: [[o - 200, 40, o + 200, 40], [o + 200, -80, o - 200, -80]], humo: [] };
-    spot(s, "palacio", 0, 0, 0, {}, { vida: { aldeanosOn: 1 } });
+    spot(s, "palacio", 0, 0, 0, {}, { vida: { aldeanosOn: 1, aldeanos: [[o - 160, -60, o + 160, -60], [o + 150, -110, o - 150, -110], [o - 90, -30, o - 90, -150], [o + 90, -150, o + 90, -30]] } });
     spot(s, "trono", -700, 0, 0, {}, { luz: "interior" });
     spot(s, "taller", 700, 0, 0, {}, { luz: "interior" });
     spot(s, "puerta_lab", 1500, 0, -40, {}, {});
@@ -251,36 +252,37 @@ export function construirSets(scene) {
   { const s = nuevo("laberinto", "laberinto"), V = new Vox(s.g), P = new Plantas(s.g), o = s.ox;
     suelo(V, o, 0, 90, 90, "piedraOsc");
     const muro = (x, z, h = 5) => { for (let k = 0; k < h; k++) V.cubo(rnd(x * 0.3 + z * 0.7 + k) < 0.3 ? "musgo" : "piedraOsc", x, k * BL, z); };
-    // pasillo principal (z = 0, de x-400 a x+400), paredes en z = ±32 con huecos
-    for (let x = -640; x <= 640; x += BL) { if ((Math.floor(x / BL) % 13) !== 5) muro(o + x, -32); if ((Math.floor(x / BL) % 11) !== 3) muro(o + x, 32); }
-    // laberinto alrededor (para el plano cenital)
-    for (let i = -18; i <= 18; i++) for (let j = -18; j <= 18; j++) { const x = o + i * 48, z = j * 48; if (Math.abs(z) < 60) continue; if (Math.hypot(i * 48, j * 48 - 0) < 0) continue; if (rnd(i * 31 + j * 17) < 0.5) for (let q = 0; q < 3; q++) muro(x + q * BL - BL, z, 4); else for (let q = 0; q < 3; q++) muro(x, z + q * BL - BL, 4); }
-    // sala central (en z = +400): muros alrededor, sin muros dentro
+    // pasillo principal (z = 0): pared alta detrás (z=-48) y pared baja delante (z=+48) para que la cámara vea por encima
+    for (let x = -640; x <= 640; x += BL) { if ((Math.floor(x / BL) % 13) !== 5) muro(o + x, -48, 5); muro(o + x, 48, 1); if ((Math.floor(x / BL) % 7) === 2) muro(o + x, 48, 2); }
+    // laberinto alrededor (para el plano cenital), dejando libre la franja de cámara delante del pasillo y de la sala
     const cz = 400;
-    for (let i = -7; i <= 7; i++) { muro(o + i * BL, cz - 7 * BL, 6); muro(o + i * BL, cz + 7 * BL, 6); muro(o - 7 * BL, cz + i * BL, 6); muro(o + 7 * BL, cz + i * BL, 6); }
-    // limpia el interior de la sala: suelo especial
+    for (let i = -18; i <= 18; i++) for (let j = -18; j <= 18; j++) { const x = o + i * 48, z = j * 48; if (z > -90 && z < 230) continue; if (Math.abs(i * 48) < 150 && z > 250) continue; if (rnd(i * 31 + j * 17) < 0.5) for (let q = 0; q < 3; q++) muro(x + q * BL - BL, z, 4); else for (let q = 0; q < 3; q++) muro(x, z + q * BL - BL, 4); }
+    // sala central (z = 400): muros altos atrás y a los lados, bajo delante
+    for (let i = -7; i <= 7; i++) { muro(o + i * BL, cz - 7 * BL, 6); muro(o + i * BL, cz + 7 * BL, i % 3 === 0 ? 2 : 1); muro(o - 7 * BL, cz + i * BL, 6); muro(o + 7 * BL, cz + i * BL, 6); }
     for (let i = -6; i <= 6; i++) for (let j = -6; j <= 6; j++) V.add("piedra", o + i * BL, 0.3, cz + j * BL, BL, 0.6, BL);
+    // columnas rotas y cadenas en la sala
+    for (const [x, z] of [[-80, -80], [80, -80], [-80, 60], [80, 60]]) { muro(o + x, cz + z, x > 0 && z > 0 ? 2 : 3); }
     // entrada (x = -660): marco
-    for (let k = 0; k < 6; k++) { V.cubo("piedraOsc", o - 660, k * BL, -32); V.cubo("piedraOsc", o - 660, k * BL, 32); }
+    for (let k = 0; k < 6; k++) { V.cubo("piedraOsc", o - 660, k * BL, -48); V.cubo("piedraOsc", o - 660, k * BL, 48); } for (let i = -3; i <= 3; i++) V.cubo("piedraOsc", o - 660, 6 * BL, i * BL);
     // antorchas
-    for (let x = -600; x <= 600; x += 96) { antorchaPared(s.g, o + x, 40, -23, llamas); antorchaPared(s.g, o + x + 48, 40, 23, llamas); }
-    for (const [x, z] of [[-90, cz - 100], [90, cz - 100], [-100, cz + 90], [100, cz + 90], [-100, cz], [100, cz]]) antorchaPared(s.g, o + x, 40, z, llamas);
+    for (let x = -600; x <= 600; x += 80) { antorchaPared(s.g, o + x, 40, -39, llamas); }
+    for (const [x, z] of [[-60, cz - 103], [60, cz - 103], [-103, cz - 40], [103, cz - 40], [-103, cz + 40], [103, cz + 40]]) antorchaPared(s.g, o + x, 40, z, llamas);
     // huesos y calaveras
-    for (let k = 0; k < 40; k++) P.add("hueso", o + (rnd(k * 3) - 0.5) * 900, 0, (rnd(k * 7) - 0.5) * 40, 6 + rnd(k) * 4);
+    for (let k = 0; k < 40; k++) P.add("hueso", o + (rnd(k * 3) - 0.5) * 900, 0, (rnd(k * 7) - 0.5) * 70, 6 + rnd(k) * 4);
     for (let k = 0; k < 30; k++) P.add("hueso", o + (rnd(k * 5) - 0.5) * 180, 0, cz + (rnd(k * 9) - 0.5) * 180, 7 + rnd(k) * 5);
     const calav = M(tex(8, 8, (px, w, h, r) => { fill(px, 8, 8, "#e8e2cc", r, 0.05); px(1, 3, "#111"); px(2, 3, "#111"); px(5, 3, "#111"); px(6, 3, "#111"); px(1, 4, "#111"); px(6, 4, "#111"); px(3, 5, "#333"); px(4, 5, "#333"); for (let x = 1; x < 7; x += 2) px(x, 7, "#555"); }, 750));
     for (let k = 0; k < 10; k++) { const c = caja(6, 6, 6, [MAT.hueso, MAT.hueso, MAT.hueso, MAT.hueso, calav, MAT.hueso], o + (rnd(k * 13) - 0.5) * 700, 3, (rnd(k * 17) - 0.5) * 36); c.rotation.y = (rnd(k) - 0.5) * 1.4; s.g.add(c); }
     for (let k = 0; k < 8; k++) { const c = caja(7, 7, 7, [MAT.hueso, MAT.hueso, MAT.hueso, MAT.hueso, calav, MAT.hueso], o + (rnd(k * 19) - 0.5) * 160, 3.5, cz + (rnd(k * 23) - 0.5) * 160); c.rotation.y = (rnd(k + 3) - 0.5) * 2; s.g.add(c); }
     // telarañas y raíces
-    for (let k = 0; k < 30; k++) P.add("juncos", o + (rnd(k * 29) - 0.5) * 1200, 0, (rnd(k * 31) < 0.5 ? -26 : 26), 8);
+    for (let k = 0; k < 30; k++) P.add("juncos", o + (rnd(k * 29) - 0.5) * 1200, 0, -42, 8);
     V.hacer(); P.hacer();
     // hilo rojo (se dibuja por plano)
     const hilo = caja(1, 0.6, 1, MB("#e0202a"), 0, 0, 0); hilo.castShadow = false; s.g.add(hilo); s.hilo = hilo;
     // pared que se rompe (para la embestida)
     s.vida = { pajaros: "murcielago", polvo: 1 };
-    spot(s, "pasillo", 0, 0, 0, { huesos: [0, 2, 8] });
-    spot(s, "entrada", -620, 0, 0);
-    spot(s, "centro", 0, 0, cz, { centro: [0, 20, 0], muro: [0, 30, -96], laberinto_vista: [0, 0, -400] });
+    spot(s, "pasillo", 0, 0, 0, { huesos: [0, 2, 8] }, { caja: [-2000, 2000, -40, 200] });
+    spot(s, "entrada", -620, 0, 0, {}, { caja: [-30, 2000, -40, 200] });
+    spot(s, "centro", 0, 0, cz, { centro: [0, 20, 0], muro: [0, 30, -100], laberinto_vista: [0, 0, -400] }, { caja: [-100, 100, -100, 260] });
   }
   // ========== MAR abierto: el barco, islas lejanas, delfines
   { const s = nuevo("mar", "dia"), V = new Vox(s.g), o = s.ox;
@@ -303,7 +305,7 @@ export function construirSets(scene) {
     escatter(P, o, 160, 500, 120, 500, ["hierba", "arbusto", "seca", "juncos"], 606, (x, z) => z < 40);
     V.hacer(); P.hacer();
     s.vida = { pajaros: "gaviota", luciernagas: 1, olas: 1, fogata: [o - 60, 14, 60] };
-    spot(s, "playa", 0, 0, 40, { teseo_barco: [60, 30, -240] }, { barco: [80, -6, -230, 0.3] });
+    spot(s, "playa", 0, 0, 40, { teseo_barco: [80, 20, -270] }, { barco: [80, -6, -230, 0.3] });
   }
   // ========== MAPA: mar con Grecia, Peloponeso, Creta y Cícladas en bloques
   { const s = nuevo("mapa", "mapa"), V = new Vox(s.g), o = s.ox;

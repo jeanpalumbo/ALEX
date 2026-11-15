@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Lilita;src:url(fonts/LilitaOne-Regular.ttf)}
+@font-face{font-family:Pixel;src:url(fonts/PressStart2P-Regular.ttf)}
+html,body{margin:0;background:#000;overflow:hidden;width:1920px;height:1080px}
+#lienzo canvas{display:block}
+#ui{position:absolute;inset:0;pointer-events:none;font-family:Lilita,sans-serif}
+#titulo{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;transform-origin:50% 45%}
+#titulo .t1{font-size:210px;color:#ffd23a;letter-spacing:6px;-webkit-text-stroke:10px #3a1a00;paint-order:stroke fill;text-shadow:0 14px 0 #3a1a00,0 22px 30px rgba(0,0,0,.5);line-height:1}
+#titulo .t2{font-size:96px;color:#fff;-webkit-text-stroke:8px #3a1a00;paint-order:stroke fill;text-shadow:0 10px 0 #3a1a00;margin-top:-6px}
+#sub{font-family:Pixel;font-size:26px;color:#fff;background:#b8302a;padding:14px 22px;margin-top:26px;box-shadow:0 6px 0 #5a1010}
+#cap{position:absolute;left:60px;top:56px;display:none}
+#capn{font-family:Lilita;font-size:34px;letter-spacing:3px;color:#3a1a00;background:#ffd23a;padding:10px 16px;display:inline-block;box-shadow:0 5px 0 #8a6010}
+#capt{font-size:64px;color:#fff;-webkit-text-stroke:7px #2a1a10;paint-order:stroke fill;text-shadow:0 7px 0 #2a1a10;margin-top:8px}
+#spoiler{position:absolute;left:50%;top:40%;display:none;font-family:Pixel;font-size:96px;color:#e8202a;border:12px solid #e8202a;padding:20px 34px;background:rgba(255,255,255,.88)}
+#suscribete{position:absolute;left:50%;top:150px;display:none;flex-direction:column;align-items:center;transform-origin:50% 50%}
+#boton{display:flex;align-items:center;gap:22px;font-size:84px;color:#fff;background:#e0202a;padding:18px 44px;border-radius:18px;box-shadow:0 10px 0 #7a0a10;-webkit-text-stroke:2px #7a0a10}
+#boton.pulsado{background:#555;box-shadow:0 4px 0 #222;transform:translateY(6px)}
+#campana{font-size:70px;transform-origin:50% 10%}
+#prox{margin-top:28px;font-size:46px;color:#fff;-webkit-text-stroke:6px #2a1a10;paint-order:stroke fill;text-shadow:0 6px 0 #2a1a10;opacity:0}
+#prox b{color:#ffd23a}
+.etq{position:absolute;font-family:Pixel;font-size:26px;color:#fff;background:rgba(30,20,10,.75);padding:10px 14px;white-space:nowrap}
+.etq.grande{font-size:64px;background:none;color:#fff;-webkit-text-stroke:3px #0a2a5a;text-shadow:0 6px 0 #0a2a5a}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+</style>
+<script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
+</head><body>
+<div id="lienzo"></div>
+<div id="ui">
+ <div id="titulo"><div class="t1">TESEO</div><div class="t2">Y EL MINOTAURO</div><div id="sub">EL BICHO CURIOSO</div></div>
+ <div id="cap"><div id="capn">CAPÍTULO 1</div><div id="capt">Título</div></div>
+ <div id="spoiler">SPOILER</div>
+ <div id="suscribete"><div id="boton"><span id="campana">🔔</span>SUSCRÍBETE</div><div id="prox">Próximo vídeo: <b>PERSEO Y LA MEDUSA</b></div></div>
+ <div id="etiquetas"></div>
+ <div id="flash"></div>
+</div>
+<script>window.__err=[];window.onerror=(m,s,l,c)=>{window.__err.push(m+" @"+s+":"+l+":"+c)};window.addEventListener("unhandledrejection",e=>window.__err.push(String(e.reason&&e.reason.stack||e.reason)))</script>
+<script type="module" src="./main.js"></script>
+</body></html>

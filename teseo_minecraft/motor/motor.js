@@ -108,7 +108,7 @@ export class Plantas {
     for (const tipo in this.b) { const l = this.b[tipo], mat = texPlanta(tipo);
       for (const rot of [0.78, -0.78]) { const im = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), mat, l.length);
         l.forEach((p, i) => { e.set(0, rot + (rnd(i * 3.1) - 0.5) * 0.3, 0); q.setFromEuler(e); v.set(p[0], p[1] + p[3] / 2, p[2]); sc.set(p[3], p[3], 1); m.compose(v, q, sc); im.setMatrixAt(i, m); });
-        im.frustumCulled = false; this.g.add(im); } }
+        im.frustumCulled = false; im.userData.planta = 1; this.g.add(im); } }
   }
 }
 

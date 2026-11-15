@@ -1,0 +1,3677 @@
+[
+ {
+  "id": "gancho",
+  "cap": null,
+  "segs": [
+   {
+    "tx": "Oscuridad total. Pasillos de piedra que se retuercen como espaguetis.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "travel:teseo:90",
+     "picado:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -60,
+      "z": 0,
+      "ry": 90,
+      "acc": "agachado",
+      "e": "susto",
+      "to": [
+       20,
+       0
+      ],
+      "prop": "antorcha"
+     }
+    ]
+   },
+   {
+    "tx": "Y en algún lugar ahí dentro, algo respira.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:minotauro:10"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -30,
+      "ry": 0,
+      "acc": "respirar",
+      "e": "malvado"
+     }
+    ],
+    "fx": [
+     "vapor@0.3",
+     "vapor@0.7"
+    ]
+   },
+   {
+    "tx": "Algo grande. Algo con cuernos.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "primer:minotauro:-25"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -30,
+      "ry": 0,
+      "acc": "rugir",
+      "e": "enfado"
+     }
+    ],
+    "fx": [
+     "temblor@0.5"
+    ]
+   },
+   {
+    "tx": "Nadie que haya entrado aquí ha salido jamás.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "picado:teseo:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -50,
+      "z": 0,
+      "ry": 90,
+      "acc": "agachado",
+      "e": "susto",
+      "to": [
+       30,
+       0
+      ],
+      "prop": "antorcha"
+     }
+    ]
+   },
+   {
+    "tx": "Pero este chico tiene un plan.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "quieto",
+      "e": "guino",
+      "prop": "antorcha",
+      "ico": "!",
+      "ent": [
+       30,
+       0
+      ],
+      "ent_d": 0.06
+     }
+    ]
+   },
+   {
+    "tx": "Una espada... y un ovillo de lana.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "medio:teseo:-15"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "mostrar",
+      "e": "risa",
+      "prop": "espada",
+      "prop2": "ovillo",
+      "ent": [
+       -11.7,
+       -11.7
+      ],
+      "ent_d": 0.11
+     }
+    ]
+   },
+   {
+    "tx": "Sí. De lana. Como tu abuela.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "primer:teseo:30"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "encoger",
+      "e": "aburrido",
+      "prop2": "ovillo",
+      "ent": [
+       -17.6,
+       -17.6
+      ],
+      "ent_d": 0.04
+     }
+    ]
+   },
+   {
+    "tx": "¿Cómo acabó aquí? Hoy te lo cuento.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:minotauro:0"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -60,
+      "ry": 0,
+      "acc": "embestir",
+      "e": "enfado",
+      "to": [
+       0,
+       40
+      ]
+     }
+    ],
+    "fx": [
+     "temblor@0.4",
+     "rugido@0.2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "titulo",
+  "pausa": 4.2,
+  "segs": [
+   {
+    "tx": "",
+    "set": "atenas",
+    "spot": "plaza",
+    "cam": [
+     "paisaje:spot:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "espada_alto",
+      "e": "risa",
+      "prop": "espada",
+      "ent": [
+       11.7,
+       8.3
+      ],
+      "ent_d": 0.02
+     }
+    ],
+    "ov": "titulo"
+   }
+  ]
+ },
+ {
+  "id": "c1",
+  "cap": "Una espada bajo una roca",
+  "segs": [
+   {
+    "tx": "Todo empieza con Egeo, rey de Atenas.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "general:egeo:0",
+     "primer:egeo:15"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "normal",
+      "ico": "corona"
+     }
+    ]
+   },
+   {
+    "tx": "Egeo tenía un problema: no tenía hijos. Y un rey sin hijos es un rey nervioso.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "medio:egeo:20",
+     "primer:egeo:-20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -30,
+      "z": 10,
+      "ry": 90,
+      "acc": "andar",
+      "e": "sudor",
+      "to": [
+       30,
+       10
+      ]
+     }
+    ]
+   },
+   {
+    "tx": "Así que fue a preguntar al oráculo de Delfos, que era como Google, pero con humo y respuestas en acertijo.",
+    "set": "delfos",
+    "spot": "templo",
+    "cam": [
+     "paisaje:spot:20",
+     "medio:egeo:30",
+     "primer:pitia:-20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 30,
+      "ry": 180,
+      "acc": "arrodillado",
+      "e": "normal"
+     },
+     {
+      "n": "pitia",
+      "x": 0,
+      "z": -34,
+      "ry": 0,
+      "acc": "hablar",
+      "e": "cerrados",
+      "ent": [
+       -17.8,
+       -51.8
+      ],
+      "ent_d": 0.28
+     }
+    ],
+    "fx": [
+     "humo_tripode"
+    ]
+   },
+   {
+    "tx": "El oráculo le dijo algo rarísimo. Y Egeo, en vez de volver a casa, se fue de visita a Trecén.",
+    "set": "trecen",
+    "spot": "camino",
+    "cam": [
+     "travel:egeo:90",
+     "primer:egeo:20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -80,
+      "z": 20,
+      "ry": 90,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       60,
+       20
+      ],
+      "ico": "?"
+     }
+    ]
+   },
+   {
+    "tx": "Allí conoció a la princesa Etra. Se gustaron. Pasó lo que tenía que pasar.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "dos:egeo,etra:0",
+     "paisaje:spot:-30"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -14,
+      "z": 20,
+      "ry": 60,
+      "acc": "hablar",
+      "e": "enamorado",
+      "ent": [
+       -21.8,
+       15.5
+      ],
+      "ent_d": 0.01
+     },
+     {
+      "n": "etra",
+      "x": 14,
+      "z": 20,
+      "ry": -60,
+      "acc": "quieto",
+      "e": "enamorado",
+      "ent": [
+       21.8,
+       15.5
+      ],
+      "ent_d": 0.16
+     }
+    ],
+    "fx": [
+     "corazones@0.3"
+    ]
+   },
+   {
+    "tx": "Pero Egeo tenía que volver a Atenas.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "medio:egeo:-30"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -10,
+      "z": 20,
+      "ry": 200,
+      "acc": "mirar",
+      "e": "triste",
+      "ent": [
+       7.0,
+       27.9
+      ],
+      "ent_d": 0.03
+     },
+     {
+      "n": "etra",
+      "x": 20,
+      "z": 30,
+      "ry": -40,
+      "acc": "quieto",
+      "e": "triste",
+      "ent": [
+       14,
+       20
+      ],
+      "ent_d": 0.17
+     }
+    ]
+   },
+   {
+    "tx": "Antes de irse, escondió su espada y sus sandalias debajo de una roca enorme.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "medio:roca:30",
+     "contra:egeo:-20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 6,
+      "ry": 180,
+      "acc": "empujar",
+      "e": "sudor"
+     }
+    ],
+    "fx": [
+     "polvo@0.5"
+    ]
+   },
+   {
+    "tx": "Y le dijo a Etra: si tenemos un hijo, y algún día es capaz de levantar esta roca, que venga a buscarme.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "dos:egeo,etra:10",
+     "primer:egeo:25",
+     "primer:etra:-25"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -16,
+      "z": 20,
+      "ry": 50,
+      "acc": "hablar",
+      "e": "normal",
+      "ent": [
+       0,
+       6
+      ],
+      "ent_d": 0.06
+     },
+     {
+      "n": "etra",
+      "x": 16,
+      "z": 20,
+      "ry": -50,
+      "acc": "quieto",
+      "e": "normal",
+      "ent": [
+       20,
+       30
+      ],
+      "ent_d": 0.31
+     }
+    ]
+   },
+   {
+    "tx": "Básicamente, la primera prueba de acceso de la historia.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "orbita:roca:0"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -14,
+      "z": 24,
+      "ry": 0,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       -90,
+       60
+      ]
+     },
+     {
+      "n": "etra",
+      "x": 16,
+      "z": 24,
+      "ry": -40,
+      "acc": "saludar",
+      "e": "triste",
+      "ent": [
+       14.3,
+       4.5
+      ],
+      "ent_d": 0.26
+     }
+    ],
+    "ico_roca": "?"
+   }
+  ]
+ },
+ {
+  "id": "c2",
+  "cap": "El chico que levantó la roca",
+  "segs": [
+   {
+    "tx": "Nació un niño. Lo llamaron Teseo.",
+    "set": "trecen",
+    "spot": "casa",
+    "cam": [
+     "medio:etra:0"
+    ],
+    "act": [
+     {
+      "n": "etra",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "acunar",
+      "e": "risa",
+      "ent": [
+       -15.5,
+       -5.5
+      ],
+      "ent_d": 0.1
+     },
+     {
+      "n": "bebe",
+      "x": 0,
+      "z": 16,
+      "ry": 0,
+      "acc": "bebe",
+      "e": "risa",
+      "y": 16
+     }
+    ],
+    "fx": [
+     "corazones@0.2"
+    ]
+   },
+   {
+    "tx": "Creció fuerte, listo, y bastante cabezota.",
+    "set": "trecen",
+    "spot": "casa",
+    "cam": [
+     "medio:teseo:20",
+     "primer:teseo:-10"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "musculos",
+      "e": "risa",
+      "ent": [
+       0.0,
+       1.0
+      ],
+      "ent_d": 0.16
+     }
+    ]
+   },
+   {
+    "tx": "A los dieciséis años, su madre lo llevó delante de la roca.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "travel:teseo:70"
+    ],
+    "act": [
+     {
+      "n": "etra",
+      "x": -70,
+      "z": 40,
+      "ry": 90,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       -20,
+       30
+      ]
+     },
+     {
+      "n": "teseo",
+      "x": -90,
+      "z": 30,
+      "ry": 90,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       -5,
+       22
+      ]
+     }
+    ]
+   },
+   {
+    "tx": "Teseo miró la roca. La roca no le miró a él, porque es una roca.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "primer:teseo:0",
+     "general:teseo:30"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 22,
+      "ry": 180,
+      "acc": "pensar",
+      "e": "aburrido",
+      "ent": [
+       -0.0,
+       31.0
+      ],
+      "ent_d": 0.18
+     }
+    ]
+   },
+   {
+    "tx": "Y la levantó como quien levanta una almohada.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "contra:teseo:30"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 2,
+      "ry": 180,
+      "acc": "levantar",
+      "e": "risa",
+      "prop": "roca"
+     }
+    ],
+    "ocultar": [
+     "roca"
+    ],
+    "fx": [
+     "polvo@0.3",
+     "temblor@0.3"
+    ]
+   },
+   {
+    "tx": "Debajo estaban la espada y las sandalias de su padre.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "picado:espada_suelo:0",
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 22,
+      "ry": 180,
+      "acc": "agachado",
+      "e": "sorpresa",
+      "to": [
+       0,
+       14
+      ],
+      "ico": "!"
+     }
+    ],
+    "ocultar": [
+     "roca"
+    ],
+    "mostrar": [
+     "espada_suelo"
+    ],
+    "fx": [
+     "brillo@0.2"
+    ]
+   },
+   {
+    "tx": "Por fin supo quién era su padre: ¡el rey de Atenas!",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "primer:teseo:15",
+     "medio:teseo:-20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "espada_alto",
+      "e": "sorpresa",
+      "prop": "espada",
+      "ico": "!",
+      "ent": [
+       -16.8,
+       -6.8
+      ],
+      "ent_d": 0.14
+     }
+    ],
+    "ocultar": [
+     "roca"
+    ]
+   },
+   {
+    "tx": "Su madre le dijo: ve por mar, hijo, que es más seguro.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "medio:etra:-25"
+    ],
+    "act": [
+     {
+      "n": "etra",
+      "x": 12,
+      "z": 20,
+      "ry": -60,
+      "acc": "hablar",
+      "e": "normal",
+      "ent": [
+       -20,
+       30
+      ],
+      "ent_d": 0.05
+     },
+     {
+      "n": "teseo",
+      "x": -12,
+      "z": 20,
+      "ry": 60,
+      "acc": "quieto",
+      "e": "aburrido",
+      "prop": "espada",
+      "ent": [
+       0,
+       10
+      ],
+      "ent_d": 0.26
+     }
+    ],
+    "ocultar": [
+     "roca"
+    ]
+   },
+   {
+    "tx": "Y Teseo dijo: no, mamá. Voy por tierra. Por el camino de los bandidos.",
+    "set": "trecen",
+    "spot": "roca",
+    "cam": [
+     "primer:teseo:20",
+     "primer:etra:-20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -12,
+      "z": 20,
+      "ry": 60,
+      "acc": "hablar",
+      "e": "risa",
+      "prop": "espada",
+      "ent": [
+       -19.8,
+       15.5
+      ],
+      "ent_d": 0.18
+     },
+     {
+      "n": "etra",
+      "x": 12,
+      "z": 20,
+      "ry": -60,
+      "acc": "facepalm",
+      "e": "enfado",
+      "ent": [
+       19.8,
+       15.5
+      ],
+      "ent_d": 0.21
+     }
+    ],
+    "ocultar": [
+     "roca"
+    ]
+   },
+   {
+    "tx": "Porque claro, para qué ir tranquilo, si puedes ir peleando.",
+    "set": "trecen",
+    "spot": "camino",
+    "cam": [
+     "travel:teseo:-90",
+     "paisaje:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -40,
+      "z": 20,
+      "ry": 90,
+      "acc": "andar",
+      "e": "risa",
+      "to": [
+       120,
+       20
+      ],
+      "prop": "espada"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "c3",
+  "cap": "El camino de los bandidos",
+  "segs": [
+   {
+    "tx": "El camino a Atenas estaba lleno de criminales, de lo más creativos.",
+    "set": "camino",
+    "spot": "maza",
+    "cam": [
+     "paisaje:spot:30",
+     "travel:teseo:90"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -70,
+      "z": 30,
+      "ry": 90,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       0,
+       30
+      ],
+      "prop": "espada"
+     }
+    ]
+   },
+   {
+    "tx": "Primero, Perifetes, que mataba a la gente con una maza de bronce.",
+    "set": "camino",
+    "spot": "maza",
+    "cam": [
+     "contra:perifetes:15",
+     "medio:perifetes:-20"
+    ],
+    "act": [
+     {
+      "n": "perifetes",
+      "x": 20,
+      "z": 10,
+      "ry": -40,
+      "acc": "maza_golpe",
+      "e": "malvado",
+      "prop": "maza"
+     }
+    ],
+    "fx": [
+     "polvo@0.45",
+     "temblor@0.45"
+    ]
+   },
+   {
+    "tx": "Teseo le quitó la maza... y se la quedó. De recuerdo.",
+    "set": "camino",
+    "spot": "maza",
+    "cam": [
+     "dos:teseo,perifetes:0",
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -10,
+      "z": 20,
+      "ry": 70,
+      "acc": "golpe",
+      "e": "enfado"
+     },
+     {
+      "n": "perifetes",
+      "x": 12,
+      "z": 20,
+      "ry": -70,
+      "acc": "caer",
+      "e": "mareado"
+     }
+    ],
+    "fx": [
+     "golpe@0.35",
+     "estrellas@0.4"
+    ],
+    "e_teseo2": "guino"
+   },
+   {
+    "tx": "Luego vino Sinis, el dobla-pinos.",
+    "set": "camino",
+    "spot": "pinos",
+    "cam": [
+     "contra:sinis:0",
+     "paisaje:spot:20"
+    ],
+    "act": [
+     {
+      "n": "sinis",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "brazos",
+      "e": "malvado",
+      "gira": -110,
+      "ent_d": 0.1
+     }
+    ]
+   },
+   {
+    "tx": "Ataba a sus víctimas a dos pinos doblados, y los soltaba. Mejor no te explico el resultado.",
+    "set": "camino",
+    "spot": "pinos",
+    "cam": [
+     "medio:sinis:30",
+     "primer:teseo:-15"
+    ],
+    "act": [
+     {
+      "n": "sinis",
+      "x": 10,
+      "z": 20,
+      "ry": -30,
+      "acc": "hablar",
+      "e": "malvado",
+      "ent": [
+       26.8,
+       15.5
+      ],
+      "ent_d": 0.1
+     },
+     {
+      "n": "teseo",
+      "x": -20,
+      "z": 24,
+      "ry": 40,
+      "acc": "quieto",
+      "e": "sudor",
+      "prop": "maza",
+      "ent": [
+       -43.3,
+       22.0
+      ],
+      "ent_d": 0.26
+     }
+    ],
+    "pinos": "doblados"
+   },
+   {
+    "tx": "Teseo le hizo exactamente lo mismo. Sinis salió volando.",
+    "set": "camino",
+    "spot": "pinos",
+    "cam": [
+     "general:sinis:0"
+    ],
+    "act": [
+     {
+      "n": "sinis",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "lanzado",
+      "e": "grito",
+      "to": [
+       160,
+       -300
+      ],
+      "h": 180
+     },
+     {
+      "n": "teseo",
+      "x": -30,
+      "z": 30,
+      "ry": 30,
+      "acc": "brazos",
+      "e": "risa",
+      "prop": "maza",
+      "ent": [
+       -20,
+       24
+      ],
+      "ent_d": 0.33
+     }
+    ],
+    "pinos": "soltar",
+    "fx": [
+     "hojas@0.3"
+    ]
+   },
+   {
+    "tx": "Después, Escirón, que obligaba a los viajeros a lavarle los pies al borde de un acantilado.",
+    "set": "camino",
+    "spot": "acantilado",
+    "cam": [
+     "paisaje:spot:40",
+     "medio:esciron:10"
+    ],
+    "act": [
+     {
+      "n": "esciron",
+      "x": 0,
+      "z": 24,
+      "ry": 180,
+      "acc": "sentado",
+      "e": "malvado"
+     },
+     {
+      "n": "viajero",
+      "x": 0,
+      "z": 2,
+      "ry": 0,
+      "acc": "arrodillado",
+      "e": "triste"
+     }
+    ]
+   },
+   {
+    "tx": "Y cuando se agachaban: ¡patada! Directos al mar, donde esperaba una tortuga gigante.",
+    "set": "camino",
+    "spot": "acantilado",
+    "cam": [
+     "medio:viajero:60",
+     "picado:tortuga:0"
+    ],
+    "act": [
+     {
+      "n": "esciron",
+      "x": 0,
+      "z": 24,
+      "ry": 180,
+      "acc": "patada",
+      "e": "risa"
+     },
+     {
+      "n": "viajero",
+      "x": 0,
+      "z": 2,
+      "ry": 0,
+      "acc": "lanzado",
+      "e": "grito",
+      "to": [
+       10,
+       -150
+      ],
+      "h": 40,
+      "y2": -150
+     }
+    ],
+    "fx": [
+     "salpicar_mar@0.8"
+    ]
+   },
+   {
+    "tx": "Teseo se agachó... y le dio la patada a él. La tortuga cenó igual.",
+    "set": "camino",
+    "spot": "acantilado",
+    "cam": [
+     "medio:teseo:50",
+     "picado:tortuga:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 10,
+      "ry": 180,
+      "acc": "patada",
+      "e": "guino",
+      "prop": "maza"
+     },
+     {
+      "n": "esciron",
+      "x": 0,
+      "z": -8,
+      "ry": 0,
+      "acc": "lanzado",
+      "e": "grito",
+      "to": [
+       10,
+       -150
+      ],
+      "h": 40,
+      "y2": -150
+     }
+    ],
+    "fx": [
+     "salpicar_mar@0.7"
+    ]
+   },
+   {
+    "tx": "Y el último, el peor de todos: Procusto.",
+    "set": "camino",
+    "spot": "cama",
+    "cam": [
+     "contra:procusto:0",
+     "primer:procusto:20"
+    ],
+    "act": [
+     {
+      "n": "procusto",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "brazos",
+      "e": "malvado",
+      "ent": [
+       15.4,
+       4.6
+      ],
+      "ent_d": 0.12
+     }
+    ],
+    "fx": [
+     "trueno@0.2"
+    ]
+   },
+   {
+    "tx": "Procusto tenía una cama para invitados, y una manía: todos tenían que caber exactos.",
+    "set": "camino",
+    "spot": "cama",
+    "cam": [
+     "medio:cama:20",
+     "primer:procusto:-20"
+    ],
+    "act": [
+     {
+      "n": "procusto",
+      "x": 30,
+      "z": 10,
+      "ry": -50,
+      "acc": "hablar",
+      "e": "malvado",
+      "ent": [
+       0,
+       20
+      ],
+      "ent_d": 0.09
+     }
+    ]
+   },
+   {
+    "tx": "Si eras alto, te cortaba lo que sobraba. Si eras bajito, te estiraba.",
+    "set": "camino",
+    "spot": "cama",
+    "cam": [
+     "picado:cama:0",
+     "primer:viajero:30"
+    ],
+    "act": [
+     {
+      "n": "viajero",
+      "x": 18,
+      "z": 0,
+      "ry": 90,
+      "acc": "tumbado",
+      "e": "grito",
+      "y": 12,
+      "sc": [
+       1,
+       1.35,
+       1
+      ]
+     },
+     {
+      "n": "procusto",
+      "x": 40,
+      "z": 4,
+      "ry": -90,
+      "acc": "estirar",
+      "e": "malvado"
+     }
+    ]
+   },
+   {
+    "tx": "Teseo lo tumbó en su propia cama. Y oye, le sobraba un poco.",
+    "set": "camino",
+    "spot": "cama",
+    "cam": [
+     "medio:cama:-20",
+     "primer:teseo:15"
+    ],
+    "act": [
+     {
+      "n": "procusto",
+      "x": 18,
+      "z": 0,
+      "ry": 90,
+      "acc": "tumbado",
+      "e": "susto",
+      "y": 12
+     },
+     {
+      "n": "teseo",
+      "x": 36,
+      "z": 24,
+      "ry": -40,
+      "acc": "brazos",
+      "e": "guino",
+      "prop": "maza",
+      "gira": 110,
+      "ent_d": 0.24
+     }
+    ]
+   },
+   {
+    "tx": "Cuatro bandidos, cero problemas. Teseo llegó a Atenas siendo ya famoso.",
+    "set": "atenas",
+    "spot": "puerta",
+    "cam": [
+     "paisaje:spot:0",
+     "medio:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": -130,
+      "ry": 0,
+      "acc": "andar",
+      "e": "risa",
+      "to": [
+       0,
+       10
+      ],
+      "prop": "maza"
+     },
+     {
+      "n": "aldeano1",
+      "x": -40,
+      "z": 0,
+      "ry": 30,
+      "acc": "celebrar",
+      "e": "risa"
+     },
+     {
+      "n": "aldeano2",
+      "x": 40,
+      "z": 4,
+      "ry": -30,
+      "acc": "celebrar",
+      "e": "risa"
+     },
+     {
+      "n": "aldeano3",
+      "x": -60,
+      "z": -20,
+      "ry": 20,
+      "acc": "saludar",
+      "e": "risa",
+      "ent": [
+       -63.1,
+       -28.5
+      ],
+      "ent_d": 0.46
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "c4",
+  "cap": "Una copa envenenada",
+  "segs": [
+   {
+    "tx": "En Atenas, Egeo no tenía ni idea de que aquel chico era su hijo.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "general:egeo:0",
+     "primer:egeo:20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "aburrido"
+     },
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 50,
+      "ry": 180,
+      "acc": "quieto",
+      "e": "normal",
+      "prop": "espada_cinto",
+      "ent": [
+       -0.0,
+       59.0
+      ],
+      "ent_d": 0.28
+     }
+    ]
+   },
+   {
+    "tx": "Pero alguien sí lo sabía: Medea, la nueva esposa del rey. Una hechicera.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "primer:medea:-20",
+     "contra:medea:10"
+    ],
+    "act": [
+     {
+      "n": "medea",
+      "x": 26,
+      "z": -6,
+      "ry": -20,
+      "acc": "magia",
+      "e": "malvado",
+      "gira": 110,
+      "ent_d": 0.06
+     },
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "normal"
+     }
+    ],
+    "fx": [
+     "chispas_moradas@0.3"
+    ]
+   },
+   {
+    "tx": "Medea quería el trono para su propio hijo. Así que convenció a Egeo de que el forastero era peligroso.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "dos:medea,egeo:0",
+     "primer:egeo:15"
+    ],
+    "act": [
+     {
+      "n": "medea",
+      "x": 12,
+      "z": -8,
+      "ry": -80,
+      "acc": "susurrar",
+      "e": "malvado",
+      "ent": [
+       26,
+       -6
+      ],
+      "ent_d": 0.08
+     },
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "susto"
+     }
+    ]
+   },
+   {
+    "tx": "Y preparó una copa de vino... con veneno.",
+    "set": "atenas",
+    "spot": "banquete",
+    "cam": [
+     "primer:copa:0",
+     "medio:medea:20"
+    ],
+    "act": [
+     {
+      "n": "medea",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "verter",
+      "e": "malvado",
+      "prop": "copa",
+      "ent": [
+       0.0,
+       -9.0
+      ],
+      "ent_d": 0.0
+     }
+    ],
+    "fx": [
+     "veneno@0.4"
+    ]
+   },
+   {
+    "tx": "En el banquete, Egeo le ofreció la copa a Teseo.",
+    "set": "atenas",
+    "spot": "banquete",
+    "cam": [
+     "general:mesa:0",
+     "dos:egeo,teseo:20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -20,
+      "z": -14,
+      "ry": 60,
+      "acc": "ofrecer",
+      "e": "normal",
+      "prop": "copa",
+      "ent": [
+       -27.8,
+       -18.5
+      ],
+      "ent_d": 0.03
+     },
+     {
+      "n": "teseo",
+      "x": 20,
+      "z": -14,
+      "ry": -60,
+      "acc": "quieto",
+      "e": "risa",
+      "ent": [
+       24.7,
+       -31.4
+      ],
+      "ent_d": 0.21
+     },
+     {
+      "n": "medea",
+      "x": -70,
+      "z": -6,
+      "ry": 40,
+      "acc": "quieto",
+      "e": "malvado",
+      "ent": [
+       0,
+       0
+      ],
+      "ent_d": 0.45
+     }
+    ]
+   },
+   {
+    "tx": "Teseo, para cortar la carne, sacó la espada.",
+    "set": "atenas",
+    "spot": "banquete",
+    "cam": [
+     "medio:teseo:-30"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 20,
+      "z": -14,
+      "ry": -60,
+      "acc": "sacar_espada",
+      "e": "normal",
+      "prop": "espada"
+     }
+    ],
+    "fx": [
+     "brillo@0.5"
+    ]
+   },
+   {
+    "tx": "Egeo vio la espada... ¡y era la suya!",
+    "set": "atenas",
+    "spot": "banquete",
+    "cam": [
+     "primer:egeo:20",
+     "primer:espada_teseo:0"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -20,
+      "z": -14,
+      "ry": 60,
+      "acc": "susto",
+      "e": "sorpresa",
+      "ico": "!",
+      "prop": "copa"
+     },
+     {
+      "n": "teseo",
+      "x": 20,
+      "z": -14,
+      "ry": -60,
+      "acc": "quieto",
+      "e": "normal",
+      "prop": "espada",
+      "ent": [
+       36.1,
+       -9.7
+      ],
+      "ent_d": 0.24
+     }
+    ],
+    "fx": [
+     "zoom@0.1"
+    ]
+   },
+   {
+    "tx": "Le tiró la copa de un manotazo, y el veneno se derramó por el suelo.",
+    "set": "atenas",
+    "spot": "banquete",
+    "cam": [
+     "medio:egeo:40",
+     "picado:veneno_suelo:0"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -20,
+      "z": -14,
+      "ry": 60,
+      "acc": "manotazo",
+      "e": "grito"
+     },
+     {
+      "n": "teseo",
+      "x": 20,
+      "z": -14,
+      "ry": -60,
+      "acc": "susto",
+      "e": "susto",
+      "prop": "espada"
+     }
+    ],
+    "fx": [
+     "copa_vuela@0.25",
+     "veneno_suelo@0.5"
+    ]
+   },
+   {
+    "tx": "¡Hijo mío!, gritó Egeo. ¡Papá!, gritó Teseo. Y Medea dijo: bueno, yo me voy.",
+    "set": "atenas",
+    "spot": "banquete",
+    "cam": [
+     "dos:egeo,teseo:0",
+     "medio:medea:30"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -6,
+      "z": 0,
+      "ry": 90,
+      "acc": "abrazar",
+      "e": "risa",
+      "ent": [
+       -20,
+       -14
+      ],
+      "ent_d": 0.11
+     },
+     {
+      "n": "teseo",
+      "x": 6,
+      "z": 0,
+      "ry": -90,
+      "acc": "abrazar",
+      "e": "risa",
+      "ent": [
+       20,
+       -14
+      ],
+      "ent_d": 0.33
+     },
+     {
+      "n": "medea",
+      "x": -50,
+      "z": -4,
+      "ry": 260,
+      "acc": "agachado",
+      "e": "sudor",
+      "to": [
+       -110,
+       10
+      ]
+     }
+    ],
+    "fx": [
+     "corazones@0.2"
+    ]
+   },
+   {
+    "tx": "Y salió huyendo en un carro tirado por dragones. Literalmente.",
+    "set": "atenas",
+    "spot": "plaza",
+    "cam": [
+     "contra:medea:0",
+     "paisaje:medea:30"
+    ],
+    "act": [
+     {
+      "n": "medea",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "volar_carro",
+      "e": "malvado",
+      "to": [
+       -150,
+       420
+      ],
+      "h": 240
+     }
+    ],
+    "fx": [
+     "chispas_moradas@0.3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "c5",
+  "cap": "El tributo de Creta",
+  "segs": [
+   {
+    "tx": "Pero la alegría duró poco. Atenas escondía un secreto horrible.",
+    "set": "atenas",
+    "spot": "plaza",
+    "cam": [
+     "paisaje:spot:20"
+    ],
+    "act": [
+     {
+      "n": "aldeano1",
+      "x": -30,
+      "z": 20,
+      "ry": 20,
+      "acc": "triste",
+      "e": "triste",
+      "gira": 160,
+      "ent_d": 0.06
+     },
+     {
+      "n": "aldeano2",
+      "x": 30,
+      "z": 10,
+      "ry": -20,
+      "acc": "triste",
+      "e": "triste",
+      "ent": [
+       50.5,
+       0.4
+      ],
+      "ent_d": 0.23
+     }
+    ],
+    "luz": "tormenta"
+   },
+   {
+    "tx": "Años atrás, el hijo de Minos, el rey de Creta, había muerto en Atenas.",
+    "set": "creta",
+    "spot": "trono",
+    "cam": [
+     "contra:minos:0",
+     "primer:minos:20"
+    ],
+    "act": [
+     {
+      "n": "minos",
+      "x": 0,
+      "z": -12,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "triste"
+     }
+    ]
+   },
+   {
+    "tx": "Minos, furioso, declaró la guerra a los atenienses, la ganó, y les impuso un castigo.",
+    "set": "creta",
+    "spot": "trono",
+    "cam": [
+     "medio:minos:20",
+     "primer:minos:-20"
+    ],
+    "act": [
+     {
+      "n": "minos",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "senalar",
+      "e": "enfado",
+      "ent": [
+       0,
+       -12
+      ],
+      "ent_d": 0.05
+     },
+     {
+      "n": "soldado1",
+      "x": -40,
+      "z": 0,
+      "ry": 30,
+      "acc": "lanza",
+      "e": "enfado",
+      "ent": [
+       -57.5,
+       -4.7
+      ],
+      "ent_d": 0.2
+     },
+     {
+      "n": "soldado2",
+      "x": 40,
+      "z": 0,
+      "ry": -30,
+      "acc": "lanza",
+      "e": "enfado",
+      "ent": [
+       44.5,
+       -7.8
+      ],
+      "ent_d": 0.42
+     }
+    ],
+    "fx": [
+     "temblor@0.3"
+    ]
+   },
+   {
+    "tx": "Cada nueve años, Atenas debía enviar a Creta siete chicos y siete chicas.",
+    "set": "mapa",
+    "spot": "mapa",
+    "cam": [
+     "cenital:mapa:0",
+     "general:barco_mapa:20"
+    ],
+    "act": [],
+    "mapa": "ruta"
+   },
+   {
+    "tx": "¿Para qué? Para dárselos de comer al Minotauro.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:minotauro:0"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "rugir",
+      "e": "enfado"
+     }
+    ],
+    "fx": [
+     "temblor@0.4",
+     "rugido@0.3"
+    ]
+   },
+   {
+    "tx": "Un monstruo con cuerpo de hombre y cabeza de toro.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "orbita:minotauro:0",
+     "primer:minotauro:15"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "respirar",
+      "e": "malvado"
+     }
+    ],
+    "fx": [
+     "vapor@0.4"
+    ]
+   },
+   {
+    "tx": "Vivía encerrado en el Laberinto, construido por Dédalo, el mejor inventor de su época.",
+    "set": "creta",
+    "spot": "taller",
+    "cam": [
+     "medio:dedalo:20",
+     "cenital:laberinto_vista:0"
+    ],
+    "act": [
+     {
+      "n": "dedalo",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "plano",
+      "e": "risa",
+      "prop": "plano",
+      "ent": [
+       -12.2,
+       -2.2
+      ],
+      "ent_d": 0.11
+     }
+    ]
+   },
+   {
+    "tx": "Un laberinto tan complicado, que ni el propio Dédalo sabía salir de él.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "picado:dedalo:0",
+     "primer:dedalo:20"
+    ],
+    "act": [
+     {
+      "n": "dedalo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "perdido",
+      "e": "mareado",
+      "ico": "?"
+     }
+    ]
+   },
+   {
+    "tx": "Y ese año, otra vez, tocaba.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "general:spot:20",
+     "medio:joven1:20"
+    ],
+    "act": [
+     {
+      "n": "joven1",
+      "x": -30,
+      "z": 30,
+      "ry": 180,
+      "acc": "andar",
+      "e": "triste",
+      "to": [
+       -30,
+       -10
+      ]
+     },
+     {
+      "n": "joven2",
+      "x": -10,
+      "z": 40,
+      "ry": 180,
+      "acc": "andar",
+      "e": "triste",
+      "to": [
+       -10,
+       0
+      ]
+     },
+     {
+      "n": "joven3",
+      "x": 10,
+      "z": 34,
+      "ry": 180,
+      "acc": "andar",
+      "e": "llanto",
+      "to": [
+       10,
+       -6
+      ]
+     },
+     {
+      "n": "joven4",
+      "x": 30,
+      "z": 44,
+      "ry": 180,
+      "acc": "andar",
+      "e": "triste",
+      "to": [
+       30,
+       4
+      ]
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   }
+  ]
+ },
+ {
+  "id": "c6",
+  "cap": "Velas negras",
+  "segs": [
+   {
+    "tx": "Entonces Teseo dijo: voy yo. Iré como uno de los catorce, y mataré al Minotauro.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "contra:teseo:10",
+     "primer:teseo:-15"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "espada_alto",
+      "e": "enfado",
+      "prop": "espada",
+      "ent": [
+       0,
+       50
+      ],
+      "ent_d": 0.12
+     },
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "susto"
+     }
+    ],
+    "fx": [
+     "brillo@0.3"
+    ]
+   },
+   {
+    "tx": "A Egeo casi le da algo.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "primer:egeo:10"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "desmayo",
+      "e": "mareado"
+     }
+    ]
+   },
+   {
+    "tx": "El barco de los jóvenes llevaba velas negras, en señal de luto.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "paisaje:barco:30",
+     "contra:barco:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 6,
+      "ry": 90,
+      "acc": "senalar",
+      "e": "enfado",
+      "y": "cubierta",
+      "gira": 90
+     },
+     {
+      "n": "joven1",
+      "x": -26,
+      "z": 0,
+      "ry": 90,
+      "acc": "triste",
+      "e": "llanto",
+      "y": "cubierta",
+      "gira": -90
+     },
+     {
+      "n": "joven2",
+      "x": 26,
+      "z": 2,
+      "ry": 90,
+      "acc": "llorar",
+      "e": "llanto",
+      "y": "cubierta",
+      "gira": -90
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Así que Egeo le pidió una sola cosa.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "dos:egeo,teseo:0"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -12,
+      "z": 20,
+      "ry": 70,
+      "acc": "hablar",
+      "e": "triste",
+      "ent": [
+       -20.5,
+       16.9
+      ],
+      "ent_d": 0.17
+     },
+     {
+      "n": "teseo",
+      "x": 12,
+      "z": 20,
+      "ry": -70,
+      "acc": "quieto",
+      "e": "normal",
+      "prop": "espada_cinto",
+      "ent": [
+       0,
+       6
+      ],
+      "ent_d": 0.34
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Si vuelves vivo, cambia las velas negras por unas blancas. Así sabré desde lejos que estás bien.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "primer:egeo:20",
+     "medio:vela_blanca:0",
+     "primer:teseo:-20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": -12,
+      "z": 20,
+      "ry": 70,
+      "acc": "ofrecer",
+      "e": "triste",
+      "prop": "tela",
+      "ent": [
+       -20.5,
+       16.9
+      ],
+      "ent_d": 0.11
+     },
+     {
+      "n": "teseo",
+      "x": 12,
+      "z": 20,
+      "ry": -70,
+      "acc": "pulgar",
+      "e": "risa",
+      "prop": "espada_cinto",
+      "ent": [
+       27.3,
+       27.1
+      ],
+      "ent_d": 0.28
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Y Teseo dijo: claro, papá. Fácil. Cómo me voy a olvidar.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "primer:teseo:15"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 12,
+      "z": 20,
+      "ry": -70,
+      "acc": "pulgar",
+      "e": "guino",
+      "prop": "espada_cinto",
+      "ent": [
+       22.8,
+       -3.2
+      ],
+      "ent_d": 0.09
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Spoiler: se iba a olvidar.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "primer:teseo:15"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 12,
+      "z": 20,
+      "ry": -70,
+      "acc": "pulgar",
+      "e": "guino",
+      "prop": "espada_cinto",
+      "ent": [
+       19.1,
+       4.7
+      ],
+      "ent_d": 0.11
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde",
+    "ov": "spoiler",
+    "congelar": true
+   },
+   {
+    "tx": "Y el barco zarpó rumbo a Creta.",
+    "set": "mar",
+    "spot": "barco",
+    "cam": [
+     "paisaje:barco:40",
+     "travel:barco:90"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 22,
+      "ry": 0,
+      "acc": "mirar",
+      "e": "normal",
+      "y": "cubierta",
+      "gira": -90
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   }
+  ]
+ },
+ {
+  "id": "c7",
+  "cap": "Ariadna",
+  "segs": [
+   {
+    "tx": "En Creta, el rey Minos recibió a los jóvenes en su palacio, con columnas rojas y una sonrisa de malo de película.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "paisaje:spot:20",
+     "general:minos:10",
+     "primer:minos:-20"
+    ],
+    "act": [
+     {
+      "n": "minos",
+      "x": 0,
+      "z": -20,
+      "ry": 0,
+      "acc": "brazos",
+      "e": "malvado",
+      "gira": 160,
+      "ent_d": 0.01
+     },
+     {
+      "n": "joven1",
+      "x": -30,
+      "z": 40,
+      "ry": 180,
+      "acc": "quieto",
+      "e": "susto",
+      "gira": 160,
+      "ent_d": 0.23
+     },
+     {
+      "n": "joven2",
+      "x": -10,
+      "z": 46,
+      "ry": 180,
+      "acc": "quieto",
+      "e": "triste",
+      "ent": [
+       -10.0,
+       55.0
+      ],
+      "ent_d": 0.49
+     },
+     {
+      "n": "teseo",
+      "x": 14,
+      "z": 40,
+      "ry": 180,
+      "acc": "quieto",
+      "e": "enfado",
+      "prop": "espada_cinto",
+      "ent": [
+       14.0,
+       49.0
+      ],
+      "ent_d": 0.54
+     },
+     {
+      "n": "joven3",
+      "x": 34,
+      "z": 46,
+      "ry": 180,
+      "acc": "quieto",
+      "e": "llanto",
+      "ent": [
+       15.8,
+       64.2
+      ],
+      "ent_d": 0.69
+     }
+    ]
+   },
+   {
+    "tx": "Teseo se plantó delante de él, y le dijo que era hijo de un rey, y que no le tenía miedo.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "dos:teseo,minos:0",
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 10,
+      "ry": 180,
+      "acc": "senalar",
+      "e": "enfado",
+      "ent": [
+       14,
+       40
+      ],
+      "ent_d": 0.1
+     },
+     {
+      "n": "minos",
+      "x": 0,
+      "z": -20,
+      "ry": 0,
+      "acc": "brazos",
+      "e": "sorpresa",
+      "ent": [
+       -16.4,
+       -36.4
+      ],
+      "ent_d": 0.3
+     }
+    ]
+   },
+   {
+    "tx": "Pero quien de verdad se fijó en Teseo fue Ariadna, la hija de Minos.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "primer:ariadna:20",
+     "medio:ariadna:-10"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 30,
+      "z": -30,
+      "ry": -40,
+      "acc": "quieto",
+      "e": "enamorado",
+      "ent": [
+       35.8,
+       -36.9
+      ],
+      "ent_d": 0.14
+     },
+     {
+      "n": "minos",
+      "x": 0,
+      "z": -20,
+      "ry": 0,
+      "acc": "brazos",
+      "e": "malvado",
+      "ent": [
+       0.0,
+       -29.0
+      ],
+      "ent_d": 0.19
+     }
+    ],
+    "fx": [
+     "corazones@0.3"
+    ]
+   },
+   {
+    "tx": "Se enamoró a primera vista. Pero a primera vista, ¿eh? Corazones por todas partes.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "primer:ariadna:0"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 30,
+      "z": -30,
+      "ry": 0,
+      "acc": "suspiro",
+      "e": "enamorado",
+      "gira": 110,
+      "ent_d": 0.03
+     }
+    ],
+    "fx": [
+     "corazones@0.1",
+     "corazones@0.4",
+     "corazones@0.7"
+    ]
+   },
+   {
+    "tx": "Esa noche, fue a verle en secreto.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "travel:ariadna:90",
+     "picado:ariadna:0"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": -60,
+      "z": 30,
+      "ry": 90,
+      "acc": "agachado",
+      "e": "normal",
+      "to": [
+       20,
+       30
+      ],
+      "prop": "antorcha"
+     }
+    ],
+    "luz": "noche"
+   },
+   {
+    "tx": "Y le dio dos cosas: una espada escondida, y un ovillo de hilo rojo.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "dos:ariadna,teseo:0",
+     "primer:ovillo:0"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 10,
+      "z": 30,
+      "ry": -80,
+      "acc": "ofrecer",
+      "e": "normal",
+      "prop": "ovillo",
+      "ent": [
+       18.9,
+       28.4
+      ],
+      "ent_d": 0.01
+     },
+     {
+      "n": "teseo",
+      "x": -10,
+      "z": 30,
+      "ry": 80,
+      "acc": "quieto",
+      "e": "sorpresa",
+      "prop": "espada",
+      "ent": [
+       0,
+       10
+      ],
+      "ent_d": 0.26
+     }
+    ],
+    "luz": "noche"
+   },
+   {
+    "tx": "Ata el hilo a la entrada, le dijo. Ve soltándolo mientras avanzas. Y para salir, solo tienes que seguirlo.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "primer:ariadna:-20",
+     "primer:teseo:20",
+     "dos:ariadna,teseo:10"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 10,
+      "z": 30,
+      "ry": -80,
+      "acc": "hablar",
+      "e": "normal",
+      "gira": -110,
+      "ent_d": 0.14
+     },
+     {
+      "n": "teseo",
+      "x": -10,
+      "z": 30,
+      "ry": 80,
+      "acc": "pensar",
+      "e": "normal",
+      "prop2": "ovillo",
+      "ent": [
+       -24.2,
+       9.7
+      ],
+      "ent_d": 0.22
+     }
+    ],
+    "luz": "noche"
+   },
+   {
+    "tx": "La idea, por cierto, se la había dado el propio Dédalo.",
+    "set": "creta",
+    "spot": "taller",
+    "cam": [
+     "primer:dedalo:20"
+    ],
+    "act": [
+     {
+      "n": "dedalo",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "pulgar",
+      "e": "guino",
+      "ent": [
+       15.7,
+       -5.7
+      ],
+      "ent_d": 0.12
+     }
+    ],
+    "luz": "noche"
+   },
+   {
+    "tx": "A cambio, Teseo le prometió llevársela a Atenas, y casarse con ella.",
+    "set": "creta",
+    "spot": "palacio",
+    "cam": [
+     "dos:ariadna,teseo:0",
+     "primer:ariadna:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -10,
+      "z": 30,
+      "ry": 80,
+      "acc": "mano_pecho",
+      "e": "risa",
+      "gira": -110,
+      "ent_d": 0.16
+     },
+     {
+      "n": "ariadna",
+      "x": 10,
+      "z": 30,
+      "ry": -80,
+      "acc": "celebrar",
+      "e": "enamorado"
+     }
+    ],
+    "luz": "noche",
+    "fx": [
+     "corazones@0.5"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "c8",
+  "cap": "El Laberinto",
+  "segs": [
+   {
+    "tx": "A la mañana siguiente, encerraron a los catorce jóvenes en el Laberinto.",
+    "set": "creta",
+    "spot": "puerta_lab",
+    "cam": [
+     "general:spot:0",
+     "medio:joven1:20"
+    ],
+    "act": [
+     {
+      "n": "joven1",
+      "x": -20,
+      "z": 10,
+      "ry": 0,
+      "acc": "susto",
+      "e": "susto"
+     },
+     {
+      "n": "joven2",
+      "x": 0,
+      "z": 16,
+      "ry": 0,
+      "acc": "quieto",
+      "e": "llanto",
+      "gira": 160,
+      "ent_d": 0.31
+     },
+     {
+      "n": "teseo",
+      "x": 20,
+      "z": 10,
+      "ry": 0,
+      "acc": "quieto",
+      "e": "enfado",
+      "prop": "espada_cinto",
+      "ent": [
+       33.7,
+       -3.7
+      ],
+      "ent_d": 0.31
+     },
+     {
+      "n": "soldado1",
+      "x": -50,
+      "z": 40,
+      "ry": 180,
+      "acc": "lanza",
+      "e": "enfado",
+      "ent": [
+       -64.5,
+       54.5
+      ],
+      "ent_d": 0.49
+     },
+     {
+      "n": "soldado2",
+      "x": 50,
+      "z": 40,
+      "ry": 180,
+      "acc": "lanza",
+      "e": "enfado",
+      "ent": [
+       50.0,
+       49.0
+      ],
+      "ent_d": 0.67
+     }
+    ],
+    "fx": [
+     "puerta@0.6"
+    ]
+   },
+   {
+    "tx": "Teseo ató el hilo a la puerta, y entró el primero.",
+    "set": "laberinto",
+    "spot": "entrada",
+    "cam": [
+     "medio:teseo:30",
+     "travel:teseo:90"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       90,
+       0
+      ],
+      "prop2": "ovillo",
+      "hilo": 1
+     }
+    ]
+   },
+   {
+    "tx": "Giró a la izquierda. A la derecha. Otra vez a la izquierda.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "travel:teseo:90",
+     "picado:teseo:0",
+     "hombro:teseo:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -50,
+      "z": 0,
+      "ry": 90,
+      "acc": "andar",
+      "e": "normal",
+      "to": [
+       60,
+       0
+      ],
+      "prop": "antorcha",
+      "prop2": "ovillo",
+      "hilo": 1
+     }
+    ]
+   },
+   {
+    "tx": "Pasillos y más pasillos. Huesos por el suelo. Muy buena decoración, la verdad.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "picado:huesos:0",
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 0,
+      "ry": 30,
+      "acc": "quieto",
+      "e": "sudor",
+      "prop": "antorcha",
+      "hilo": 1,
+      "ent": [
+       60,
+       0
+      ],
+      "ent_d": 0.16
+     }
+    ]
+   },
+   {
+    "tx": "Y de repente... silencio.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "primer:teseo:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "quieto",
+      "e": "susto",
+      "prop": "antorcha",
+      "ico": "!",
+      "ent": [
+       0.0,
+       -9.0
+      ],
+      "ent_d": 0.07
+     }
+    ],
+    "silencio": true
+   },
+   {
+    "tx": "Un resoplido.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "primer:minotauro:0"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "respirar",
+      "e": "enfado"
+     }
+    ],
+    "fx": [
+     "vapor@0.2",
+     "resoplido@0.1"
+    ]
+   },
+   {
+    "tx": "¡El Minotauro!",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:minotauro:20"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "rugir",
+      "e": "enfado"
+     }
+    ],
+    "fx": [
+     "temblor@0.1",
+     "rugido@0.0"
+    ]
+   },
+   {
+    "tx": "Embistió con los cuernos por delante. Teseo saltó a un lado, y el Minotauro se estampó contra la pared.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "general:centro:0",
+     "medio:muro:30"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": 60,
+      "ry": 180,
+      "acc": "embestir",
+      "e": "enfado",
+      "to": [
+       0,
+       -66
+      ]
+     },
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": -30,
+      "ry": 0,
+      "acc": "esquivar",
+      "e": "susto",
+      "prop": "espada"
+     }
+    ],
+    "fx": [
+     "muro@0.75",
+     "temblor@0.75",
+     "estrellas@0.8"
+    ]
+   },
+   {
+    "tx": "Pelearon durante horas. Golpe. Esquiva. Golpe.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "medio:teseo:40",
+     "primer:minotauro:-30",
+     "dos:teseo,minotauro:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -14,
+      "z": 0,
+      "ry": 90,
+      "acc": "espadazo",
+      "e": "enfado",
+      "prop": "espada"
+     },
+     {
+      "n": "minotauro",
+      "x": 16,
+      "z": 0,
+      "ry": -90,
+      "acc": "pelear",
+      "e": "enfado"
+     }
+    ],
+    "fx": [
+     "golpe@0.3",
+     "golpe@0.6",
+     "golpe@0.9"
+    ]
+   },
+   {
+    "tx": "El Minotauro era más fuerte. Pero Teseo era más listo.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "primer:minotauro:20",
+     "primer:teseo:-20"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 16,
+      "z": 0,
+      "ry": -90,
+      "acc": "musculos",
+      "e": "enfado",
+      "gira": -110,
+      "ent_d": 0.04
+     },
+     {
+      "n": "teseo",
+      "x": -14,
+      "z": 0,
+      "ry": 90,
+      "acc": "pensar",
+      "e": "guino",
+      "prop": "espada",
+      "ent": [
+       -27.6,
+       13.6
+      ],
+      "ent_d": 0.25
+     }
+    ]
+   },
+   {
+    "tx": "Le agarró por un cuerno, se subió a su espalda...",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:minotauro:30"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "sacudir",
+      "e": "enfado"
+     },
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": -4,
+      "ry": 0,
+      "acc": "montar",
+      "e": "grito",
+      "prop": "espada"
+     }
+    ]
+   },
+   {
+    "tx": "... y con la espada, acabó con él.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:minotauro:-10",
+     "general:centro:20"
+    ],
+    "act": [
+     {
+      "n": "minotauro",
+      "x": 0,
+      "z": 0,
+      "ry": 0,
+      "acc": "caer_grande",
+      "e": "mareado"
+     },
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 24,
+      "ry": 180,
+      "acc": "espada_alto",
+      "e": "enfado",
+      "prop": "espada",
+      "ent": [
+       0,
+       -4
+      ],
+      "ent_d": 0.35
+     }
+    ],
+    "fx": [
+     "flash@0.15",
+     "bloques@0.2",
+     "temblor@0.55"
+    ]
+   },
+   {
+    "tx": "Silencio otra vez. Teseo lo había conseguido.",
+    "set": "laberinto",
+    "spot": "centro",
+    "cam": [
+     "contra:teseo:0",
+     "orbita:teseo:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "espada_alto",
+      "e": "risa",
+      "prop": "espada",
+      "ent": [
+       0.0,
+       11.0
+      ],
+      "ent_d": 0.0
+     }
+    ],
+    "fx": [
+     "rayos"
+    ]
+   },
+   {
+    "tx": "Ahora solo faltaba salir. Y aquí, el ovillo de lana se convierte en el mejor invento de la historia.",
+    "set": "laberinto",
+    "spot": "pasillo",
+    "cam": [
+     "primer:teseo:20",
+     "travel:teseo:-90",
+     "picado:teseo:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 60,
+      "z": 0,
+      "ry": -90,
+      "acc": "andar",
+      "e": "risa",
+      "to": [
+       -60,
+       0
+      ],
+      "prop": "antorcha",
+      "prop2": "ovillo",
+      "hilo": 1
+     }
+    ]
+   },
+   {
+    "tx": "Siguió el hilo, recogió a los demás jóvenes, y salieron todos vivos.",
+    "set": "creta",
+    "spot": "puerta_lab",
+    "cam": [
+     "general:spot:0",
+     "medio:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": -30,
+      "ry": 0,
+      "acc": "andar",
+      "e": "risa",
+      "to": [
+       0,
+       30
+      ],
+      "prop": "espada"
+     },
+     {
+      "n": "joven1",
+      "x": -20,
+      "z": -50,
+      "ry": 0,
+      "acc": "correr",
+      "e": "risa",
+      "to": [
+       -30,
+       20
+      ]
+     },
+     {
+      "n": "joven2",
+      "x": 20,
+      "z": -55,
+      "ry": 0,
+      "acc": "correr",
+      "e": "risa",
+      "to": [
+       30,
+       20
+      ]
+     },
+     {
+      "n": "joven3",
+      "x": -10,
+      "z": -70,
+      "ry": 0,
+      "acc": "celebrar",
+      "e": "risa",
+      "to": [
+       -10,
+       10
+      ]
+     },
+     {
+      "n": "joven4",
+      "x": 12,
+      "z": -75,
+      "ry": 0,
+      "acc": "correr",
+      "e": "risa",
+      "to": [
+       14,
+       6
+      ]
+     }
+    ],
+    "fx": [
+     "rayos"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "c9",
+  "cap": "La isla de Naxos",
+  "segs": [
+   {
+    "tx": "Esa misma noche huyeron de Creta, con Ariadna, antes de que Minos se enterara.",
+    "set": "mar",
+    "spot": "barco",
+    "cam": [
+     "general:barco:30",
+     "medio:ariadna:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -10,
+      "z": 20,
+      "ry": 0,
+      "acc": "quieto",
+      "e": "risa",
+      "y": "cubierta",
+      "gira": 90
+     },
+     {
+      "n": "ariadna",
+      "x": 10,
+      "z": 20,
+      "ry": 0,
+      "acc": "quieto",
+      "e": "enamorado",
+      "y": "cubierta",
+      "gira": -90
+     },
+     {
+      "n": "joven1",
+      "x": -30,
+      "z": -10,
+      "ry": 0,
+      "acc": "celebrar",
+      "e": "risa",
+      "y": "cubierta"
+     }
+    ],
+    "barco": "negras",
+    "luz": "noche"
+   },
+   {
+    "tx": "Pararon a descansar en la isla de Naxos.",
+    "set": "naxos",
+    "spot": "playa",
+    "cam": [
+     "general:teseo:20",
+     "medio:joven1:-20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -10,
+      "z": -30,
+      "ry": 0,
+      "acc": "andar",
+      "e": "aburrido",
+      "to": [
+       0,
+       20
+      ]
+     },
+     {
+      "n": "ariadna",
+      "x": 20,
+      "z": -40,
+      "ry": 0,
+      "acc": "andar",
+      "e": "risa",
+      "to": [
+       24,
+       16
+      ]
+     },
+     {
+      "n": "joven1",
+      "x": -40,
+      "z": 30,
+      "ry": 30,
+      "acc": "estirar",
+      "e": "aburrido"
+     },
+     {
+      "n": "joven2",
+      "x": -60,
+      "z": 10,
+      "ry": 60,
+      "acc": "dormir",
+      "e": "cerrados",
+      "y": 0
+     }
+    ],
+    "barco": "negras",
+    "luz": "noche"
+   },
+   {
+    "tx": "Y aquí viene la parte fea de la historia.",
+    "set": "naxos",
+    "spot": "playa",
+    "cam": [
+     "picado:ariadna:20"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "dormir",
+      "e": "cerrados"
+     }
+    ],
+    "luz": "noche",
+    "fx": [
+     "zzz"
+    ]
+   },
+   {
+    "tx": "Mientras Ariadna dormía, Teseo se fue. La dejó allí. Sola.",
+    "set": "naxos",
+    "spot": "playa",
+    "cam": [
+     "travel:teseo:90",
+     "paisaje:barco:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": -30,
+      "z": 10,
+      "ry": 200,
+      "acc": "agachado",
+      "e": "sudor",
+      "to": [
+       0,
+       -80
+      ]
+     },
+     {
+      "n": "ariadna",
+      "x": 30,
+      "z": 20,
+      "ry": 0,
+      "acc": "dormir",
+      "e": "cerrados"
+     }
+    ],
+    "barco": "negras",
+    "barco_mueve": 1,
+    "luz": "noche"
+   },
+   {
+    "tx": "Sí. Después de todo lo que hizo por él. Muy mal, Teseo. Muy mal.",
+    "set": "naxos",
+    "spot": "playa",
+    "cam": [
+     "primer:ariadna:10",
+     "general:ariadna:-25"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "llorar",
+      "e": "llanto",
+      "ent": [
+       30,
+       20
+      ],
+      "ent_d": 0.17
+     }
+    ],
+    "luz": "amanecer"
+   },
+   {
+    "tx": "Unos dicen que se lo ordenaron los dioses. Otros, que era un poco sinvergüenza.",
+    "set": "mar",
+    "spot": "barco",
+    "cam": [
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "encoger",
+      "e": "sudor",
+      "y": "cubierta",
+      "gira": -90
+     }
+    ],
+    "barco": "negras",
+    "luz": "amanecer"
+   },
+   {
+    "tx": "Por suerte, Ariadna no lloró mucho tiempo. Apareció el dios Dioniso, se enamoró de ella, y se casaron.",
+    "set": "naxos",
+    "spot": "playa",
+    "cam": [
+     "medio:dioniso:20",
+     "dos:ariadna,dioniso:0"
+    ],
+    "act": [
+     {
+      "n": "dioniso",
+      "x": -14,
+      "z": 20,
+      "ry": 70,
+      "acc": "aparecer",
+      "e": "risa"
+     },
+     {
+      "n": "ariadna",
+      "x": 14,
+      "z": 20,
+      "ry": -70,
+      "acc": "quieto",
+      "e": "enamorado",
+      "ent": [
+       0,
+       10
+      ],
+      "ent_d": 0.33
+     }
+    ],
+    "luz": "amanecer",
+    "fx": [
+     "chispas_moradas@0.05",
+     "corazones@0.6"
+    ]
+   },
+   {
+    "tx": "Ariadna acabó siendo diosa. Así que, en el fondo, salió ganando.",
+    "set": "naxos",
+    "spot": "playa",
+    "cam": [
+     "primer:ariadna:20",
+     "paisaje:spot:0"
+    ],
+    "act": [
+     {
+      "n": "ariadna",
+      "x": 14,
+      "z": 20,
+      "ry": -30,
+      "acc": "celebrar",
+      "e": "risa",
+      "ico": "corona"
+     },
+     {
+      "n": "dioniso",
+      "x": -14,
+      "z": 20,
+      "ry": 30,
+      "acc": "celebrar",
+      "e": "risa"
+     }
+    ],
+    "luz": "dia",
+    "fx": [
+     "chispas_doradas@0.2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "c10",
+  "cap": "Las velas",
+  "segs": [
+   {
+    "tx": "Mientras tanto, en Atenas, Egeo subía cada día a lo alto de un acantilado para mirar el mar.",
+    "set": "atenas",
+    "spot": "acantilado",
+    "cam": [
+     "paisaje:spot:30",
+     "medio:egeo:-20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "mirar",
+      "e": "triste",
+      "gira": -110,
+      "ent_d": 0.1
+     }
+    ],
+    "luz": "tarde"
+   },
+   {
+    "tx": "Esperando ver unas velas blancas.",
+    "set": "atenas",
+    "spot": "acantilado",
+    "cam": [
+     "hombro:egeo:0"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "mirar",
+      "e": "triste",
+      "ent": [
+       -11.8,
+       -11.8
+      ],
+      "ent_d": 0.19
+     }
+    ],
+    "luz": "tarde"
+   },
+   {
+    "tx": "Y un día, por fin, apareció el barco.",
+    "set": "atenas",
+    "spot": "acantilado",
+    "cam": [
+     "hombro:egeo:0",
+     "primer:egeo:20"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "celebrar",
+      "e": "risa"
+     }
+    ],
+    "luz": "tarde",
+    "barco_lejos": "negras"
+   },
+   {
+    "tx": "Con las velas...",
+    "set": "mar",
+    "spot": "barco",
+    "cam": [
+     "contra:barco:0"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 6,
+      "ry": 0,
+      "acc": "saludar",
+      "e": "risa",
+      "y": "cubierta",
+      "gira": 90
+     },
+     {
+      "n": "joven1",
+      "x": -24,
+      "z": 0,
+      "ry": 0,
+      "acc": "celebrar",
+      "e": "risa",
+      "y": "cubierta"
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   },
+   {
+    "tx": "negras.",
+    "set": "atenas",
+    "spot": "acantilado",
+    "cam": [
+     "primer:egeo:0"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "quieto",
+      "e": "susto",
+      "ent": [
+       -9.0,
+       -0.0
+      ],
+      "ent_d": 0.15
+     }
+    ],
+    "luz": "tarde",
+    "fx": [
+     "zoom@0.0"
+    ]
+   },
+   {
+    "tx": "Teseo, con la emoción de la victoria, se había olvidado por completo.",
+    "set": "mar",
+    "spot": "barco",
+    "cam": [
+     "medio:teseo:20",
+     "general:barco:30"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "bailar",
+      "e": "risa",
+      "y": "cubierta"
+     },
+     {
+      "n": "joven1",
+      "x": -24,
+      "z": 0,
+      "ry": 0,
+      "acc": "bailar",
+      "e": "risa",
+      "y": "cubierta"
+     },
+     {
+      "n": "joven2",
+      "x": 24,
+      "z": 4,
+      "ry": 0,
+      "acc": "celebrar",
+      "e": "risa",
+      "y": "cubierta"
+     }
+    ],
+    "barco": "negras",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Egeo pensó que su hijo había muerto. Y, destrozado, se lanzó al mar.",
+    "set": "atenas",
+    "spot": "acantilado",
+    "cam": [
+     "primer:egeo:20",
+     "general:spot:60"
+    ],
+    "act": [
+     {
+      "n": "egeo",
+      "x": 0,
+      "z": 0,
+      "ry": 90,
+      "acc": "caer_acantilado",
+      "e": "llanto",
+      "y2": -8
+     }
+    ],
+    "luz": "tarde",
+    "fx": [
+     "salpicar_mar@0.85"
+    ]
+   },
+   {
+    "tx": "Desde entonces, ese mar se llama así: el mar Egeo.",
+    "set": "mapa",
+    "spot": "mapa",
+    "cam": [
+     "cenital:mapa:0"
+    ],
+    "act": [],
+    "mapa": "egeo"
+   },
+   {
+    "tx": "Teseo llegó a casa, y se encontró con que ahora, el rey... era él.",
+    "set": "atenas",
+    "spot": "trono",
+    "cam": [
+     "medio:teseo:0",
+     "primer:teseo:15"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": -10,
+      "ry": 0,
+      "acc": "sentado",
+      "e": "triste",
+      "ico": "corona"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cierre",
+  "cap": null,
+  "segs": [
+   {
+    "tx": "Teseo fue un buen rey. Unió a los pueblos del Ática, y convirtió a Atenas en una gran ciudad.",
+    "set": "atenas",
+    "spot": "plaza",
+    "cam": [
+     "paisaje:spot:20",
+     "medio:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "saludar",
+      "e": "risa",
+      "ico": "corona",
+      "ent": [
+       -12.4,
+       -2.4
+      ],
+      "ent_d": 0.03
+     },
+     {
+      "n": "aldeano1",
+      "x": -40,
+      "z": 30,
+      "ry": 160,
+      "acc": "celebrar",
+      "e": "risa"
+     },
+     {
+      "n": "aldeano2",
+      "x": 40,
+      "z": 34,
+      "ry": 200,
+      "acc": "celebrar",
+      "e": "risa"
+     },
+     {
+      "n": "aldeano3",
+      "x": -20,
+      "z": 50,
+      "ry": 180,
+      "acc": "saludar",
+      "e": "risa",
+      "ent": [
+       -36.8,
+       66.8
+      ],
+      "ent_d": 0.48
+     },
+     {
+      "n": "joven1",
+      "x": 20,
+      "z": 50,
+      "ry": 180,
+      "acc": "celebrar",
+      "e": "risa"
+     }
+    ],
+    "luz": "dia"
+   },
+   {
+    "tx": "Pero nunca olvidó la lección más importante de su vida.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "primer:teseo:20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "pensar",
+      "e": "normal",
+      "ent": [
+       12,
+       20
+      ],
+      "ent_d": 0.17
+     }
+    ],
+    "barco": "blancas",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Si tu padre te pide que cambies las velas... cambia las velas.",
+    "set": "atenas",
+    "spot": "puerto",
+    "cam": [
+     "contra:barco:0",
+     "primer:teseo:-15"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 20,
+      "ry": 0,
+      "acc": "pulgar",
+      "e": "guino",
+      "gira": 160,
+      "ent_d": 0.19
+     }
+    ],
+    "barco": "blancas",
+    "luz": "tarde"
+   },
+   {
+    "tx": "Si te ha gustado esta historia, suscríbete a El Bicho Curioso. En el próximo vídeo: Perseo, el chico que mató a un monstruo... sin mirarlo.",
+    "set": "atenas",
+    "spot": "plaza",
+    "cam": [
+     "medio:teseo:0",
+     "general:teseo:15",
+     "medio:teseo:-20"
+    ],
+    "act": [
+     {
+      "n": "teseo",
+      "x": 0,
+      "z": 10,
+      "ry": 0,
+      "acc": "saludar",
+      "e": "risa",
+      "ent": [
+       -11.3,
+       -1.3
+      ],
+      "ent_d": 0.16
+     }
+    ],
+    "ov": "suscribete",
+    "luz": "tarde"
+   }
+  ]
+ }
+]
