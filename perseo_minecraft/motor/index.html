@@ -49,8 +49,15 @@ function pintar(t) {
   // plano actual dentro del bloque
   let k = 0; for (let i = 0; i < b.cuts.length; i++) if (t >= b.cuts[i]) k = i; const tk = b.cuts[k], tk1 = b.cuts[k + 1] || b.t1, q = (t - tk) / (tk1 - tk);
   if (e.alt && lt >= e.alt.from) k = 0;
-  const c = cams[k % cams.length](X), dz = 0.06 * (q - 0.5), sw = Math.sin(t * 0.6) * 1.2;
-  mira(c[0] + (c[3] - c[0]) * dz + sw, c[1] + (c[4] - c[1]) * dz, c[2] + (c[5] - c[2]) * dz, c[3], c[4], c[5], c[6]);
+  const c = cams[k % cams.length](X), sw = Math.sin(t * 0.6) * 1.2;
+  { // movimiento de cámara siempre: cada plano con un movimiento distinto (acercar, alejar, órbita, grúa)
+    const qe = q * q * (3 - 2 * q), m = (b.i * 7 + k * 3) % 6; let vx = c[0] - c[3], vy = c[1] - c[4], vz = c[2] - c[5]; const L = Math.hypot(vx, vy, vz);
+    let sc = 1, ang = 0, dy = 0;
+    if (m === 0) sc = 1.08 - 0.2 * qe; else if (m === 1) sc = 0.9 + 0.2 * qe; else if (m === 2) ang = 0.28 * (qe - 0.5); else if (m === 3) ang = -0.28 * (qe - 0.5);
+    else if (m === 4) { dy = 0.16 * L * (qe - 0.5); ang = 0.1 * (qe - 0.5); } else { dy = -0.14 * L * (qe - 0.5); sc = 1.04 - 0.1 * qe; }
+    const ca = Math.cos(ang), sa = Math.sin(ang); const rx = vx * ca - vz * sa, rz = vx * sa + vz * ca;
+    c[0] = c[3] + rx * sc; c[1] = c[4] + vy * sc + dy; c[2] = c[5] + rz * sc; }
+  mira(c[0] + sw, c[1], c[2], c[3], c[4], c[5], c[6]);
   solSobre(c[3], c[5], S);
   const TINTE = { 0: [0.95, 1.02, 0.98], 1: [1.04, 1.0, 0.94], 2: [1.03, 1.0, 0.97], 3: [0.97, 0.97, 1.03], 4: [1.05, 1.0, 0.92], 5: [0.94, 1.03, 0.96], 6: [0.98, 1.0, 1.03], 7: [1.02, 1.0, 0.96], 8: [1.03, 0.98, 0.96], 9: [1.03, 1.0, 0.95], 10: [1.0, 0.98, 1.03], 11: [1.06, 0.95, 0.92], 12: [1.05, 0.98, 0.94] };
   postpro(Math.hypot(c[0] - c[3], c[1] - c[4], c[2] - c[5]), c[6] <= 34, TINTE[b.cap] || [1, 1, 1]); render();

@@ -1,7 +1,9 @@
 # Subtítulos palabra a palabra sin solapes (mismo estilo que dragones) + comprobación automática
 import json, re
 P = json.load(open("palabras.json", encoding="utf-8"))
-CLAVE = re.compile(r"hera|hércules|zeus|hidra|león|leones|cerbero|euristeo|atlas|tinaja|jarrón|doce|serpientes|monstruos|cangrejo|amazonas|olimpo|inframundo", re.I)
+for w in P: w["w"] = w["w"].replace('"', "").replace("«", "").replace("»", "")
+P = [w for w in P if w["w"].strip()]
+CLAVE = re.compile(r"perseo|medusa|zeus|atenea|hermes|acrisio|dánae|polidectes|dictis|greas|gorgonas|pegaso|atlas|andrómeda|casiopea|poseidón|piedra|monstruo|escudo|cabeza|ojo|oráculo", re.I)
 G, cur = [], []
 for w in P:
     if cur and w["t"] - cur[-1]["e"] > 0.45: G.append(cur); cur = []

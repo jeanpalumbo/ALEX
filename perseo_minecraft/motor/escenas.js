@@ -204,7 +204,7 @@ export const E = {
   gorgonas: { set: "isla_gorgonas", act(X) { const { t, lt } = X; med(C.MED, { x: 0, z: 20, ry: 0, y: 4 * Math.sin(t * 2) }, t, "malvado", 1, 1); med(C.GOR1, { x: -60, y: 30 + 6 * Math.sin(t * 2), z: -10, ry: 20 }, t, "malvado", 0.5, 1); med(C.GOR2, { x: 60, y: 26 + 6 * Math.sin(t * 2 + 1), z: -10, ry: -20 }, t, "risa", 0.5, 1);
       if (lt < W(X, "única") - 0.3) X.dato("ESTENO Y EURÍALE: INMORTALES", W(X, "inmortales") - 0.3); else X.dato("MEDUSA: MORTAL", W(X, "única") - 0.3); },
     cams: [general(0, 0, 200, 50, 0, 35), cerca(C.GOR1, 30, 0.2, 30, 0), cerca(C.MED, 32, 0.2, 30)] },
-  sacerdotisa: { set: "templo_atenea", act(X) { const { t, lt } = X; P(C.MEDH, { x: 0, z: -40, ry: 180, bR: [-160, 25], bL: [-160, -25], cR: 20, cL: 20 }, t, "cerrados"); }, cams: [() => [90, 30, 20, 0, 40, -80, 42], () => [0, 30, -68, 0, 28, -40, 36]] },
+  sacerdotisa: { set: "templo_atenea", act(X) { const { t, lt } = X; P(C.MEDH, { x: 0, z: -40, ry: 180, bR: [-160, 25], bL: [-160, -25], cR: 20, cL: 20 }, t, "cerrados"); }, cams: [() => [90, 30, 20, 0, 40, -80, 42], cerca(C.MEDH, 40, 0.3, 34)] },
   castigo: { set: "templo_atenea", act(X) { const { t, lt } = X; P(C.MEDH, mezcla(lt < 4 ? andar(lt, [40, -60], [-60, -40], 0.5, 3.5, { correr: 1 }) : { x: -60, z: -40, ry: 30 }), t, lt < 6 ? "susto" : "lloro");
       if (lt < 4.5) { P(C.POSE, mezcla(andar(lt, [140, -80], [10, -60], 0.8, 4.2), { cabY: -10 }), t, "amor"); enMano(C.POSE, TRIDENTE); }
       if (lt > 4.3) { P(C.ATENEA, mezcla({ x: 60, z: -20, ry: -60 }, senala(lt, 4.6)), t, "enfado"); enMano(C.ATENEA, LANZA, "L"); } },
@@ -257,7 +257,7 @@ export const E = {
       if (X.una("hoj")) part.add(X.t0 + choque, -10, 90, -100, 40, ["#3f8f2e", "#4a9a3a", "#d9a03c"], 30, 1.4, 30, 2.5); },
     cams: [() => [-60, 40, 160, -40, 40, -40, 44], () => [40, 60, 40, -10, 70, -100, 40], cerca(PH, 30, 0.3, 30)] },
   vuelo_nubes: { set: "vuelo_nubes", act(X) { const { t, lt } = X; P(PH, vuela(0, 230, 0, 0, t, { rz: 0.15 * Math.sin(t * 1.3) }), t, "risa"); alasPies(PH, t); enMano(PH, BOLSA, "L"); },
-    cams: [() => [60, 250, 110, 0, 230, 0, 40], () => [0, 310, -80, 0, 220, 0, 40], () => [-80, 230, 50, 0, 235, -20, 36]] },
+    cams: [(X) => [60 - 20 * X.lt, 236, 70, 0, 238, 0, 40], (X) => [-50, 228, -60 + 10 * X.lt, 0, 240, 0, 40], () => [-70, 232, 40, 0, 240, -20, 36]] },
   // ---------- capítulo 8: la guarida
   isla: { set: "isla_gorgonas", act(X) { const { t, lt } = X; const q = seg(lt, 0.3, 2.6); P(PH, mezcla({ x: lerp(-200, 0, q), y: lerp(140, 0, q), z: lerp(-100, 40, q), ry: 120 }, q < 1 ? { rx: 0.6 * (1 - q) } : {}), t, "sudor"); enCodo(PH, ESCUDO); alasPies(PH, t); },
     cams: [() => [100, 60, 200, -20, 40, 0, 44]] },
@@ -308,7 +308,7 @@ export const E = {
     cams: [() => [0, 140, -60, 0, 140, -200, 36], () => [60, 25, 120, 30, 25, 40, 38]] },
   // ---------- capítulo 11: Andrómeda
   andromeda: { set: "acantilado_etiopia", act(X) { const { t, lt } = X; P(C.ANDRO, { x: 30, y: 16, z: -20, ry: -30, bR: [-150, 60], bL: [-150, -60], cR: 10, cL: 10, cabY: 20 * Math.sin(t) }, t, "lloro"); P(PH, vuela(lerp(-200, -60, seg(lt, 0, 5)), 120, 60, 90, t), t, "sorpresa"); alasPies(PH, t); },
-    cams: [() => [200, 50, 160, 30, 20, -20, 44], cerca(C.ANDRO, 30, 0.2, 30), () => [-60, 140, 140, -60, 120, 60, 40]] },
+    cams: [() => [200, 50, 160, 30, 20, -20, 44], () => [6, 46, 28, 30, 40, -20, 36], () => [-60, 140, 140, -60, 120, 60, 40]] },
   casiopea: { set: "palacio", act(X) { const { t, lt } = X; P(C.CASIO, { x: 0, z: -60, ry: 0, bR: [-110, 20], cR: 90, cabY: 15 * Math.sin(t) }, t, "presumido"); enMano(C.CASIO, ESPEJO); P(C.ANDRO, { x: 40, z: -50, ry: -20 }, t, "sudor"); },
     cams: [cerca(C.CASIO, 30, 0.3, 30), () => [0, 30, 60, 20, 25, -60, 42]] },
   poseidon: { set: "acantilado_etiopia", act(X) { const { t, lt } = X; const sube = seg(lt, 0, 2.5); P(C.POSE, { x: 200, y: lerp(-60, 0, sube), z: -40, ry: -80, bR: [-160, 20], cR: 10 }, t, "enfado"); enMano(C.POSE, TRIDENTE);

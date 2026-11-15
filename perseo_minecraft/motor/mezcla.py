@@ -30,39 +30,64 @@ def campanas(): x = xs(1.6); return sum(np.sin(2 * np.pi * f * x) * np.exp(-x * 
 def piedra(): x = xs(1.0); return (sm(nz(len(x)), 30) * 2 + np.sin(2 * np.pi * 45 * x)) * np.exp(-x * 4)
 def ladrido(): x = xs(0.5); f = 300 - 200 * x; return np.sign(np.sin(np.cumsum(2 * np.pi * f / SR))) * np.exp(-x * 8) * 0.4
 FX = dict(paso=paso, golpe=golpe, corte=corte, whoosh=whoosh, rugido=rugido, siseo=siseo, pop=pop, risa=risa, magia=magia, rayo=rayo, boing=boing, tin=tin, agua=agua_, flecha=flecha, piar=piar, fuego=fuego, campanas=campanas, piedra=piedra, ladrido=ladrido)
-# efectos por escena: (tiempo relativo al bloque, efecto, ganancia)
+def aleteo(): return np.concatenate([whoosh(0.15) * 0.8 for _ in range(6)])
+def crujido(): x = xs(1.6); n = nz(len(x)); cr = (rng.random(len(x)) > 0.997).astype(np.float32); return (sm(cr * 6, 40) * n * 0.8 + sm(n, 40) * 1.5 + np.sin(2 * np.pi * 50 * x) * 0.5) * np.minimum(1, x / 0.05) * np.exp(-x * 1.8)
+def olas(d=4.0): x = xs(d); return sm(nz(len(x)), 60) * 3 * (0.5 + 0.5 * np.sin(2 * np.pi * x / 2.6) ** 2) * np.minimum(1, x / 0.6) * np.minimum(1, (d - x) / 0.6)
+def viento(d=4.0): x = xs(d); return sm(nz(len(x)), 120) * 6 * (0.6 + 0.4 * np.sin(2 * np.pi * x * 0.3)) * np.minimum(1, x / 0.8) * np.minimum(1, (d - x) / 0.8)
+def trueno(): x = xs(2.5); return (sm(nz(len(x)), 50) * 4 * (0.4 + 0.6 * np.exp(-x * 1.5)) + sm(nz(len(x)), 3) * np.exp(-x * 12)) * np.minimum(1, x / 0.02)
+def grito(): x = xs(0.8); f = 700 + 300 * np.sin(2 * np.pi * 9 * x); return np.sign(np.sin(np.cumsum(2 * np.pi * f / SR))) * 0.25 * np.exp(-x * 2)
+FX.update(aleteo=aleteo, crujido=crujido, olas=olas, viento=viento, trueno=trueno, grito=grito)
+# efectos por escena: (tiempo relativo al bloque o palabra, efecto, ganancia)
 EV = {
- "hidra_frio": [(0.2, "siseo", .6), (1.6, "corte", .9), (2.3, "siseo", .7), (2.5, "pop", .6)], "hidra_frio2": [(0.3, "siseo", .5), (2.6, "boing", .5)],
- "tinaja_frio": [(0.4, "paso", .3), (0.9, "paso", .3), (1.4, "paso", .3), (1.9, "paso", .3), (4.0, "tin", .8), (4.4, "boing", .5)],
- "intro": [(0.2, "whoosh", .8), (0.6, "golpe", .8), (1.3, "campanas", .6)],
- "olimpo_zeus": [(2.5, "rayo", .7)], "zeus_disfraz": [(4.1, "magia", .6), (9.2, "boing", .4)], "olimpo_hera": [(1.7, "golpe", .3)],
- "hera_serpientes": [(1.0, "magia", .7), (1.4, "siseo", .5)], "bebe_serpientes": [(0.2, "siseo", .6), (1.1, "boing", .3), (2.2, "pop", .9), (2.34, "pop", .9), (2.5, "risa", .7)],
- "bebe_juega": [(0.3, "risa", .6), (2.0, "risa", .5)], "hera_rabia": [(0.5, "golpe", .3), (1.0, "golpe", .3)],
- "lino_lira": [(0.5, "tin", .3), (6.6, "golpe", .9), (6.7, "tin", .6)], "lino_chiste": [(0.1, "piedra", .4)],
- "quiron": [(5.0, "flecha", .6), (6.6, "flecha", .6), (8.2, "flecha", .6), (5.05, "golpe", .3)], "tebas_familia": [(0.5, "risa", .4)],
- "hera_locura": [(2.0, "magia", .8), (2.4, "rayo", .5)], "delfos": [(0.1, "fuego", .4)], "euristeo_presenta": [(2.2, "boing", .5)],
- "nemea_flechas": [(0.5, "rugido", .6), (0.75, "flecha", .6), (2.85, "flecha", .6), (4.95, "flecha", .6)], "nemea_cueva": [(1.0, "rugido", .8), (4.2, "golpe", .9), (4.6, "piedra", .5)],
- "nemea_piel": [(2.6, "tin", .5), (6.0, "corte", .5)], "nemea_casco": [(0.3, "campanas", .4)], "nemea_vuelta": [(0.5, "risa", .3)],
- "euristeo_miedo": [(2.2, "boing", .6), (2.5, "paso", .4), (2.7, "paso", .4)],
- "hidra_llega": [(3.0, "siseo", .8), (3.3, "rugido", .5)], "hidra_corta": [(0.8, "corte", .9), (2.2, "corte", .9), (3.6, "corte", .9), (1.2, "pop", .5), (2.6, "pop", .5), (4.0, "pop", .5)],
- "hidra_yolao": [(0.2, "fuego", .6), (0.6, "corte", .7), (2.2, "corte", .7), (3.8, "corte", .7), (5.4, "corte", .7)], "hidra_roca": [(1.4, "whoosh", .7), (2.5, "piedra", 1.0)],
- "cangrejo": [(3.0, "boing", .6), (3.6, "pop", .8), (6.2, "campanas", .5)], "cancer_chiste": [(1.0, "campanas", .3)],
- "cierva": [(0.2, "paso", .2), (0.6, "paso", .2), (4.5, "magia", .5)], "jabali": [(0.5, "rugido", .5), (2.0, "rugido", .4), (4.0, "golpe", .6)],
- "tinaja": [(4.2, "boing", .6), (4.9, "tin", .9)], "tinaja_chiste": [(0.4, "tin", .4)],
- "establos": [(1.0, "piar", .2), (3.0, "paso", .2)], "rios": [(2.6, "golpe", 1.0), (2.7, "piedra", .7), (3.0, "agua", 1.0)], "no_cuenta": [(0.5, "tin", .3)],
- "pajaros": [(4.6, "tin", .6), (5.0, "tin", .6), (5.4, "tin", .6), (5.0, "piar", .5), (5.5, "piar", .5), (8.6, "flecha", .6), (9.1, "flecha", .6), (9.6, "flecha", .6), (10.1, "flecha", .6)], "pajaros_chiste": [(0.2, "tin", .3)],
- "toro": [(0.2, "rugido", .5), (2.0, "golpe", .6), (6.0, "paso", .3)], "yeguas": [(0.5, "rugido", .4), (4.8, "golpe", 1.0), (8.0, "risa", .3)],
- "amazonas": [(4.0, "campanas", .3)], "amazonas_hera": [(5.5, "rugido", .4), (6.5, "golpe", .6), (7.0, "golpe", .6), (7.5, "golpe", .6)],
- "columnas": [(8.0, "piedra", 1.0)], "gerion": [(3.3, "golpe", .9), (3.5, "ladrido", .5)], "atlas": [(4.0, "rayo", .3)],
- "atlas_trato": [(4.0, "piedra", .5)], "atlas_cojin": [(5.0, "piedra", .5), (6.2, "risa", .4)],
- "inframundo": [(0.1, "fuego", .5), (1.0, "ladrido", .6), (1.5, "ladrido", .6), (2.0, "ladrido", .6)], "hades": [(0.1, "fuego", .4)],
- "cerbero": [(1.6, "golpe", .8), (1.8, "ladrido", .5)], "cerbero_tinaja": [(0.5, "ladrido", .7), (1.0, "ladrido", .7), (0.7, "tin", .6)],
- "camisa": [(6.5, "magia", .4), (9.0, "fuego", .6)], "pira": [(2.5, "fuego", .8), (4.0, "campanas", .7)], "hebe": [(4.0, "campanas", .8)],
- "final_chiste": [(4.5, "boing", .4)], "cierre": [(4.0, "pop", .6), (5.2, "campanas", .5)],
+ "gancho_cueva": [(0.3, "siseo", .5), (2.5, "siseo", .5), (4.0, "crujido", .5)], "gancho_mirada": [(0.3, "crujido", .7), (2.0, "siseo", .6)],
+ "gancho_escudo": [("cortarle", "corte", .7), ("espejo", "tin", .8), (1.0, "siseo", .5)], "gancho_casco": [("invisible", "magia", .7), ("lío", "boing", .5)],
+ "intro": [(0.2, "whoosh", .8), (0.6, "golpe", .8), (1.3, "campanas", .6), (0.4, "aleteo", .6)],
+ "argos": [(0.3, "campanas", .3)], "oraculo": [(0.1, "fuego", .5), ("matar", "golpe", .7)], "oraculo_chiste": [(0.3, "boing", .4)],
+ "danae_plan": [("Fácil", "pop", .4)], "torre": [(0.3, "golpe", .6), ("perfecto", "tin", .5)], "torre_dentro": [("Zeus", "rayo", .6)],
+ "lluvia_oro": [(0.3, "magia", .8), (1.5, "tin", .4), (2.5, "tin", .4)], "nace_perseo": [("bebé", "risa", .4), ("profecía", "trueno", .6)],
+ "acrisio_panico": [("corona", "tin", .6), ("corona", "boing", .4)], "cofre_mete": [("cofre", "golpe", .6), ("mar", "agua", .8)],
+ "cofre_mar": [(0.0, "trueno", .8), (0.0, "olas", .9), (2.5, "olas", .9)], "zeus_vigila": [(0.5, "rayo", .4)],
+ "dictis_red": [(0.0, "olas", .5), ("abrió", "golpe", .4), ("bebé", "risa", .3)], "crece": [(0.0, "olas", .4), ("chulito", "boing", .4)],
+ "estorbo": [("perro", "ladrido", .4)], "plan_banquete": [(0.2, "campanas", .3)], "sin_caballo": [("oveja", "boing", .4)],
+ "frase": [("Medusa", "trueno", .8)], "silencio": [("sonrió", "risa", .3)], "tarde": [("tarde", "boing", .5)],
+ "gorgonas": [(0.0, "trueno", .5), (1.0, "siseo", .6), (4.0, "siseo", .5)], "castigo": [("Atenea", "rayo", .5)],
+ "transforma": [(1.0, "magia", .9), (1.4, "siseo", .8)], "petrifica": [(1.6, "crujido", 1.0), (0.2, "siseo", .5)],
+ "perseo_fatal": [(0.0, "olas", .4), ("fatal", "boing", .3)], "dioses_llegan": [(0.5, "magia", .7), (1.5, "rayo", .3)],
+ "regalos": [("escudo", "tin", .8), ("espada", "corte", .6)], "inventario1": [("sandalias", "pop", .5), ("casco", "pop", .5), ("bolsa", "pop", .5)],
+ "ninfas_dir": [("nadie", "boing", .4)], "greas": [(0.0, "viento", .7), (5.0, "viento", .6)], "greas_pelea": [(0.3, "grito", .4), (2.0, "grito", .4)],
+ "ojo_robo": [("zas", "whoosh", 1.0), ("zas", "pop", .7)], "greas_ciegas": [(0.0, "viento", .5), (1.0, "boing", .3)],
+ "ninfas": [(0.0, "piar", .3), (1.0, "agua", .4), ("sandalias", "magia", .6)],
+ "vuelo_arbol": [("salto", "aleteo", .8), ("Directo", "golpe", 1.0), ("Directo", "boing", .5)], "vuelo_nubes": [(0.0, "viento", .7), (0.2, "aleteo", .6), (3.5, "aleteo", .6)],
+ "isla": [(0.0, "trueno", .5), (0.5, "aleteo", .5)], "estatuas": [(0.5, "viento", .5), (3.0, "crujido", .3)],
+ "casco_invisible": [("invisible", "magia", .8), (0.3, "siseo", .4)], "reflejo": [("escudo", "tin", .7), (1.0, "siseo", .5)],
+ "atras": [(1.0, "paso", .4), (2.2, "paso", .4), (3.4, "paso", .4), ("ojo", "siseo", .9)], "corte": [("cayó", "whoosh", .9), ("golpe", "corte", 1.0), ("golpe", "golpe", .8)],
+ "bolsa": [("bolsa", "pop", .5), ("criaturas", "magia", .6)], "pegaso": [("Pegaso", "aleteo", .9), ("Crisaor", "golpe", .5)],
+ "hermanas": [(0.3, "grito", .6), (0.6, "siseo", .7), (3.0, "aleteo", .5)], "huida": [(0.0, "trueno", .4), (0.3, "aleteo", .7), (2.5, "aleteo", .6), (0.0, "olas", .6)],
+ "arma": [(0.0, "viento", .6), (2.0, "magia", .5), (6.0, "crujido", .5)],
+ "atlas": [(0.0, "viento", .4), (2.0, "golpe", .3)], "atlas_largo": [("largara", "rugido", .5)], "atlas_piedra": [("sacó", "magia", .7), ("piedra", "crujido", 1.0), ("montaña", "piedra", .9)],
+ "atlas_chiste": [("favor", "boing", .4)], "andromeda": [(0.0, "olas", .7), (0.5, "aleteo", .6)], "casiopea": [("guapa", "tin", .3)],
+ "poseidon": [(0.0, "olas", .8), ("monstruo", "rugido", .8)], "trato_boda": [(0.0, "olas", .5), ("Hecho", "campanas", .5)],
+ "ceto": [(0.0, "agua", 1.0), (0.3, "rugido", 1.0)],
+ "combate": [(0.0, "olas", .6), (0.3, "aleteo", .6), (1.2, "rugido", .6), (1.8, "whoosh", .7), (2.0, "corte", .9), (3.2, "whoosh", .7), (3.4, "golpe", .9), (4.4, "corte", .9), (5.4, "rugido", .8), (6.4, "agua", .9)],
+ "boda": [(0.3, "campanas", .5), ("ejército", "paso", .4)], "boda_cabeza": [("gritó", "grito", .4), ("sacó", "magia", .6), (4.3, "crujido", 1.0)],
+ "boda_chiste": [(0.2, "crujido", .4)], "vuelta": [(0.0, "olas", .4), (1.0, "aleteo", .5)], "banquete2": [("rio", "risa", .5)],
+ "pues_si": [(0.3, "magia", .7)], "corte_piedra": [(0.0, "crujido", 1.0), ("Literalmente", "boing", .4)],
+ "dictis_rey": [("rey", "campanas", .6)], "devuelve": [(1.0, "pop", .4), (2.0, "pop", .4), (3.0, "pop", .4), ("Atenea", "magia", .5)],
+ "huye_abuelo": [(0.5, "paso", .4), (0.8, "paso", .4), (1.1, "paso", .4)], "juegos": [(0.5, "campanas", .4)],
+ "disco": [("lanzó", "whoosh", .9), ("ráfaga", "viento", .7)], "disco_golpe": [("cabeza", "golpe", 1.0), ("cabeza", "tin", .5)],
+ "destino": [(0.3, "trueno", .4)], "constelaciones": [("cielo", "magia", .6)], "estrellas": [(1.0, "tin", .3), (3.0, "tin", .3)],
+ "casiopea_abajo": [("abajo", "boing", .5)], "cierre": [(4.0, "pop", .6), (5.2, "campanas", .5)],
 }
+def tev(b, k):
+    if not isinstance(k, str): return k
+    n = k.lower(); ws = [w for w in PAL if w["b"] == b["i"] and w["w"].lower().strip("¡!¿?.,…:;\"'").startswith(n.lower())]
+    return (ws[0]["t"] - b["t0"]) if ws else None
 fx = np.zeros(N, np.float32)
 for b in B:
-    for (lt, k, g) in EV.get(b["esc"], []): at(fx, FX[k](), b["t0"] + lt, g)
+    for (lt, k, g) in EV.get(b["esc"], []):
+        r = tev(b, lt)
+        if r is None: print("aviso: palabra no encontrada", b["esc"], lt); continue
+        at(fx, FX[k](), b["t0"] + r, g)
     # cortes de plano: whoosh suave (mismo algoritmo que index.html)
     ws = [w["t"] for w in PAL if w["b"] == b["i"]]; cur = b["t0"]
     while b["t1"] - cur > 4.6:
@@ -70,11 +95,13 @@ for b in B:
         cur = (min(cand, key=lambda w: abs(w - obj)) - 0.08) if cand else obj; at(fx, whoosh(0.25), cur - 0.1, 0.12)
     at(fx, whoosh(0.4), b["t0"] - 0.15, 0.2)
 # ---------------- música por capítulo: escala, tempo, instrumento y ánimo propios
-ESTILOS = {  # raíz Hz, modo, bpm, timbre, ánimo
+ESTILOS = {  # raíz Hz, modo, bpm, timbre, ánimo (0 gancho, 1 intro, 2-14 capítulos, 15 cierre)
  0: (110.0, "menor", 132, "cuerdas", "tenso"), 1: (146.83, "mayor", 120, "metal", "epico"), 2: (130.81, "mayor", 108, "pizz", "juguete"),
- 3: (123.47, "menor", 96, "cuerdas", "triste"), 4: (110.0, "menor", 120, "metal", "epico"), 5: (98.0, "menor", 126, "cuerdas", "tenso"),
- 6: (146.83, "mayor", 116, "pizz", "juguete"), 7: (130.81, "mayor", 112, "pizz", "juguete"), 8: (110.0, "menor", 118, "metal", "epico"),
- 9: (138.59, "mayor", 110, "cuerdas", "epico"), 10: (123.47, "mayor", 104, "pizz", "juguete"), 11: (87.31, "menor", 100, "cuerdas", "tenso"), 12: (146.83, "mayor", 92, "metal", "triste")}
+ 3: (123.47, "menor", 96, "cuerdas", "triste"), 4: (138.59, "mayor", 112, "pizz", "juguete"), 5: (98.0, "menor", 120, "cuerdas", "tenso"),
+ 6: (146.83, "mayor", 116, "metal", "epico"), 7: (116.54, "menor", 104, "pizz", "juguete"), 8: (130.81, "mayor", 118, "pizz", "juguete"),
+ 9: (103.83, "menor", 126, "cuerdas", "tenso"), 10: (110.0, "menor", 132, "metal", "epico"), 11: (123.47, "mayor", 100, "pizz", "juguete"),
+ 12: (98.0, "menor", 128, "metal", "epico"), 13: (146.83, "mayor", 112, "metal", "epico"), 14: (87.31, "menor", 96, "cuerdas", "triste"),
+ 15: (130.81, "mayor", 88, "cuerdas", "triste")}
 ESC = {"mayor": [0, 2, 4, 5, 7, 9, 11, 12], "menor": [0, 2, 3, 5, 7, 8, 10, 12]}
 def nota(buf, f, d, g, t0, tim):
     x = xs(d)

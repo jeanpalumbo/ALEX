@@ -299,6 +299,7 @@ export const SETS = {
 };
 export const CIELOS = {   // [arriba, horizonte, niebla, cerca, lejos, hemiCielo, hemiSuelo, hemiI, solColor, solI, exposición, sol[x,y,z]]
   dia: ["#4f9ce8", "#cfe6ff", "#cfe6ff", 500, 2200, "#cfe6ff", "#6b5a3a", 1.1, "#fff1d8", 2.6, 1.05, [300, 520, 300]],
+  vuelo: ["#2f6fc8", "#f3c89a", "#e8c8a8", 700, 3000, "#bcd2f0", "#8a7a6a", 0.8, "#ffd9a0", 2.2, 0.9, [-500, 260, -400]],
   dia_alto: ["#3f8ce0", "#e8f4ff", "#e8f4ff", 600, 2600, "#e8f4ff", "#c8c0b0", 1.25, "#fff6e0", 2.6, 1.05, [300, 600, 300]],
   amanecer: ["#6a8ad8", "#ffd0a0", "#ffd8b0", 500, 2200, "#ffe0c0", "#6b5a3a", 1.0, "#ffd0a0", 2.4, 1.05, [-500, 260, 200]],
   tarde: ["#5a90d8", "#ffe0b0", "#f0d8b0", 450, 2000, "#ffe8c8", "#5a4a2a", 1.0, "#ffd8a0", 2.6, 1.05, [400, 300, 200]],
@@ -421,11 +422,11 @@ Object.assign(SETS, {
     hoguera(g, v, -110, -120, 9); g.add(caja(26, 6, 10, MAT.piedra, 0, 3, -195)); ambiente(g, v, 200, "nieve", 0, 0, 700, 0, 240); bandada(g, v, 3, 220, -400, "#2a2a2a", 25);
     alfombra(g, ["hueso", "seca"], 40, 0, -170, 120, () => false);
     return {}; } },
-  vuelo_nubes: { cielo: "dia_alto", build(g, v) { const b = new Blq(g);
-    nubes(b, 120, -60, 300, 3000, 40); nubes(b, 80, -20, -400, 3000, 48); nubes(b, 40, 140, -900, 3000, 56); nubes(b, 40, -160, 0, 3000, 48);
+  vuelo_nubes: { cielo: "vuelo", build(g, v) { const b = new Blq(g); const NA = liso("#d9dde6", 0.1, 16, 534), NB = liso("#f2e2d2", 0.08, 16, 535);
+    nubes(b, 60, -60, 300, 3000, 40, NA); nubes(b, 50, -20, -400, 3000, 48, NB); nubes(b, 40, 160, -900, 3000, 56, NB); nubes(b, 30, -160, 0, 3000, 48, NA);
     for (let k = 0; k < 9; k++) for (let i = 0; i < 6; i++) b.add(-1200 + k * 300 + i * 30, -380, -600 + (i % 3) * 30, liso("#5f9e3a", 0.15, 16, 530), 30); b.fin();
     agua(g, v, 0, -400, 6000, 3000, -400); bandada(g, v, 10, 40, -200, "#ffffff", 70, 2000); bandada(g, v, 6, 120, -500, "#3a3a4a", 50, 2000, 2);
-    const g2 = new THREE.Group(); g.add(g2); const bb = new Blq(g2); nubes(bb, 30, 30, 200, 1600, 30); bb.fin(); v.push(t => g2.position.x = -((t * 120) % 800) + 400);
+    const g2 = new THREE.Group(); g.add(g2); const bb = new Blq(g2); nubes(bb, 24, 120, 260, 1600, 30, NB); bb.fin(); v.push(t => g2.position.x = -((t * 120) % 800) + 400);
     return {}; } },
   desierto_atlas: { cielo: "atardecer", build(g, v) { const b = new Blq(g);
     suelo(b, 50, MAT.arena, 6); for (let k = 0; k < 12; k++) { const cx = (rnd(k * 3) - 0.5) * 1400, cz = -200 - rnd(k) * 600; for (let y = 0; y < 3; y++) for (let i = -5 + y * 2; i <= 5 - y * 2; i++) b.add(cx + i * BL, y * BL, cz, liso("#e8c890", 0.08, 16, 531)); }
